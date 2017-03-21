@@ -16,8 +16,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace Blog.DependencyResolution {
-    using Blog.Managers;
-    using Blog.Models;
+    using Blog.Entities;
+    using Blog.Infrastructure;
+    using Blog.Infrastructure.Managers;
     using Microsoft.AspNet.Identity;
     using Microsoft.Owin.Security;
     using StructureMap.Configuration.DSL;

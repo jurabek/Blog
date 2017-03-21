@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using Microsoft.AspNet.Identity.Owin;
-using Blog.Models;
 using Microsoft.Owin.Security.DataProtection;
 using System.Net.Mail;
 using System.Net;
 using System.Threading.Tasks;
+using Blog.Entities;
+using Blog.Infrastructure.Services;
 
-namespace Blog.Managers
+namespace Blog.Infrastructure.Managers
 {
     public class ApplicationUserManager : UserManager<User>
     {

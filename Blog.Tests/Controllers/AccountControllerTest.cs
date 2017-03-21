@@ -1,6 +1,5 @@
 ﻿using Blog.Controllers;
 using Blog.DependencyResolution;
-using Blog.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StructureMap;
 using System;

@@ -4,33 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace Blog.Models
+namespace Blog.ViewModels
 {
-    public class ChangePasswordViewModel
-    {
-        [Display(Name = "Old password"), DataType(DataType.Password)]
-        public string OldPassword { get; set; }
-
-        [Display(Name = "New password"), DataType(DataType.Password)]
-        public string NewPassword { get; set; }
-    }
-
-    public class LoginViewModel
-    {
-        [Required]
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-        
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-        
-        [Display(Name = "Remember me")]
-        public bool RememberMe { get; set; }
-    }
-    
     public class RegisterViewModel
     {
         [Display(Name = "Name"), Required]

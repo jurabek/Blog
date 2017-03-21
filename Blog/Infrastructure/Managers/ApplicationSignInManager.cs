@@ -7,9 +7,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Blog.Models;
+using Blog.Entities;
 
-namespace Blog.Managers
+namespace Blog.Infrastructure.Managers
 {
     public class ApplicationSignInManager : SignInManager<User, string>
     {

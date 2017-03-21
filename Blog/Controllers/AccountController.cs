@@ -1,5 +1,6 @@
-﻿using Blog.Managers;
-using Blog.Models;
+﻿using Blog.Entities;
+using Blog.Infrastructure.Managers;
+using Blog.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System;

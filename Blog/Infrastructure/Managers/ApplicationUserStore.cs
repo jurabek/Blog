@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
-using Blog.Models;
+﻿using Blog.Entities;
+using Microsoft.AspNet.Identity.EntityFramework;
 
-namespace Blog.Managers
+namespace Blog.Infrastructure.Managers
 {
     public class ApplicationUserStore : UserStore<User>
     {

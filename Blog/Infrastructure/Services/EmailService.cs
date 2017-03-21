@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 
-namespace Blog.Managers
+namespace Blog.Infrastructure.Services
 {
     public class EmailService : IIdentityMessageService
     {
