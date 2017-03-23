@@ -1,13 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using Microsoft.Owin;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Blog.Data.Entities;
+using Blog.Model.Entities;
 
 namespace Blog.Core.Managers
 {

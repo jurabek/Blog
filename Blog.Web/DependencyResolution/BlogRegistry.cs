@@ -15,15 +15,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Blog.Web.DependencyResolution {
-    using Blog.Core;
+namespace Blog.Web.DependencyResolution
+{
     using Blog.Core.IoC;
-    using Blog.Core.Managers;
-    using Blog.Data.Entities;
-    using Microsoft.AspNet.Identity;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataProtection;
-    using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
     using System.Web;
 

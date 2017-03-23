@@ -1,13 +1,9 @@
 ﻿using Blog.Abstractions.Fasades;
 using Blog.Core.Managers;
-using Blog.Data.Entities;
+using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Blog.Core.Fasades
 {

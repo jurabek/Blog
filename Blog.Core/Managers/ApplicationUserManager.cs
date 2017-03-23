@@ -2,11 +2,8 @@
 using System;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
-using System.Net.Mail;
-using System.Net;
-using System.Threading.Tasks;
-using Blog.Data.Entities;
 using Blog.Core.Services;
+using Blog.Model.Entities;
 
 namespace Blog.Core.Managers
 {

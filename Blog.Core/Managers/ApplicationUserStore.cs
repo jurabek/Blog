@@ -1,4 +1,4 @@
-﻿using Blog.Data.Entities;
+﻿using Blog.Model.Entities;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Blog.Core.Managers

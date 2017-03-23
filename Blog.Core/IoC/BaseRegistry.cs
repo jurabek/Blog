@@ -1,14 +1,9 @@
 ﻿using Blog.Abstractions.Fasades;
 using Blog.Core.Fasades;
 using Blog.Core.Managers;
-using Blog.Data.Entities;
+using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
 using StructureMap.Configuration.DSL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Blog.Core.IoC
 {

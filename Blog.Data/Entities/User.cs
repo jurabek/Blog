@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Blog.Data.Entities
+namespace Blog.Model.Entities
 {
     public class User : IdentityUser
     {

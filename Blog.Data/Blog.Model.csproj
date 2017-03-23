@@ -7,8 +7,8 @@
     <ProjectGuid>{0D1C4AD3-BC35-4694-AC93-45192590A55E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Blog.Data</RootNamespace>
-    <AssemblyName>Blog.Data</AssemblyName>
+    <RootNamespace>Blog.Model</RootNamespace>
+    <AssemblyName>Blog.Model</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -56,8 +56,11 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
+    <Compile Include="ViewModels\ChangeProfileViewModel.cs" />
+    <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\ResetPasswordViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

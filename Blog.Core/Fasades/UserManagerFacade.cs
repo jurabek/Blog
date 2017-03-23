@@ -1,8 +1,9 @@
 ﻿using Blog.Abstractions.Fasades;
 using Blog.Core.Managers;
-using Blog.Data.Entities;
+using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using System;
 
 namespace Blog.Core.Fasades
 {
@@ -38,6 +39,31 @@ namespace Blog.Core.Fasades
         public IdentityResult ChangePassword(string userId, string oldPassword, string newPassword)
         {
             return _userManager.ChangePassword(userId, oldPassword, newPassword);
+        }
+
+        public Task<IdentityResult> UpdateAsync(IUser user)
+        {
+            return _userManager.UpdateAsync(user as User);
+        }
+
+        public async Task<IUser> FindByIdAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
+
+        public async Task<IUser> FindByNameAsync(string name)
+        {
+            return await _userManager.FindByNameAsync(name);
+        }
+
+        public Task<string> GeneratePasswordResetTokenAsync(string userId)
+        {
+            return _userManager.GeneratePasswordResetTokenAsync(userId);
+        }
+
+        public Task<IdentityResult> ResetPasswordAsync(string id, string code, string password)
+        {
+            return _userManager.ResetPasswordAsync(id, code, password);
         }
     }
 }

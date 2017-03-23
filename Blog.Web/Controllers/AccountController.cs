@@ -1,20 +1,22 @@
 ﻿using Blog.Abstractions.Fasades;
-using Blog.Data.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Blog.Data.Entities;
+using Blog.Model.ViewModels;
+using Blog.Model.Entities;
+using System.Web;
+using Microsoft.Owin.Security;
+using AutoMapper;
 
 namespace Blog.Web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private const string SuccessTitle = "success_title";
+        private const string SuccessMessage = "success_body";
+
         private IUserManagerFacade _userManagerFacade;
         private ISignInManagerFacade _signInManagerFacade;
 
@@ -53,28 +55,50 @@ namespace Blog.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManagerFacade.FindByNameAsync(model.Email);
+                string code = await _userManagerFacade.GeneratePasswordResetTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await _userManagerFacade.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+
 
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
-        private const string SuccessTitle = "success_title";
-        private const string SuccessMessage = "success_body";
-
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new User
-                {
-                    Name = model.Name,
-                    LastName = model.LastName,
-                    UserName = model.Email,
-                    Email = model.Email
-                };
+                var user = Mapper.Map<RegisterViewModel, User>(model);
 
                 var result = await _userManagerFacade.CreateUserAsync(user, model.Password);
                 if (result.Succeeded)
@@ -85,8 +109,7 @@ namespace Blog.Web.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await _userManagerFacade.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    TempData[SuccessTitle] = "Email confirmation";
-                    TempData[SuccessMessage] = "Email confirmation has been sent, please check your email!";
+                    AddSuccessTempData("Email confirmation", "Email confirmation has been sent, please check your email!");
 
                     return RedirectToAction("Success", "Account");
                 }
@@ -96,14 +119,64 @@ namespace Blog.Web.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult ResetPassword(string code)
+        {
+            return code == null ? View("Error") : View();
+        }
+
+        //
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManagerFacade.FindByNameAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            var result = await _userManagerFacade.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("ResetPasswordConfirmation", "Account");
+            }
+            AddErrors(result);
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [AllowAnonymous]
         public ActionResult Success()
         {
             ViewBag.Title = TempData[SuccessTitle];
             ViewBag.Message = TempData[SuccessMessage];
+            ClearSuccessTempData();
+            return View();
+        }
 
+        private void ClearSuccessTempData()
+        {
             TempData.Remove(SuccessTitle);
             TempData.Remove(SuccessMessage);
-            return View();
+        }
+
+        private void AddSuccessTempData(string title, string message)
+        {
+            TempData[SuccessTitle] = title;
+            TempData[SuccessMessage] = message;
         }
 
         [AllowAnonymous]
@@ -117,23 +190,7 @@ namespace Blog.Web.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        public ActionResult ChangePassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult ChangePassword(ChangePasswordViewModel model)
-        {
-            var result = _userManagerFacade.ChangePassword(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-            {
-                TempData[SuccessTitle] = "Password changed";
-                TempData[SuccessMessage] = "Your password successfully changed!";
-                return RedirectToAction("Success", "Account");
-            }
-            return View();
-        }
+        
 
         private ActionResult RedirectToLocal(string returnUrl)
         {

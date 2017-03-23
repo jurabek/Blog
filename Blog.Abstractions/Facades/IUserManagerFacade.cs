@@ -10,5 +10,10 @@ namespace Blog.Abstractions.Fasades
         Task<IdentityResult> CreateUserAsync(IUser user, string password);
         Task<string> GenerateEmailConfirmationTokenAsync(string userId);
         Task SendEmailAsync(string userId, string subject, string body);
+        Task<IdentityResult> UpdateAsync(IUser user);
+        Task<IUser> FindByIdAsync(string userId);
+        Task<IUser> FindByNameAsync(string name);
+        Task<string> GeneratePasswordResetTokenAsync(string userId);
+        Task<IdentityResult> ResetPasswordAsync(string id, string code, string password);
     }
 }

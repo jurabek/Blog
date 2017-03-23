@@ -9,8 +9,8 @@ using Moq;
 using Blog.Web.Tests.IoC;
 using Blog.Web.Controllers;
 using Microsoft.AspNet.Identity.Owin;
-using Blog.Data.ViewModels;
 using System.Web.Mvc;
+using Blog.Model.ViewModels;
 
 namespace Blog.Web.Tests.Controllers
 {
@@ -28,13 +28,25 @@ namespace Blog.Web.Tests.Controllers
         }
 
         [Test]
+        public void LoginActionTest()
+        {
+            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object);
+
+            var result = accountController.Login(string.Empty) as ViewResult;
+
+            Assert.IsNotNull(result);
+
+            Assert.IsInstanceOf<ActionResult>(result);
+        }
+
+        [Test]
         public async Task LoginShouldBeSuccesWhenEnteredValidLoginAndPassword()
         {
             SignInManagerFacade.Setup(sm => sm.PasswordSignInAsync("valid", "valid", false))
                 .Returns(Task.Run(() => SignInStatus.Success));
 
             var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object);
-            
+
             var result = await accountController.Login(new LoginViewModel
             {
                 Email = "valid",
@@ -44,10 +56,10 @@ namespace Blog.Web.Tests.Controllers
 
 
             Assert.IsTrue(accountController.ModelState.IsValid);
-            
+
 
             Assert.IsInstanceOf<RedirectToRouteResult>(result);
-            
+
 
             Assert.AreEqual("Home",
                             result.RouteValues["controller"],
@@ -57,7 +69,6 @@ namespace Blog.Web.Tests.Controllers
                 result.RouteValues["action"],
                 "Expected action shoulde be Index beacause if login success it rederects into Index");
 
-            
         }
     }
 }

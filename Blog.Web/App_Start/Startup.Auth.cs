@@ -9,7 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.AspNet.Identity.Owin;
 using Blog.Core.Managers;
-using Blog.Data.Entities;
+using Blog.Model.Entities;
+using Blog.Core.Mappings;
 
 namespace Blog.Web
 {
@@ -19,6 +20,7 @@ namespace Blog.Web
         
         public void ConfigureAuth(IAppBuilder app)
         {
+            AutoMapperConfiguration.Configure();
             DataProtectionProvider = app.GetDataProtectionProvider();
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
