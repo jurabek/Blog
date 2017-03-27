@@ -87,14 +87,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Settings\Settings.cs" />
-    <Compile Include="BlogDbContext.cs" />
     <Compile Include="Fasades\SignInManagerFacade.cs" />
     <Compile Include="Fasades\UserManagerFacade.cs" />
+    <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="IoC\BaseRegistry.cs" />
     <Compile Include="IoC\BaseStructuremapBootstrapper.cs" />
-    <Compile Include="Managers\ApplicationSignInManager.cs" />
-    <Compile Include="Managers\ApplicationUserManager.cs" />
-    <Compile Include="Managers\ApplicationUserStore.cs" />
+    <Compile Include="Managers\IdentitySignInManager.cs" />
+    <Compile Include="Managers\IdentityUserManager.cs" />
+    <Compile Include="Managers\Managers.cs" />
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\ModelToViewModelMappingProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,6 +112,10 @@
     <ProjectReference Include="..\Blog.Data\Blog.Model.csproj">
       <Project>{0d1c4ad3-bc35-4694-ac93-45192590a55e}</Project>
       <Name>Blog.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helpers\IdentityPermission\IdentityPermissionExtension.csproj">
+      <Project>{0dd3726c-04dd-4d17-82b6-bf20898d0d92}</Project>
+      <Name>IdentityPermissionExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

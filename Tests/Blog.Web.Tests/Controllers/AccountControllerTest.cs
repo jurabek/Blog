@@ -11,6 +11,7 @@ using Blog.Web.Controllers;
 using Microsoft.AspNet.Identity.Owin;
 using System.Web.Mvc;
 using Blog.Model.ViewModels;
+using Blog.Model;
 
 namespace Blog.Web.Tests.Controllers
 {
@@ -26,11 +27,33 @@ namespace Blog.Web.Tests.Controllers
             UserManagerFacade = new Mock<IUserManagerFacade>();
             SignInManagerFacade = new Mock<ISignInManagerFacade>();
         }
+        
+
+        public class A
+        {
+            public Permission Permission { get; set; }
+        }
+
+
+        [Test]
+        public void SampleTest()
+        {
+            var a = new A { Permission = Permission.CreateArticle | Permission.CreateComment | Permission.DeleteComment };
+
+            int val = (int)a.Permission;
+
+            var enval = (Permission)val;
+            
+            
+        }
+
+        
+
 
         [Test]
         public void LoginActionTest()
         {
-            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object);
+            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object, null);
 
             var result = accountController.Login(string.Empty) as ViewResult;
 
@@ -45,7 +68,7 @@ namespace Blog.Web.Tests.Controllers
             SignInManagerFacade.Setup(sm => sm.PasswordSignInAsync("valid", "valid", false))
                 .Returns(Task.Run(() => SignInStatus.Success));
 
-            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object);
+            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object, null);
 
             var result = await accountController.Login(new LoginViewModel
             {

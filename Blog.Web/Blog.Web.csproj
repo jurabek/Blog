@@ -198,7 +198,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Attributes\AuthorizeUserAttribute.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Extentions\Extenstions.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -263,6 +267,10 @@
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Comment\Index.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -294,6 +302,10 @@
     <ProjectReference Include="..\Blog.Data\Blog.Model.csproj">
       <Project>{0d1c4ad3-bc35-4694-ac93-45192590a55e}</Project>
       <Name>Blog.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Helpers\IdentityPermission\IdentityPermissionExtension.csproj">
+      <Project>{0dd3726c-04dd-4d17-82b6-bf20898d0d92}</Project>
+      <Name>IdentityPermissionExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -6,9 +6,9 @@ using Blog.Model.Entities;
 
 namespace Blog.Core.Managers
 {
-    public class ApplicationSignInManager : SignInManager<User, string>
+    public class IdentitySignInManager : SignInManager<User, string>
     {
-        public ApplicationSignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
+        public IdentitySignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)
             : base(userManager, authenticationManager)
         {
         }

@@ -8,6 +8,10 @@ using Blog.Model.Entities;
 using System.Web;
 using Microsoft.Owin.Security;
 using AutoMapper;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Claims;
+using Blog.Core.Managers;
+using IdentityPermissionExtension;
 
 namespace Blog.Web.Controllers
 {
@@ -19,11 +23,13 @@ namespace Blog.Web.Controllers
 
         private IUserManagerFacade _userManagerFacade;
         private ISignInManagerFacade _signInManagerFacade;
+        private IdentityRoleManager _roleManager;
 
-        public AccountController(IUserManagerFacade userManagerFacade, ISignInManagerFacade signInManagerFacade)
+        public AccountController(IUserManagerFacade userManagerFacade, ISignInManagerFacade signInManagerFacade, IdentityRoleManager roleManager)
         {
             _userManagerFacade = userManagerFacade;
             _signInManagerFacade = signInManagerFacade;
+            _roleManager = roleManager;
         }
 
         [AllowAnonymous]
@@ -37,6 +43,7 @@ namespace Blog.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel model, string redirectUrl)
         {
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManagerFacade.PasswordSignInAsync(model.Email, model.Password, model.RememberMe);
@@ -61,12 +68,6 @@ namespace Blog.Web.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
-            return View();
-        }
-
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -75,23 +76,34 @@ namespace Blog.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManagerFacade.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", $"The {model.Email} not registired to our service!");
+                    return View(model);
+                }
                 string code = await _userManagerFacade.GeneratePasswordResetTokenAsync(user.Id);
+
                 var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+
                 await _userManagerFacade.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
 
         [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> Register(RegisterViewModel model)
@@ -109,6 +121,10 @@ namespace Blog.Web.Controllers
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     await _userManagerFacade.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    var userRole = _roleManager.FindByName(nameof(Roles.User));
+
+                    await _userManagerFacade.AddToRoleAsync(user.Id, userRole.Name);
+
                     AddSuccessTempData("Email confirmation", "Email confirmation has been sent, please check your email!");
 
                     return RedirectToAction("Success", "Account");
@@ -119,13 +135,11 @@ namespace Blog.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ResetPassword(string code)
+        public ActionResult ResetPassword(string userId = null, string code = null)
         {
-            return code == null ? View("Error") : View();
+            return code == null ? View("Error") : View(new ResetPasswordViewModel { UserId = userId });
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -135,12 +149,14 @@ namespace Blog.Web.Controllers
             {
                 return View(model);
             }
-            var user = await _userManagerFacade.FindByNameAsync(model.Email);
+
+            var user = await _userManagerFacade.FindByIdAsync(model.UserId);
             if (user == null)
             {
-                // Don't reveal that the user does not exist
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
+                ModelState.AddModelError("", "We did not find user, Perhaps it was deleted or blocked, Please inform customer suppor about that!");
+                return View();
             }
+
             var result = await _userManagerFacade.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
@@ -189,8 +205,6 @@ namespace Blog.Web.Controllers
             var result = await _userManagerFacade.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-
-        
 
         private ActionResult RedirectToLocal(string returnUrl)
         {

@@ -4,12 +4,13 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using Blog.Core.Services;
 using Blog.Model.Entities;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Blog.Core.Managers
 {
-    public class ApplicationUserManager : UserManager<User>
+    public class ApplicationUserManager : UserManager<User, string>
     {
-        public ApplicationUserManager(IUserStore<User> store, IDataProtectionProvider dataProtectionProvider) : base(store)
+        public ApplicationUserManager(IdentityUserStore store, IDataProtectionProvider dataProtectionProvider) : base(store)
         {
             this.UserValidator = new UserValidator<User>(this)
             {
@@ -20,11 +21,7 @@ namespace Blog.Core.Managers
             // Configure validation logic for passwords
             this.PasswordValidator = new PasswordValidator
             {
-                RequiredLength = 6,
-                RequireNonLetterOrDigit = false,
-                RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequiredLength = 6
             };
 
             // Configure user lockout defaults
@@ -50,13 +47,15 @@ namespace Blog.Core.Managers
             //TODO: set sms service here
             //this.SmsService = new SmsService();
 
-            
+
+#if !DEBUG_TEST
             if (dataProtectionProvider != null)
             {
                 IDataProtector dataProtector = dataProtectionProvider.Create("ASP.NET Identity");
 
                 this.UserTokenProvider = new DataProtectorTokenProvider<User>(dataProtector);
             }
+#endif
         }
     }
 }

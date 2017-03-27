@@ -11,13 +11,17 @@ using Microsoft.AspNet.Identity.Owin;
 using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Blog.Core.Mappings;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Blog.Core.IoC;
+using Blog.Core;
+using IdentityPermissionExtension;
 
 namespace Blog.Web
 {
     public partial class Startup
     {
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }
-        
+
         public void ConfigureAuth(IAppBuilder app)
         {
             AutoMapperConfiguration.Configure();
@@ -30,9 +34,10 @@ namespace Blog.Web
                 {
                     // Enables the application to validate the security stamp when the user logs in.
                     // This is a security feature which is used when you change a password or add an external login to your account.  
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, User>(
+                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, User, string>(
                       validateInterval: TimeSpan.FromMinutes(30),
-                      regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                      regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
+                       getUserIdCallback: (claimIdentity) => claimIdentity.GetUserId<string>())
                 }
             });
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
@@ -44,6 +49,10 @@ namespace Blog.Web
             // Once you check this option, your second step of verification during the login process will be remembered on the device where you logged in from.
             // This is similar to the RememberMe option when you log in.
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
+
+            app.UsePermissionManager(new IdentityPermissionManager(new IdentityPermissionStore(new Model.BlogDbContext())));
+            
         }
+        
     }
 }

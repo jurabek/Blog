@@ -65,5 +65,12 @@ namespace Blog.Core.Fasades
         {
             return _userManager.ResetPasswordAsync(id, code, password);
         }
+
+
+        public Task<IdentityResult> AddToRoleAsync(string userId, string role)
+        {
+            return _userManager.AddToRoleAsync(userId, role);
+        }
+
     }
 }
