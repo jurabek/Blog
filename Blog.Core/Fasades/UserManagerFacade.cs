@@ -9,7 +9,7 @@ namespace Blog.Core.Fasades
 {
     public class UserManagerFacade : IUserManagerFacade
     {
-        private ApplicationUserManager _userManager;
+        private readonly ApplicationUserManager _userManager;
 
         public UserManagerFacade(ApplicationUserManager userManager)
         {

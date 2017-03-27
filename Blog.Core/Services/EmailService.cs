@@ -17,7 +17,7 @@ namespace Blog.Core.Services
             var plainTextContent = message.Body;
             var htmlContent = "<div>" + message.Body + "</div>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
+            await client.SendEmailAsync(msg);
         }
     }
 }

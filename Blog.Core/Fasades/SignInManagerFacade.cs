@@ -9,7 +9,7 @@ namespace Blog.Core.Fasades
 {
     public class SignInManagerFacade : ISignInManagerFacade
     {
-        private IdentitySignInManager _signInManager;
+        private readonly IdentitySignInManager _signInManager;
 
         public SignInManagerFacade(IdentitySignInManager signInManager)
         {

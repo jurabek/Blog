@@ -10,5 +10,8 @@ namespace Blog.Model
     {
         internal const string ConnectionString
             = @"Data Source=LVAGPLTP1948\SQLEXPRESS;Initial Catalog=BlogDatabase;User ID=sa;Password=Bek199328";
+
+        internal const string ConnectonStringHome =
+            "Data Source=localhost;Initial Catalog=BlogDatabase;Integrated Security=True";
     }
 }

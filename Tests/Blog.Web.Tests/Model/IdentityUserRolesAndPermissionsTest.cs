@@ -44,8 +44,8 @@ namespace Blog.Web.Tests.Model
             var uniq = UserManager.Users.Count().ToString();
             var user = new User
             {
-                Email = "test" + uniq + "@test.com",
-                UserName = "test" + uniq
+                Email = "test1@test.com",
+                UserName = "test1"
             };
 
             var result = await UserManager.CreateAsync(user, "password@123");
@@ -54,18 +54,64 @@ namespace Blog.Web.Tests.Model
 
             var role = new IdentityRole
             {
-                Name = "TestRole" + uniq,
+                Name = "Role 1",
                 Title = "Description"
             };
 
             var roleResult = await RoleManager.CreateAsync(role);
 
             Assert.AreEqual(IdentityResult.Success, roleResult);
-            
 
-            var permission = await PermissionManager.CreatePermissionAsync("CanWriteTest_" + uniq, "User can write to test", true);
+            await UserManager.AddToRoleAsync(user.Id, role.Name);
+
+
+            var permission = await PermissionManager.CreatePermissionAsync("CanWriteTest", "User can write to test", true);
+            var permission2 = await PermissionManager.CreatePermissionAsync("CanWriteTest1", "User can write to test", true);
+            var permission3 = await PermissionManager.CreatePermissionAsync("CanWriteTest2", "User can write to test", true);
 
             await PermissionManager.AddToRole(permission, role.Id);
+            await PermissionManager.AddToRole(permission2, role.Id);
+            await PermissionManager.AddToRole(permission3, role.Id);
+
+
+
+            var user2 = new User
+            {
+                Email = "test2@test.com",
+                UserName = "test2"
+            };
+
+            var result2 = await UserManager.CreateAsync(user2, "password@123");
+
+
+            var role2 = new IdentityRole
+            {
+                Name = "Role 2",
+                Title = "Description"
+            };
+
+            var roleResult2 = await RoleManager.CreateAsync(role2);
+
+
+            await UserManager.AddToRoleAsync(user2.Id, role2.Name);
+
+
+            await PermissionManager.AddToRole(permission2, role2.Id);
+            await PermissionManager.AddToRole(permission3, role2.Id);
+
+
+            var user1Roles = Context.Roles.Where(r => r.Users.Any(u => u.UserId == user.Id)).ToList();
+
+
+            var user2Roles = Context.Roles.Where(r => r.Users.Any(u => u.UserId == user2.Id)).ToList();
+
+
+
+            var user1RolesPermissions = user1Roles.SelectMany(ur => ur.Permissions).Select(rp => rp.PermissionId);
+
+
+            var permissions = Context.Permissions.Where(p => user1RolesPermissions.Contains(p.Id));
+
 
         }
     }
