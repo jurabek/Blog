@@ -26,12 +26,7 @@ namespace Blog.Web
 
             return string.Empty;
         }
-
-        public static bool HasPermission(this IIdentity identity, Permission permission)
-        {
-            var user = userManager.FindById(identity.GetUserId());
-            return false;
-        }
+        
 
         public static IHtmlString DisplayForPermission<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> ex)
             where TValue : struct, IConvertible

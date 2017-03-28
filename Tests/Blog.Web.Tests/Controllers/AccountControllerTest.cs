@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using Blog.Abstractions.Fasades;
 using Moq;
-using Blog.Web.Tests.IoC;
 using Blog.Web.Controllers;
 using Microsoft.AspNet.Identity.Owin;
 using System.Web.Mvc;
@@ -23,32 +22,9 @@ namespace Blog.Web.Tests.Controllers
 
         public override void Init()
         {
-            Container = DependencyInjection.Initialize();
             UserManagerFacade = new Mock<IUserManagerFacade>();
             SignInManagerFacade = new Mock<ISignInManagerFacade>();
         }
-        
-
-        public class A
-        {
-            public Permission Permission { get; set; }
-        }
-
-
-        [Test]
-        public void SampleTest()
-        {
-            var a = new A { Permission = Permission.CreateArticle | Permission.CreateComment | Permission.DeleteComment };
-
-            int val = (int)a.Permission;
-
-            var enval = (Permission)val;
-            
-            
-        }
-
-        
-
 
         [Test]
         public void LoginActionTest()
@@ -79,7 +55,6 @@ namespace Blog.Web.Tests.Controllers
 
 
             Assert.IsTrue(accountController.ModelState.IsValid);
-
 
             Assert.IsInstanceOf<RedirectToRouteResult>(result);
 

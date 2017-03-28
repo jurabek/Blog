@@ -74,9 +74,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facades\IRoleManagerFacade.cs" />
     <Compile Include="Facades\ISignInManagerFacade.cs" />
+    <Compile Include="Facades\IUrlHelperFacade.cs" />
     <Compile Include="Facades\IUserManagerFacade.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\IAccountRepository.cs" />
+    <Compile Include="ViewModels\IForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\ILoginViewModel.cs" />
+    <Compile Include="ViewModels\IResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\IUserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

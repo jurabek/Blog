@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Blog.Model.Entities.User>
+﻿@model IEnumerable<Blog.Model.ViewModels.UserViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -12,23 +12,26 @@
 <table class="table">
     <tr>
         <th>
+            Name
+        </th>
+        <th>
+            Last name
+        </th>
+        <th>
             Email
         </th>
         <th>
             Email confirmed
         </th>
         <th style="min-width: 200px">
-            Permission
+            Roles
+        </th>
+        <th style="min-width: 200px">
+            Permissions
         </th>
         <th>
             User name
-        </th>
-        <th>
-            Name
-        </th>
-        <th>
-            Last name
-        </th>
+        </th>       
         <th></th>
     </tr>
 
@@ -36,23 +39,30 @@
     {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EmailConfirmed)
             </td>
             <td>
-                Permisson will shown soon...
+                @foreach(string role in item.Roles)
+                {
+                    <p>@role</p>
+                }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @foreach(string permission in item.Permissions)
+                {
+                    <p>@permission</p>
+                }
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
+            
             <td>
                 @Html.ActionLink("Edit permissions", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })

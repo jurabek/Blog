@@ -7,9 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Blog.Core.Managers
-{
-    #region Managers
-    
+{   
     public class IdentityRoleManager : RoleManager<IdentityRole, string>
     {
         public IdentityRoleManager(IdentityRoleStore store) : base(store)
@@ -26,5 +24,4 @@ namespace Blog.Core.Managers
         {
         }
     }
-    #endregion
 }

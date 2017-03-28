@@ -11,7 +11,7 @@ namespace Blog.Web.Controllers
 {
     public class CommentController : Controller
     {
-        [AuthorizePermission(Roles = "Administrator, User", Name = "CanWriteCommentr")]
+        [AuthorizePermission(Roles = "Administrator, User", Name = "CanWriteComment")]
         public ActionResult Index()
         {
             return View();

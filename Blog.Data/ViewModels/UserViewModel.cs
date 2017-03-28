@@ -9,6 +9,8 @@ namespace Blog.Model.ViewModels
 {
     public class UserViewModel
     {
+        public string Id { get; set; }
+
         [Display(Name = "Name")]
         public string Name { get; set; }
 
@@ -20,6 +22,9 @@ namespace Blog.Model.ViewModels
 
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Display(Name = "Roles")]
+        public IEnumerable<string> Roles { get; set; }
 
         [Display(Name = "Permissions")]
         public IEnumerable<string> Permissions { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blog.Abstractions.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Web;
 
 namespace Blog.Model.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterViewModel : IUserViewModel
     {
         [Display(Name = "Name"), Required]
         public string Name { get; set; }

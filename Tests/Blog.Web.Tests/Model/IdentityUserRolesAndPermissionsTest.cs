@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace Blog.Web.Tests.Model
 {
-
     //TODO:
     // That tests will be ignored it is only for Debugging... 
     [TestFixture]
@@ -37,8 +36,8 @@ namespace Blog.Web.Tests.Model
             PermissionManager = new IdentityPermissionManager(PermissionStore);
         }
 
-
         [Test]
+        [Ignore("That was for debugging of Many to Many selecting")]
         public async Task CreateUserAndRoleTest()
         {
             var uniq = UserManager.Users.Count().ToString();
@@ -104,14 +103,18 @@ namespace Blog.Web.Tests.Model
 
 
             var user2Roles = Context.Roles.Where(r => r.Users.Any(u => u.UserId == user2.Id)).ToList();
-
-
+            
 
             var user1RolesPermissions = user1Roles.SelectMany(ur => ur.Permissions).Select(rp => rp.PermissionId);
 
 
             var permissions = Context.Permissions.Where(p => user1RolesPermissions.Contains(p.Id));
 
+
+            var user2RolesPermissions = user2Roles.SelectMany(ur => ur.Permissions).Select(rp => rp.PermissionId);
+
+
+            var permissions2 = Context.Permissions.Where(p => user2RolesPermissions.Contains(p.Id));
 
         }
     }

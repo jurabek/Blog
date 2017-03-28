@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
-namespace Blog.Abstractions.Fasades
+namespace Blog.Abstractions.Facades
 {
     public interface IUserManagerFacade
     {
@@ -15,7 +15,6 @@ namespace Blog.Abstractions.Fasades
         Task<IUser> FindByNameAsync(string name);
         Task<string> GeneratePasswordResetTokenAsync(string userId);
         Task<IdentityResult> ResetPasswordAsync(string id, string code, string password);
-
         Task<IdentityResult> AddToRoleAsync(string userId, string role);
     }
 }

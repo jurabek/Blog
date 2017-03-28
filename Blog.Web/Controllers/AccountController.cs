@@ -1,35 +1,26 @@
-﻿using Blog.Abstractions.Fasades;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blog.Model.ViewModels;
 using Blog.Model.Entities;
 using System.Web;
-using Microsoft.Owin.Security;
 using AutoMapper;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Security.Claims;
 using Blog.Core.Managers;
 using IdentityPermissionExtension;
+using Blog.Abstractions.Facades;
+using Blog.Abstractions.Repositories;
 
 namespace Blog.Web.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
-        private const string SuccessTitle = "success_title";
-        private const string SuccessMessage = "success_body";
+        private IAccountRepository<User, string> _accountRepository;
 
-        private IUserManagerFacade _userManagerFacade;
-        private ISignInManagerFacade _signInManagerFacade;
-        private IdentityRoleManager _roleManager;
-
-        public AccountController(IUserManagerFacade userManagerFacade, ISignInManagerFacade signInManagerFacade, IdentityRoleManager roleManager)
+        public AccountController(IAccountRepository<User, string> accountRepository)
         {
-            _userManagerFacade = userManagerFacade;
-            _signInManagerFacade = signInManagerFacade;
-            _roleManager = roleManager;
+            _accountRepository = accountRepository;
         }
 
         [AllowAnonymous]
@@ -43,10 +34,9 @@ namespace Blog.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel model, string redirectUrl)
         {
-
             if (ModelState.IsValid)
             {
-                var result = await _signInManagerFacade.PasswordSignInAsync(model.Email, model.Password, model.RememberMe);
+                var result = await _accountRepository.SignIn(model);
                 switch (result)
                 {
                     case SignInStatus.Success:
@@ -55,8 +45,10 @@ namespace Blog.Web.Controllers
                         return View("Lockout");
                     case SignInStatus.Failure:
                     default:
+                    {
                         ModelState.AddModelError("", "Invalid login attempt.");
                         return View(model);
+                    }
                 }
             }
             return View();
@@ -75,20 +67,13 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManagerFacade.FindByNameAsync(model.Email);
-                if (user == null)
+                var result = await _accountRepository.ForgotPassword(model);
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError("", $"The {model.Email} not registired to our service!");
-                    return View(model);
+                    return RedirectToAction("ForgotPasswordConfirmation", "Account");
                 }
-                string code = await _userManagerFacade.GeneratePasswordResetTokenAsync(user.Id);
-
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-
-                await _userManagerFacade.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                AddErrors(result);
             }
-
             return View(model);
         }
 
@@ -110,34 +95,27 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = Mapper.Map<RegisterViewModel, User>(model);
-
-                var result = await _userManagerFacade.CreateUserAsync(user, model.Password);
+                var result = await _accountRepository.CreateUserAsync(model);
                 if (result.Succeeded)
                 {
-                    await _signInManagerFacade.SignInAsync(user);
+                    var successModel = new SuccessViewModel
+                                       (
+                                         "Email confirmation",
+                                         "Email confirmation has been sent, please check your email!"
+                                       );
 
-                    string code = await _userManagerFacade.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await _userManagerFacade.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    var userRole = _roleManager.FindByName(nameof(Roles.User));
-
-                    await _userManagerFacade.AddToRoleAsync(user.Id, userRole.Name);
-
-                    AddSuccessTempData("Email confirmation", "Email confirmation has been sent, please check your email!");
-
-                    return RedirectToAction("Success", "Account");
+                    return RedirectToAction("Success", "Account", successModel);
                 }
                 AddErrors(result);
             }
-            return View();
+            return View(model);
         }
 
         [AllowAnonymous]
         public ActionResult ResetPassword(string userId = null, string code = null)
         {
-            return code == null ? View("Error") : View(new ResetPasswordViewModel { UserId = userId });
+            return code == null ? View("Error")
+                                : View(new ResetPasswordViewModel { UserId = userId });
         }
 
         [HttpPost]
@@ -145,25 +123,16 @@ namespace Blog.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var result = await _accountRepository.UpdatePassword(model);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("ResetPasswordConfirmation", "Account");
+                }
+                AddErrors(result);
             }
-
-            var user = await _userManagerFacade.FindByIdAsync(model.UserId);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "We did not find user, Perhaps it was deleted or blocked, Please inform customer suppor about that!");
-                return View();
-            }
-
-            var result = await _userManagerFacade.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            AddErrors(result);
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -175,34 +144,15 @@ namespace Blog.Web.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Success()
+        public ActionResult Success(SuccessViewModel model)
         {
-            ViewBag.Title = TempData[SuccessTitle];
-            ViewBag.Message = TempData[SuccessMessage];
-            ClearSuccessTempData();
-            return View();
-        }
-
-        private void ClearSuccessTempData()
-        {
-            TempData.Remove(SuccessTitle);
-            TempData.Remove(SuccessMessage);
-        }
-
-        private void AddSuccessTempData(string title, string message)
-        {
-            TempData[SuccessTitle] = title;
-            TempData[SuccessMessage] = message;
+            return View(model);
         }
 
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
-            {
-                return View("Error");
-            }
-            var result = await _userManagerFacade.ConfirmEmailAsync(userId, code);
+            var result = await _accountRepository.ConfirmEmail(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -222,5 +172,6 @@ namespace Blog.Web.Controllers
                 ModelState.AddModelError("", error);
             }
         }
+
     }
 }

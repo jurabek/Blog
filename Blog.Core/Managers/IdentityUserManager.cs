@@ -18,23 +18,10 @@ namespace Blog.Core.Managers
                 RequireUniqueEmail = true
             };
 
-            // Configure validation logic for passwords
-            this.PasswordValidator = new PasswordValidator
-            {
-                RequiredLength = 6
-            };
-
-            // Configure user lockout defaults
+            this.PasswordValidator = new PasswordValidator { RequiredLength = 6 };            
             this.UserLockoutEnabledByDefault = true;
             this.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
             this.MaxFailedAccessAttemptsBeforeLockout = 5;
-
-            // Register two-factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug it in here.
-            this.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<User>
-            {
-                MessageFormat = "Your security code is {0}"
-            });
 
             this.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<User>
             {
@@ -43,11 +30,7 @@ namespace Blog.Core.Managers
             });
 
             this.EmailService = new EmailService();
-
-            //TODO: set sms service here
-            //this.SmsService = new SmsService();
-
-
+            
 #if !DEBUG_TEST
             if (dataProtectionProvider != null)
             {

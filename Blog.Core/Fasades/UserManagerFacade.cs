@@ -1,5 +1,4 @@
-﻿using Blog.Abstractions.Fasades;
-using Blog.Core.Managers;
+﻿using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;

@@ -15,7 +15,7 @@ namespace Blog.Model
         : IdentityDbContext<User, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityPermission,IdentityRolePermission, IdentityUserClaim>
     {
 
-        public BlogDbContext() : base(Settings.ConnectonStringHome)
+        public BlogDbContext() : base("BlogConnectionString")
         {
         }
 

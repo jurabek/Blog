@@ -2,7 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 
-namespace Blog.Abstractions.Fasades
+namespace Blog.Abstractions.Facades
 {
     public interface ISignInManagerFacade
     {

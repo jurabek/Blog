@@ -1,4 +1,4 @@
-﻿using Blog.Abstractions.Fasades;
+﻿using Blog.Abstractions.Facades;
 using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Core.Fasades
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class SignInManagerFacade : ISignInManagerFacade
     {
         private readonly IdentitySignInManager _signInManager;

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Configuration;
 
 namespace Blog.Core.Services
 {
@@ -9,9 +10,11 @@ namespace Blog.Core.Services
     {
         public async Task SendAsync(IdentityMessage message)
         {
-            var apiKey = Settings.SendGridKey;
+            var apiKey = ConfigurationManager.AppSettings["SendGridKey"];
+            var email = ConfigurationManager.AppSettings["defualtEmail"];
+
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("jurabek.azizkhujaev@gmail.com", "Blog Site");
+            var from = new EmailAddress(email, "Blog Site");
             var subject = message.Subject;
             var to = new EmailAddress(message.Destination, "Blog Site");
             var plainTextContent = message.Body;

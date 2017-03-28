@@ -51,7 +51,6 @@ namespace Blog.Web
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             app.UsePermissionManager(new IdentityPermissionManager(new IdentityPermissionStore(new Model.BlogDbContext())));
-            
         }
         
     }

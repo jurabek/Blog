@@ -27,14 +27,8 @@ namespace Blog.Model.Entities
 
         [NotMapped]
         [Display(Name = "Full name")]
-        public virtual string FullName
-        {
-            get
-            {   
-                return Name + " " + LastName;
-            }
-        }
-        
+        public virtual string FullName { get { return Name + " " + LastName; } }
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, string> manager)
         {
@@ -42,7 +36,7 @@ namespace Blog.Model.Entities
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
-        }       
+        }
     }
 
     public class IdentityUserLogin : IdentityUserLogin<string>
@@ -51,11 +45,13 @@ namespace Blog.Model.Entities
 
     public class IdentityUserRole : IdentityUserRole<string>
     {
+        public virtual User User { get; set; }
+
+        public virtual IdentityRole Role { get; set; }
     }
 
     public class IdentityUserClaim : IdentityUserClaim<string>
     {
-
     }
 
     /// <summary>
@@ -64,7 +60,9 @@ namespace Blog.Model.Entities
     #region Permission Model
     public class IdentityRolePermission : IdentityPermissionExtension.IdentityRolePermission<string>
     {
+        public virtual IdentityRole Role { get; set; }
 
+        public virtual IdentityPermission Permission { get; set; }
     }
 
     public class IdentityPermission : IdentityPermissionExtension.IdentityPermission<string, IdentityRolePermission>
@@ -99,9 +97,9 @@ namespace Blog.Model.Entities
     }
 
     public class IdentityRoleStore : RoleStore<IdentityRole, string, IdentityUserRole>
-    {  
+    {
         public IdentityRoleStore(BlogDbContext context) : base(context)
-        {  
+        {
         }
     }
 
@@ -117,5 +115,5 @@ namespace Blog.Model.Entities
     }
     #endregion
 
-   
+
 }

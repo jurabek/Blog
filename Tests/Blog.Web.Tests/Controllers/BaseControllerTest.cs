@@ -11,8 +11,6 @@ namespace Blog.Web.Tests.Controllers
     [TestFixture]
     public abstract class BaseControllerTest : IDisposable
     {
-        public IContainer Container { get; protected set; }
-
         [OneTimeTearDown]
         public void Dispose()
         {

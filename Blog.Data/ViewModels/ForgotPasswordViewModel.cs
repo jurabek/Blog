@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Blog.Abstractions.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Model.ViewModels
 {
-    public class ForgotPasswordViewModel
+    public class ForgotPasswordViewModel : IForgotPasswordViewModel
     {
         [Required]
         [EmailAddress]

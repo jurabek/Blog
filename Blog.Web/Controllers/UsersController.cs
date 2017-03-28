@@ -1,6 +1,9 @@
-﻿using Blog.Core;
+﻿using AutoMapper;
+using Blog.Abstractions.Fasades;
+using Blog.Core;
 using Blog.Core.Managers;
 using Blog.Model;
+using Blog.Model.ViewModels;
 using IdentityPermissionExtension;
 using System;
 using System.Collections.Generic;
@@ -13,15 +16,28 @@ namespace Blog.Web.Controllers
     [Authorize(Roles = nameof(Roles.Administrator))]
     public class UsersController : Controller
     {
-        // GET: Users
-        public ActionResult Index(IdentityRoleManager roleManager)
+        private readonly IUserManagerFacade _userManager;
+        public UsersController(IUserManagerFacade userManager)
         {
-            var context = new BlogDbContext();
-        
-            return View();
+            _userManager = userManager;
         }
 
-        public ActionResult Edit()
+        // GET: Users
+        public ActionResult Index()
+        {
+            var context = new BlogDbContext();
+            IEnumerable<UserViewModel> model = Mapper.Map<IEnumerable<UserViewModel>>(context.Users.ToList());
+            return View(model);
+        }
+
+        public ActionResult Edit(string id = null)
+        {   
+            var user = _userManager.FindByIdAsync(id);
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(ChangeUserRolesAndPermissionsViewModel model)
         {
             return View();
         }

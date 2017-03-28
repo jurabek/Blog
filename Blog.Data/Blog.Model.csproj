@@ -53,18 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Settings\Settings.cs" />
     <Compile Include="BlogDbContext.cs" />
     <Compile Include="Permission.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\ChangeProfileViewModel.cs" />
-    <Compile Include="ViewModels\EditPermissionsViewModel.cs" />
+    <Compile Include="ViewModels\ChangeUserRolesAndPermissionsViewModel.cs" />
     <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\RegisterViewModel.cs" />
     <Compile Include="ViewModels\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\SuccessViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Blog.Abstractions\Blog.Abstractions.csproj">
+      <Project>{7517ac3e-095c-4368-9c89-728abb6ca078}</Project>
+      <Name>Blog.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Helpers\IdentityPermission\IdentityPermissionExtension.csproj">
       <Project>{0dd3726c-04dd-4d17-82b6-bf20898d0d92}</Project>
       <Name>IdentityPermissionExtension</Name>
