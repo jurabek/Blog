@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin;
 using Owin;
 using System.Web;
+using System.Web.Mvc;
 
 [assembly: OwinStartupAttribute(typeof(Blog.Web.Startup))]
 namespace Blog.Web

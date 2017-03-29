@@ -1,6 +1,8 @@
-﻿using Blog.Abstractions.Fasades;
+﻿using Blog.Abstractions.Facades;
+using Blog.Abstractions.Repositories;
 using Blog.Core.Fasades;
 using Blog.Core.Managers;
+using Blog.Core.Repositories;
 using Blog.Model;
 using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
@@ -19,6 +21,8 @@ namespace Blog.Core.IoC
             For<ApplicationUserManager>().Use<ApplicationUserManager>();
             For<ISignInManagerFacade>().Use<SignInManagerFacade>();
             For<IUserManagerFacade>().Use<UserManagerFacade>();
+            For<IAccountRepository<User, string>>().Use<AccountRepository>();
+            For<IUrlHelperFacade>().Use<UrlHelperFacade>();
         }
     }
 }

@@ -11,7 +11,6 @@ using System.Web;
 
 namespace Blog.Model.Entities
 {
-
     public class User : IdentityUser<string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>, IUser
     {
         public User()
@@ -57,7 +56,6 @@ namespace Blog.Model.Entities
     /// <summary>
     /// New models or identity models that have changed in presence of permission extension.
     /// </summary>
-    #region Permission Model
     public class IdentityRolePermission : IdentityPermissionExtension.IdentityRolePermission<string>
     {
         public virtual IdentityRole Role { get; set; }
@@ -83,12 +81,11 @@ namespace Blog.Model.Entities
             Id = Guid.NewGuid().ToString("N");
         }
     }
-    #endregion
 
     /// <summary>
     /// Note: use the permission extension DbContext in the constructor of the Stores.
     /// </summary>
-    #region Stores
+
     public class IdentityUserStore : UserStore<User, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
         public IdentityUserStore(BlogDbContext context) : base(context)
@@ -102,10 +99,7 @@ namespace Blog.Model.Entities
         {
         }
     }
-
-    /// <summary>
-    /// PermissionStore Object
-    /// </summary>
+    
     public class IdentityPermissionStore : IdentityPermissionExtension.PermissionStore<string, IdentityRole, User, IdentityUserStore, IdentityUserLogin,
         IdentityRolePermission, IdentityUserClaim, IdentityUserRole, IdentityPermission>
     {
@@ -113,7 +107,5 @@ namespace Blog.Model.Entities
         {
         }
     }
-    #endregion
-
-
+    
 }

@@ -14,13 +14,12 @@ using Blog.Abstractions.Repositories;
 namespace Blog.Web.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseAccountController
     {
-        private IAccountRepository<User, string> _accountRepository;
 
-        public AccountController(IAccountRepository<User, string> accountRepository)
+        public AccountController(IAccountRepository<User, string> accountRepository) 
+            : base(accountRepository)
         {
-            _accountRepository = accountRepository;
         }
 
         [AllowAnonymous]
@@ -125,7 +124,7 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.UpdatePassword(model);
+                var result = await _accountRepository.ResetPassword(model);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -155,23 +154,5 @@ namespace Blog.Web.Controllers
             var result = await _accountRepository.ConfirmEmail(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error);
-            }
-        }
-
     }
 }

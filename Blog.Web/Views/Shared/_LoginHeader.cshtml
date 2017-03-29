@@ -8,7 +8,7 @@ sq
 
         <ul class="nav navbar-nav navbar-right">
             <li>
-                @Html.ActionLink(User.Identity.GetUserTitle(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink(User.Identity.GetUserTitle(), "Index", "ManageAccount", routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>
             <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
         </ul>

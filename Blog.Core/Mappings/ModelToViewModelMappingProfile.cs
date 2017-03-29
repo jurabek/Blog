@@ -13,12 +13,12 @@ namespace Blog.Core.Mappings
     {
         public ModelToViewModelMappingProfile()
         {
-            CreateMap<User, ChangeProfileViewModel>();
+            CreateMap<User, UpdateProfileViewModel>();
 
             CreateMap<RegisterViewModel, User>()
                 .ForMember(u => u.UserName, map => map.MapFrom(vm => vm.Email));
 
-            CreateMap<User, UserViewModel>()
+            CreateMap<User, UsersViewModel>()
                 .ForMember(vm => vm.Roles, opt => opt.MapFrom(u => u.Roles.Select(ur => ur.Role).Select(r => r.Name)))
                 .ForMember(vm => vm.Permissions,
                                     opt => opt.MapFrom(u =>

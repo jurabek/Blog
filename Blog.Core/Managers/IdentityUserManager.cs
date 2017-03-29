@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Blog.Core.Managers
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class ApplicationUserManager : UserManager<User, string>
     {
         public ApplicationUserManager(IdentityUserStore store, IDataProtectionProvider dataProtectionProvider) : base(store)

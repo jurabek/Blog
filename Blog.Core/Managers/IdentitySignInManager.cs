@@ -6,6 +6,7 @@ using Blog.Model.Entities;
 
 namespace Blog.Core.Managers
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class IdentitySignInManager : SignInManager<User, string>
     {
         public IdentitySignInManager(ApplicationUserManager userManager, IAuthenticationManager authenticationManager)

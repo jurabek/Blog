@@ -12,7 +12,6 @@ namespace Blog.Core.Services
         {
             var apiKey = ConfigurationManager.AppSettings["SendGridKey"];
             var email = ConfigurationManager.AppSettings["defualtEmail"];
-
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(email, "Blog Site");
             var subject = message.Subject;

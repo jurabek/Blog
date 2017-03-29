@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Blog.Abstractions.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Model.ViewModels
 {
-    public class ChangePasswordViewModel
+    public class UpdatePasswordViewModel : IUpdatePasswordViewModel
     {
         [Display(Name = "Old password"), DataType(DataType.Password)]
         public string OldPassword { get; set; }

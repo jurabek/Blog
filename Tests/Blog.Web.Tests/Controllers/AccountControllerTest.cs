@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using Blog.Abstractions.Fasades;
 using Moq;
 using Blog.Web.Controllers;
 using Microsoft.AspNet.Identity.Owin;
 using System.Web.Mvc;
 using Blog.Model.ViewModels;
 using Blog.Model;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Tests.Controllers
 {
@@ -29,7 +29,7 @@ namespace Blog.Web.Tests.Controllers
         [Test]
         public void LoginActionTest()
         {
-            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object, null);
+            var accountController = new AccountController(null);
 
             var result = accountController.Login(string.Empty) as ViewResult;
 
@@ -44,7 +44,7 @@ namespace Blog.Web.Tests.Controllers
             SignInManagerFacade.Setup(sm => sm.PasswordSignInAsync("valid", "valid", false))
                 .Returns(Task.Run(() => SignInStatus.Success));
 
-            var accountController = new AccountController(UserManagerFacade.Object, SignInManagerFacade.Object, null);
+            var accountController = new AccountController(null);
 
             var result = await accountController.Login(new LoginViewModel
             {

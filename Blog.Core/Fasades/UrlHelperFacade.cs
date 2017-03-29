@@ -9,6 +9,7 @@ using System.Web.Mvc;
 
 namespace Blog.Core.Fasades
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class UrlHelperFacade : IUrlHelperFacade
     {
         public string Action(string actionName, string controllerName, object routeValues, string protocol)

@@ -3,9 +3,11 @@ using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using System;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Core.Fasades
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class UserManagerFacade : IUserManagerFacade
     {
         private readonly ApplicationUserManager _userManager;

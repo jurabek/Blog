@@ -8,9 +8,6 @@ namespace Blog.Model.ViewModels
 {
     public class SuccessViewModel
     {
-        public SuccessViewModel()
-        {
-        }
         public SuccessViewModel(string title, string message)
         {
             Title = title;
@@ -19,6 +16,5 @@ namespace Blog.Model.ViewModels
         public string Title { get; set; }
 
         public string Message { get; set; }
-
     }
 }

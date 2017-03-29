@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Blog.Abstractions.Fasades;
+using Blog.Abstractions.Facades;
+using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -9,18 +10,15 @@ using System.Web.Mvc;
 namespace Blog.Web.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageAccountController : BaseAccountController
     {
-        private IUserManagerFacade _userManagerFacade;
-        private ISignInManagerFacade _signInManagerFacade;
+        
 
-        public ManageController(IUserManagerFacade userManagerFacade, ISignInManagerFacade signInManagerFacade)
+        public ManageAccountController(IAccountRepository<User, string> accountRepository) 
+            : base(accountRepository)
         {
-            _userManagerFacade = userManagerFacade;
-            _signInManagerFacade = signInManagerFacade;
         }
 
-        // GET: Manage
         public ActionResult Index(ManageMessageId? message = null)
         {
             ViewBag.StatusMessage =
@@ -37,40 +35,40 @@ namespace Blog.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChangePassword(ChangePasswordViewModel model)
+        public async Task<ActionResult> ChangePassword(UpdatePasswordViewModel model)
         {
-            var result = _userManagerFacade.ChangePassword(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                var result = await _accountRepository.UpdatePassword(User.Identity.GetUserId(), model);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                }
+                AddErrors(result);
             }
             return View();
         }
 
         public async Task<ActionResult> ChangeProfile()
         {
-            var user = await _userManagerFacade.FindByIdAsync(User.Identity.GetUserId()) as User;
-            var model = Mapper.Map<User, ChangeProfileViewModel>(user);
+            var user = await _accountRepository.GetAsync(User.Identity.GetUserId());
+            var model = Mapper.Map<User, UpdateProfileViewModel>(user);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> ChangeProfile(ChangeProfileViewModel model)
+        public async Task<ActionResult> ChangeProfile(UpdateProfileViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await UpdateUserProfile(model);
-                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeProfileSuccess });
+                var result = await _accountRepository.UpdateProfile(User.Identity.GetUserId(), model);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", new { Message = ManageMessageId.ChangeProfileSuccess });
+                }
+                AddErrors(result);
             }
             return View();
-        }
-
-        private async Task UpdateUserProfile(ChangeProfileViewModel model)
-        {
-            var user = await _userManagerFacade.FindByIdAsync(User.Identity.GetUserId()) as User;
-            user.Name = model.Name;
-            user.LastName = model.LastName;
-            await _userManagerFacade.UpdateAsync(user);
         }
 
         public enum ManageMessageId

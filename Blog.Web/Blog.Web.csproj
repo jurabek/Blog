@@ -199,6 +199,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Attributes\AuthorizeUserAttribute.cs" />
+    <Compile Include="Controllers\BaseAccountController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -260,9 +261,9 @@
     <Content Include="Views\Account\Success.cshtml" />
     <Content Include="Views\Shared\_LoginHeader.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ChangeProfile.cshtml" />
+    <Content Include="Views\ManageAccount\ChangePassword.cshtml" />
+    <Content Include="Views\ManageAccount\Index.cshtml" />
+    <Content Include="Views\ManageAccount\ChangeProfile.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />

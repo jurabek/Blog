@@ -16,7 +16,7 @@ namespace Blog.Core.Repositories
     {
         private readonly IUserManagerFacade _userManagerFacade;
         private readonly IUrlHelperFacade _urlHelperFacade;
-        private ISignInManagerFacade _signInManagerFacade;
+        private readonly ISignInManagerFacade _signInManagerFacade;
 
         public AccountRepository(IUserManagerFacade userManagerFacade, ISignInManagerFacade signInManagerFacade, IUrlHelperFacade urlHelperFacade)
         {
@@ -25,7 +25,17 @@ namespace Blog.Core.Repositories
             _userManagerFacade = userManagerFacade;
         }
 
-        public async Task<IdentityResult> CreateUserAsync(IUserViewModel model)
+        public async Task<User> GetAsync(string id)
+        {
+            return await _userManagerFacade.FindByIdAsync(id) as User;
+        }
+
+        public User Get(string id)
+        {
+            return _userManagerFacade.FindByIdAsync(id).Result as User;
+        }
+
+        public async Task<IdentityResult> CreateUserAsync(IRegisterUserViewModel model)
         {
             var user = Mapper.Map<RegisterViewModel, User>(model as RegisterViewModel);
             var result = await _userManagerFacade.CreateUserAsync(user, model.Password);
@@ -33,7 +43,7 @@ namespace Blog.Core.Repositories
             {
                 await _userManagerFacade.AddToRoleAsync(user.Id, nameof(Roles.User));
                 await _signInManagerFacade.SignInAsync(user);
-                await SendConfirmationEmail(user);
+                await SendConfirmationEmail(user.Id);
             }
             return result;
         }
@@ -48,21 +58,7 @@ namespace Blog.Core.Repositories
             return await _userManagerFacade.FindByNameAsync(name) as User;
         }
 
-        private async Task SendConfirmationEmail(User user)
-        {
-            string code = await _userManagerFacade.GenerateEmailConfirmationTokenAsync(user.Id);
-            var callbackUrl = _urlHelperFacade.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: _urlHelperFacade.GetUrlScheme());
-            await _userManagerFacade.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-        }
-
-        private async Task SendResetPasswordEmail(User user)
-        {
-            string code = await _userManagerFacade.GeneratePasswordResetTokenAsync(user.Id);
-            var callbackUrl = _urlHelperFacade.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: _urlHelperFacade.GetUrlScheme());
-            await _userManagerFacade.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-        }
-
-        public async Task<IdentityResult> UpdatePassword(IResetPasswordViewModel model)
+        public async Task<IdentityResult> ResetPassword(IResetPasswordViewModel model)
         {
             var user = await _userManagerFacade.FindByIdAsync(model.UserId);
             if (user == null)
@@ -78,7 +74,7 @@ namespace Blog.Core.Repositories
             if (user == null)
                 return new IdentityResult($"The {model.Email} not registired to our service!");
 
-            await SendResetPasswordEmail(user);
+            await SendResetPasswordEmail(user.Id);
             return IdentityResult.Success;
         }
 
@@ -93,6 +89,34 @@ namespace Blog.Core.Repositories
         public Task<SignInStatus> SignIn(ILoginViewModel model)
         {
             return _signInManagerFacade.PasswordSignInAsync(model.Email, model.Password, model.RememberMe);
+        }
+
+        public Task<IdentityResult> UpdatePassword(string userId, IUpdatePasswordViewModel model)
+        {
+            return Task.FromResult(_userManagerFacade
+                                        .ChangePassword(userId, model.OldPassword, model.NewPassword));
+        }
+
+        public async Task<IdentityResult> UpdateProfile(string userId, IUpdateProfileViewModel model)
+        {
+            var user = await _userManagerFacade.FindByIdAsync(userId) as User;
+            user.Name = model.Name;
+            user.LastName = model.LastName;
+            return await _userManagerFacade.UpdateAsync(user);
+        }
+
+        public async Task SendConfirmationEmail(string  userId)
+        {
+            string code = await _userManagerFacade.GenerateEmailConfirmationTokenAsync(userId);
+            var callbackUrl = _urlHelperFacade.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: _urlHelperFacade.GetUrlScheme());
+            await _userManagerFacade.SendEmailAsync(userId, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        }
+
+        public async Task SendResetPasswordEmail(string userId)
+        {
+            string code = await _userManagerFacade.GeneratePasswordResetTokenAsync(userId);
+            var callbackUrl = _urlHelperFacade.Action("ResetPassword", "Account", new { userId = userId, code = code }, protocol: _urlHelperFacade.GetUrlScheme());
+            await _userManagerFacade.SendEmailAsync(userId, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
         }
     }
 }

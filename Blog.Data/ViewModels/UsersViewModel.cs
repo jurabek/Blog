@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Model.ViewModels
 {
-    public class UserViewModel
+    public class UsersViewModel
     {
         public string Id { get; set; }
 
