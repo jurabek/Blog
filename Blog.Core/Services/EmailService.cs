@@ -6,6 +6,7 @@ using System.Configuration;
 
 namespace Blog.Core.Services
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class EmailService : IIdentityMessageService
     {
         public async Task SendAsync(IdentityMessage message)

@@ -10,6 +10,7 @@ using StructureMap.Configuration.DSL;
 
 namespace Blog.Core.IoC
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public abstract class BaseRegistry : Registry
     {
         protected BaseRegistry()

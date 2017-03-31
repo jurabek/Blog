@@ -16,14 +16,13 @@ namespace Blog.Web.Controllers
     [Authorize]
     public class AccountController : BaseAccountController
     {
-
-        public AccountController(IAccountRepository<User, string> accountRepository) 
+        public AccountController(IAccountRepository<User, string> accountRepository)
             : base(accountRepository)
         {
         }
 
         [AllowAnonymous]
-        public ActionResult Login(string redirectUrl)
+        public ActionResult Login(string redirectUrl = null)
         {
             ViewBag.RedirecrUrl = redirectUrl;
             return View();
@@ -31,7 +30,7 @@ namespace Blog.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginViewModel model, string redirectUrl)
+        public async Task<ActionResult> Login(LoginViewModel model, string redirectUrl = null)
         {
             if (ModelState.IsValid)
             {
@@ -40,14 +39,10 @@ namespace Blog.Web.Controllers
                 {
                     case SignInStatus.Success:
                         return RedirectToLocal(redirectUrl);
-                    case SignInStatus.LockedOut:
-                        return View("Lockout");
+
                     case SignInStatus.Failure:
-                    default:
-                    {
                         ModelState.AddModelError("", "Invalid login attempt.");
                         return View(model);
-                    }
                 }
             }
             return View();
@@ -69,17 +64,17 @@ namespace Blog.Web.Controllers
                 var result = await _accountRepository.ForgotPassword(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                    var successModel = new SuccessViewModel
+                    {
+                        Title = "Forgot Password Confirmation",
+                        Message = "Please check your email to reset your password."
+                    };
+
+                    return RedirectToAction("Success", "Account", successModel);
                 }
                 AddErrors(result);
             }
             return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
-        {
-            return View();
         }
 
         [AllowAnonymous]
@@ -98,10 +93,10 @@ namespace Blog.Web.Controllers
                 if (result.Succeeded)
                 {
                     var successModel = new SuccessViewModel
-                                       (
-                                         "Email confirmation",
-                                         "Email confirmation has been sent, please check your email!"
-                                       );
+                    {
+                        Title= "Email confirmation",
+                        Message = "Email confirmation has been sent, please check your email!"
+                    };
 
                     return RedirectToAction("Success", "Account", successModel);
                 }
@@ -127,7 +122,7 @@ namespace Blog.Web.Controllers
                 var result = await _accountRepository.ResetPassword(model);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("ResetPasswordConfirmation", "Account");
+                    return View("ResetPasswordConfirmation");
                 }
                 AddErrors(result);
             }
@@ -138,7 +133,7 @@ namespace Blog.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            HttpContext.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            _accountRepository.SignOut();
             return RedirectToAction("Index", "Home");
         }
 

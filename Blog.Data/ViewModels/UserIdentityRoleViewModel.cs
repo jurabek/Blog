@@ -14,6 +14,6 @@ namespace Blog.Model.ViewModels
 
         public string Title { get; set; }
 
-        public IEnumerable<UserIdentityPermissionViewModel> Permissions { get; set; }
+        public IList<UserIdentityPermissionViewModel> Permissions { get; set; }
     }
 }

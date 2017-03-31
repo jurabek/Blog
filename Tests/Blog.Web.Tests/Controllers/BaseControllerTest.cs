@@ -1,16 +1,18 @@
 ﻿using NUnit.Framework;
-using StructureMap;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Mvc;
+using Moq;
 
 namespace Blog.Web.Tests.Controllers
 {
     [TestFixture]
-    public abstract class BaseControllerTest : IDisposable
+    public abstract class BaseControllerTest<TController, TRepository> : IDisposable 
+        where TController : Controller
+        where TRepository : class
     {
+        protected TController _controller;
+        protected Mock<TRepository> _repository;
+
         [OneTimeTearDown]
         public void Dispose()
         {
@@ -20,13 +22,16 @@ namespace Blog.Web.Tests.Controllers
         [OneTimeSetUp]
         public abstract void Init();
 
-
         public virtual void Dispose(bool dispose)
         {
             if (dispose)
             {
                 Dispose();
             }
+        }
+        protected void ClearModelState()
+        {
+            _controller.ModelState.Clear();            
         }
     }
 }

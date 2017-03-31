@@ -10,7 +10,6 @@ using System.Linq.Expressions;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
-using Blog.Core.Helpers;
 
 namespace Blog.Web
 {
@@ -22,31 +21,13 @@ namespace Blog.Web
         {
             var user = userManager.FindById(identity.GetUserId());
             if (user != null)
+            {
+                if (string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.LastName))
+                    return user.UserName;
                 return user.FullName;
-
+            }
             return string.Empty;
         }
         
-
-        public static IHtmlString DisplayForPermission<TModel, TValue>(this HtmlHelper<TModel> html, Expression<Func<TModel, TValue>> ex)
-            where TValue : struct, IConvertible
-        {
-            var enums = (Permission)ModelMetadata.FromLambdaExpression(ex, html.ViewData).Model;
-
-            var flags = enums.GetFlags();            
-            
-            string result = 
-                string.Concat(flags.Select(x => GetCheckBox(x.GetEnumDescription())));
-
-            return html.Raw(result);
-        }
-
-        private static string GetCheckBox(string text)
-        {
-            return string.Format(@"
-                                <div class='checkbox'>
-                                  <label><input checked='checked' disabled='disabled' class='check-box' type='checkbox'>{0}</label>
-                                 </div>", text);
-        }       
     }
 }

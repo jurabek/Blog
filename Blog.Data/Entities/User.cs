@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Blog.Model.Entities
     {
         public User()
         {
-            this.Id = Guid.NewGuid().ToString();
+            this.Id = Guid.NewGuid().ToString("N");
         }
 
         [Display(Name = "Name")]
@@ -103,8 +104,74 @@ namespace Blog.Model.Entities
     public class IdentityPermissionStore : IdentityPermissionExtension.PermissionStore<string, IdentityRole, User, IdentityUserStore, IdentityUserLogin,
         IdentityRolePermission, IdentityUserClaim, IdentityUserRole, IdentityPermission>
     {
+        private IDbSet<IdentityPermission> _permissions;
         public IdentityPermissionStore(BlogDbContext context) : base(context)
         {
+            _permissions = context.Permissions;
+        }
+
+        public override Task InitialConfiguration()
+        {
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanCreateArticle)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanCreateArticle),
+                    Description = "User can create articles",
+                    IsGlobal = true
+                });
+
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanEditArticle)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanEditArticle),
+                    Description = "User can edit articles",
+                    IsGlobal = true
+                });
+
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanDeleteArticle)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanDeleteArticle),
+                    Description = "User can delete articles",
+                    IsGlobal = true
+                });
+
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanVoteArticle)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanVoteArticle),
+                    Description = "User can vote articles",
+                    IsGlobal = true
+                });
+
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanWriteComment)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanWriteComment),
+                    Description = "User can write comments",
+                    IsGlobal = true
+                });
+
+
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanEditComment)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanEditComment),
+                    Description = "User can edit comments",
+                    IsGlobal = true
+                });
+
+            if (!_permissions.Any(p => p.Name == nameof(Permissions.CanDeleteComment)))
+                _permissions.Add(new IdentityPermission
+                {
+                    Name = nameof(Permissions.CanDeleteComment),
+                    Description = "User can delete comments",
+                    IsGlobal = true
+                });
+
+            Context.SaveChanges();
+
+            return base.InitialConfiguration();
         }
     }
     

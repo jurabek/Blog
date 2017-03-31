@@ -47,12 +47,13 @@ namespace Blog.Web.Controllers
                         Id = rp.PermissionId,
                         Description = rp.Permission.Description,
                         Name = rp.Permission.Name
-                    })
+                    }).ToList()
                 });
 
             var model = new EditRolesViewModel
             {
-                UserRoles = userRoles,
+                UserId = id,
+                UserRoles = userRoles.ToList(),
                 Roles = new SelectList(context.Roles.ToList(), "Id", "Name")
             };
 

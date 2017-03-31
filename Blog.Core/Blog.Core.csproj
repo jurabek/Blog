@@ -112,7 +112,6 @@
     <Compile Include="Fasades\SignInManagerFacade.cs" />
     <Compile Include="Fasades\UrlHelperFacade.cs" />
     <Compile Include="Fasades\UserManagerFacade.cs" />
-    <Compile Include="Helpers\EnumHelpers.cs" />
     <Compile Include="IoC\BaseRegistry.cs" />
     <Compile Include="IoC\BaseStructuremapBootstrapper.cs" />
     <Compile Include="Managers\IdentitySignInManager.cs" />

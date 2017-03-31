@@ -23,6 +23,7 @@ namespace Blog.Abstractions.Repositories
         Task<IdentityResult> UpdateProfile(TKey userId, IUpdateProfileViewModel model);
         Task<IdentityResult> ConfirmEmail(TKey userId, string code);
         Task<SignInStatus> SignIn(ILoginViewModel model);
+        void SignOut();
         Task SendConfirmationEmail(TKey userId);
         Task SendResetPasswordEmail(TKey userId);
     }

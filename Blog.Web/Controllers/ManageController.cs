@@ -12,8 +12,6 @@ namespace Blog.Web.Controllers
     [Authorize]
     public class ManageAccountController : BaseAccountController
     {
-        
-
         public ManageAccountController(IAccountRepository<User, string> accountRepository) 
             : base(accountRepository)
         {
@@ -46,7 +44,7 @@ namespace Blog.Web.Controllers
                 }
                 AddErrors(result);
             }
-            return View();
+            return View(model);
         }
 
         public async Task<ActionResult> ChangeProfile()

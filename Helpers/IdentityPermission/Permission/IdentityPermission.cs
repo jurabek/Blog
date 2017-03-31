@@ -24,12 +24,14 @@ namespace IdentityPermissionExtension
         public virtual ICollection<TRolePermission> Roles { get; set; }
     }
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class IdentityRolePermission<TKey> : IRolePermission<TKey>
     {
         public virtual TKey RoleId { get; set; }
         public virtual TKey PermissionId { get; set; }
     }
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class IdentityRole<TKey, TUserRole, TRolePermission>
         : Microsoft.AspNet.Identity.EntityFramework.IdentityRole<TKey, TUserRole>,
             IIdentityRole<TKey, TRolePermission>

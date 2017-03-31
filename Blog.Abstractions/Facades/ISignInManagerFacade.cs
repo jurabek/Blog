@@ -8,5 +8,6 @@ namespace Blog.Abstractions.Facades
     {
         Task<SignInStatus> PasswordSignInAsync(string email, string password, bool rememberMe);
         Task SignInAsync(IUser user);
+        void SignOut();
     }
 }

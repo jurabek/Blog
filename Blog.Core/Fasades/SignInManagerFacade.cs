@@ -4,6 +4,7 @@ using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Blog.Core.Fasades
 {
@@ -26,5 +27,11 @@ namespace Blog.Core.Fasades
         {
             return _signInManager.SignInAsync(user as User, isPersistent: false, rememberBrowser: false);
         }
+
+        public void SignOut()
+        {
+            _signInManager.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+        }
+
     }
 }

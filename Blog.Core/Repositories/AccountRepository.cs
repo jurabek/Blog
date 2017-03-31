@@ -91,6 +91,11 @@ namespace Blog.Core.Repositories
             return _signInManagerFacade.PasswordSignInAsync(model.Email, model.Password, model.RememberMe);
         }
 
+        public void SignOut()
+        {
+            _signInManagerFacade.SignOut();
+        }
+
         public Task<IdentityResult> UpdatePassword(string userId, IUpdatePasswordViewModel model)
         {
             return Task.FromResult(_userManagerFacade
