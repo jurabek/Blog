@@ -2,7 +2,7 @@
 using Blog.Abstractions.ViewModels;
 using Microsoft.AspNet.Identity;
 
-namespace Blog.Core.Managers
+namespace Blog.Abstractions.Managers
 {
     public interface IUserManager
     {

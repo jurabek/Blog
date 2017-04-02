@@ -1,0 +1,53 @@
+﻿@using Blog.Model.Entities;
+@using Blog.Model.ViewModels
+@model EditRoleViewModel
+
+@{
+    ViewBag.Title = "Edit role";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+@using (Html.BeginForm())
+{
+    <div class="form-horizontal">
+        <h4>User roles and permissions</h4>
+        <hr />
+        <div class="form-group">
+            @Html.HiddenFor(m => m.UserId)
+
+            <label>User Roles</label>
+            @foreach (IdentityRole item in Model.UserRoles)
+            {
+                <ul>
+                    <li>
+                        @Html.ActionLink(item.Name, "EditPermission", new { userId = Model.UserId, roleId = item.Id })
+                        <ul>
+                            @foreach (var permission in item.Permissions.Select(p => p.Permission))
+                            {
+                                <li>@permission.Description</li>
+                            }
+                        </ul>
+                    </li>
+                </ul>
+            }
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label>Change roles</label>
+
+            @Html.EditorFor(m => m.Roles)
+
+            <div class="">
+                <input type="submit" value="Save" class="btn btn-primary btn-sm" style="margin-top:10px" />
+            </div>
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+

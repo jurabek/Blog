@@ -3,13 +3,15 @@ using System.Threading.Tasks;
 using Blog.Core.Fasades;
 using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
+using Blog.Abstractions.Fasades;
+using System.Linq;
 
 namespace Blog.Core.Repositories
 {
     public class RoleRepository : IRepository<IdentityRole, string>
     {
-        private readonly IRoleManagerFacade _roleManagerFacade;
-        public RoleRepository(IRoleManagerFacade roleManagerFacade)
+        private readonly IRoleManagerFacade<IdentityRole> _roleManagerFacade;
+        public RoleRepository(IRoleManagerFacade<IdentityRole> roleManagerFacade)
         {
             _roleManagerFacade = roleManagerFacade;
         }
@@ -41,7 +43,7 @@ namespace Blog.Core.Repositories
 
         public IEnumerable<IdentityRole> GetAll()
         {
-            return _roleManagerFacade.Roles;
+            return _roleManagerFacade.Roles.ToList();
         }
 
         public Task<IEnumerable<IdentityRole>> GetAllAsync()

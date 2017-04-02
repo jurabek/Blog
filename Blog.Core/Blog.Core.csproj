@@ -109,7 +109,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fasades\IRoleManagerFacade.cs" />
     <Compile Include="Fasades\RoleManagerFacade.cs" />
     <Compile Include="Fasades\SignInManagerFacade.cs" />
     <Compile Include="Fasades\UrlHelperFacade.cs" />

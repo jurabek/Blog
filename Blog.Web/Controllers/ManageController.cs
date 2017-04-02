@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Blog.Abstractions.Facades;
-using Blog.Abstractions.Managers;
+﻿using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Core.Managers;
 using Blog.Model.Entities;

@@ -268,8 +268,11 @@
     <Content Include="Views\Account\ResetPassword.cshtml" />
     <Content Include="Views\Comment\Index.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
-    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\EditRole.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Users\EditorTemplates\IdentityRoleViewModel.cshtml" />
+    <Content Include="Views\Users\EditorTemplates\IdentityPermissionViewModel.cshtml" />
+    <Content Include="Views\Users\EditPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

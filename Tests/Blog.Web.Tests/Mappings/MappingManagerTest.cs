@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
-using Blog.Abstractions.Mappings;
 using Blog.Core.Mappings;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using NUnit.Framework;
+using Blog.Abstractions.Managers;
+using Blog.Core.Managers;
 
 namespace Blog.Web.Tests.Mappings
 {

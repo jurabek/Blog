@@ -1,0 +1,9 @@
+﻿@using Blog.Model.ViewModels;
+
+@model IdentityRoleViewModel
+
+@Html.HiddenFor(m => m.Id)
+<div class="checkbox">
+    @Html.CheckBoxFor(m => m.IsSelected)
+    @Html.DisplayFor(model => model.Name)
+</div>

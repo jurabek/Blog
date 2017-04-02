@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Facades\IRoleManagerFacade.cs" />
     <Compile Include="Facades\ISignInManagerFacade.cs" />
     <Compile Include="Facades\IUrlHelperFacade.cs" />
     <Compile Include="Facades\IUserManagerFacade.cs" />

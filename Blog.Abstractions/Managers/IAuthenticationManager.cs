@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Blog.Abstractions.Managers
 {
-    public interface IAuthenticationManager
+    public interface IAuthenticationManager<TUser> where TUser : IUser
     {
         /// <summary>
         /// Signs via model
@@ -19,7 +19,7 @@ namespace Blog.Abstractions.Managers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        Task SignInAsync(IUser user);
+        Task SignInAsync(TUser user);
 
         /// <summary>
         /// Sign outs from session

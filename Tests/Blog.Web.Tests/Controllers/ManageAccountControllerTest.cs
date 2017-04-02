@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Blog.Abstractions.Mappings;
+using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Abstractions.ViewModels;
+using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using Blog.Web.Controllers;
@@ -14,15 +15,18 @@ using static Blog.Web.Controllers.ManageAccountController;
 
 namespace Blog.Web.Tests.Controllers
 {
-    public class ManageAccountControllerTest 
-        : BaseControllerTest<ManageAccountController, IAccountRepository<User, string>>
+    public class ManageAccountControllerTest : BaseControllerTest<ManageAccountController>
     {
+        private Mock<IUserRepository<User, string>> _repository;
+        private Mock<IUserManager> _userManager;
         private Mock<IMappingManager> _mappingManager;
+
         public override void Init()
         {
-            _repository = new Mock<IAccountRepository<User, string>>();
+            _repository = new Mock<IUserRepository<User, string>>();
+            _userManager = new Mock<IUserManager>();
             _mappingManager = new Mock<IMappingManager>();
-            _controller = new ManageAccountController(_repository.Object, _mappingManager.Object);
+            _controller = new ManageAccountController(_repository.Object, _userManager.Object,  _mappingManager.Object);
         }
 
         [Test]
@@ -69,7 +73,7 @@ namespace Blog.Web.Tests.Controllers
         public async Task ChangePasswordShouldRedirectToIndexWhenSuccess()
         {
             ClearModelState();
-            _repository.Setup(r => r.UpdatePassword(It.IsAny<string>(), It.IsAny<IUpdatePasswordViewModel>()))
+            _userManager.Setup(r => r.UpdatePassword(It.IsAny<string>(), It.IsAny<IUpdatePasswordViewModel>()))
                        .Returns(Task.FromResult(IdentityResult.Success));
 
             var result = await _controller.ChangePassword(null) as RedirectToRouteResult;
@@ -84,7 +88,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
             string errorMessage = "Can not change the password!";
-            _repository.Setup(r => r.UpdatePassword(It.IsAny<string>(), It.IsAny<IUpdatePasswordViewModel>()))
+            _userManager.Setup(r => r.UpdatePassword(It.IsAny<string>(), It.IsAny<IUpdatePasswordViewModel>()))
                        .Returns(Task.FromResult(new IdentityResult(errorMessage)));
             
             var result = await _controller.ChangePassword(null) as ViewResult;
@@ -153,7 +157,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _repository.Setup(r => r.UpdateProfile(It.IsAny<string>(), It.IsAny<IUpdateProfileViewModel>()))
+            _userManager.Setup(r => r.UpdateProfile(It.IsAny<string>(), It.IsAny<IUpdateProfileViewModel>()))
                        .Returns(Task.FromResult(IdentityResult.Success));
             
             var result = await _controller.ChangeProfile(new UpdateProfileViewModel()) as RedirectToRouteResult;
@@ -170,7 +174,7 @@ namespace Blog.Web.Tests.Controllers
 
             string errorMessage = "Can not update profile!";
 
-            _repository.Setup(r => r.UpdateProfile(It.IsAny<string>(), It.IsAny<IUpdateProfileViewModel>()))
+            _userManager.Setup(r => r.UpdateProfile(It.IsAny<string>(), It.IsAny<IUpdateProfileViewModel>()))
                        .Returns(Task.FromResult(new IdentityResult(errorMessage)));
 
             var result = await _controller.ChangeProfile(null) as ViewResult;

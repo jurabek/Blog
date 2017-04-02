@@ -3,7 +3,6 @@ using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Abstractions.ViewModels;
 using Blog.Model.Entities;
-using Blog.Model.ViewModels;
 using IdentityPermissionExtension;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
@@ -12,18 +11,17 @@ namespace Blog.Core.Managers
 {
     public class UserManager : IUserManager
     {
-        private IUserManagerFacade _userManagerFacade;
+        private IUserManagerFacade<User> _userManagerFacade;
         private IUserRepository<User, string> _userRepository;
         private IEmailManager _emailManager;
         private IMappingManager _mappingManager;
-        private IAuthenticationManager _authenticationManager;
+        private IAuthenticationManager<User> _authenticationManager;
 
-        public UserManager(
-            IUserManagerFacade userManagerFacade,
+        public UserManager(IUserManagerFacade<User> userManagerFacade,
             IUserRepository<User, string> userRepository,
             IEmailManager emailManager,
             IMappingManager mappingManager,
-            IAuthenticationManager authenticationManager)
+            IAuthenticationManager<User> authenticationManager)
         {
             _userManagerFacade = userManagerFacade;
             _userRepository = userRepository;

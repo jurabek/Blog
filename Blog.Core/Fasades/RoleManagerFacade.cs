@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
+using Blog.Abstractions.Fasades;
 
 namespace Blog.Core.Fasades
 {
-    public class RoleManagerFacade : IRoleManagerFacade
+    public class RoleManagerFacade : IRoleManagerFacade<IdentityRole>
     {
         private IdentityRoleManager _roleManager;
 

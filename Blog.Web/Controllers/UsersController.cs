@@ -15,60 +15,81 @@ namespace Blog.Web.Controllers
     public class UsersController : Controller
     {
         private readonly IRepository<IdentityRole, string> _roleRepository;
-        private readonly IAccountRepository<User, string> _accountRepository;
+        private IUserRepository<User, string> _userRepository;
 
-        public UsersController(IRepository<IdentityRole, string> roleRepository, IAccountRepository<User, string> accountRepository)
+        public UsersController(IRepository<IdentityRole, string> roleRepository, IUserRepository<User, string> userRepository)
         {
             _roleRepository = roleRepository;
-            _accountRepository = accountRepository;
+            _userRepository = userRepository;
         }
 
         public ActionResult Index()
         {
-            var context = new BlogDbContext();
-            IEnumerable<UsersViewModel> model = Mapper.Map<IEnumerable<UsersViewModel>>(context.Users.ToList());
+            IEnumerable<UsersViewModel> model = Mapper.Map<IEnumerable<UsersViewModel>>(_userRepository.GetAll());
             return View(model);
         }
 
-        public async Task<ActionResult> Edit(string id = null, UsersMessageId? message = null)
+        public async Task<ActionResult> EditRole(string id = null, UsersMessageId? message = null)
         {
-            var user = await _accountRepository.GetAsync(id);
+            var user = await _userRepository.GetAsync(id);
+
+            UsersViewModel vm = Mapper.Map<UsersViewModel>(user);
+
             var context = new BlogDbContext();
 
-            var userRoles = user.Roles.Select(ur =>
-                new UserIdentityRoleViewModel()
-                {
-                    Id = ur.RoleId,
-                    Name = ur.Role.Name,
-                    Title = ur.Role.Title,
-                    Permissions = ur.Role.Permissions.Select(rp => new UserIdentityPermissionViewModel
-                    {
-                        Id = rp.PermissionId,
-                        Description = rp.Permission.Description,
-                        Name = rp.Permission.Name
-                    }).ToList()
-                });
+            var model = new EditRoleViewModel { UserRoles = vm.Roles, UserId = vm.Id };
 
-            var model = new EditRolesViewModel
+
+            var roles = context.Roles.ToList().Select(r => new IdentityRoleViewModel
             {
-                UserId = id,
-                UserRoles = userRoles.ToList(),
-                Roles = new SelectList(context.Roles.ToList(), "Id", "Name"),
-                Permissions = new SelectList(context.Permissions.ToList(), "Id", "Description")
-            };
+                Id = r.Id,
+                Name = r.Name,
+                Title = r.Title,
+                IsSelected = vm.Roles.Select(ur => ur.Id).Contains(r.Id)
+            });
+
+            model.Roles = roles;
 
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(EditRolesViewModel model)
+        public async Task<ActionResult> EditRole(EditRoleViewModel model)
         {
-            var user = await _accountRepository.GetAsync(model.UserId);
-            var role = _roleRepository.Get(model.SelectedRoleId);
-            var isInRole = _accountRepository.IsInRole(user.Id, role.Name);
-
+            //var user = await _userRepository.GetAsync(model.UserId);
+            //var role = _roleRepository.Get(model.SelectedRoleId);
 
             return View();
+        }
+
+        public async Task<ActionResult> EditPermission(string userId, string roleId)
+        {
+            var user = await _userRepository.GetAsync(userId);
+
+            UsersViewModel vm = Mapper.Map<UsersViewModel>(user);
+
+            var context = new BlogDbContext();
+
+            var userRolePermissions = vm.Roles.FirstOrDefault(r => r.Id == roleId).Permissions.Select(p => p.Permission);
+
+            var model = new EditPermissionViewModel
+            {
+                Role = _roleRepository.Get(roleId)
+            };
+
+
+            var permissions = context.Permissions.ToList().Select(p => new IdentityPermissionViewModel
+            {
+                Description = p.Description,
+                Id = p.Id,
+                Name = p.Name,
+                RoleId = roleId,
+                UserId = userId,
+                IsSelected = userRolePermissions.Select(rp => rp.Id).Contains(p.Id)
+            });
+
+            model.Permissions = permissions;
+            return View(model);
         }
 
         public enum UsersMessageId

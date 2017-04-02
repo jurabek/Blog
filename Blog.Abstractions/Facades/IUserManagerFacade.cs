@@ -4,21 +4,21 @@ using System.Linq;
 
 namespace Blog.Abstractions.Facades
 {
-    public interface IUserManagerFacade
+    public interface IUserManagerFacade<TUser> where TUser : IUser
     {
-        IQueryable<IUser> Users { get; }
+        IQueryable<TUser> Users { get; }
 
-        Task<IUser> FindByIdAsync(string userId);
+        Task<TUser> FindByIdAsync(string userId);
 
-        Task<IUser> FindByNameAsync(string name);
+        Task<TUser> FindByNameAsync(string name);
 
-        Task<IdentityResult> CreateAsync(IUser user);
+        Task<IdentityResult> CreateAsync(TUser user);
 
-        Task<IdentityResult> CreateAsync(IUser user, string password);
+        Task<IdentityResult> CreateAsync(TUser user, string password);
 
-        Task<IdentityResult> UpdateAsync(IUser user);
+        Task<IdentityResult> UpdateAsync(TUser user);
 
-        Task<IdentityResult> DeleteAsync(IUser user);
+        Task<IdentityResult> DeleteAsync(TUser user);
 
         Task<IdentityResult> ChangePassword(string userId, string oldPassword, string newPassword);
         

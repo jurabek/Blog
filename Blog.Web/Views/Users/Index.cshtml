@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Blog.Model.ViewModels.UsersViewModel>
+﻿@using Blog.Model.Entities
+@model IEnumerable<Blog.Model.ViewModels.UsersViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -51,15 +52,15 @@
                 @Html.DisplayFor(modelItem => item.EmailConfirmed)
             </td>
             <td>
-                @foreach(string role in item.Roles)
+                @foreach(IdentityRole role in item.Roles)
                 {
-                    <p>@role</p>
+                    <p>@role.Name</p>
                 }
             </td>
             <td>
-                @foreach(string permission in item.Permissions)
+                @foreach(IdentityPermission permission in item.Permissions)
                 {
-                    <p>@permission</p>
+                    <p>@permission.Description</p>
                 }
             </td>
             

@@ -9,21 +9,21 @@ namespace Blog.Core.Repositories
 {
     public class UserRepository : IUserRepository<User, string>
     {
-        private IUserManagerFacade _userManagerFacade;
+        private IUserManagerFacade<User> _userManagerFacade;
 
-        public UserRepository(IUserManagerFacade userManagerFacade)
+        public UserRepository(IUserManagerFacade<User> userManagerFacade)
         {
             _userManagerFacade = userManagerFacade;
         }
 
         public TResult Add<TResult>(User entity) where TResult : class
         {
-            return _userManagerFacade.CreateAsync(entity as User).Result as TResult;
+            return _userManagerFacade.CreateAsync(entity).Result as TResult;
         }
 
         public async Task<TResult> AddAsync<TResult>(User entity) where TResult : class
         {
-            return await _userManagerFacade.CreateAsync(entity as User) as TResult;
+            return await _userManagerFacade.CreateAsync(entity) as TResult;
         }
 
         public async Task<TResult> AddAsync<TResult>(User entity, string password) where TResult : class
@@ -43,12 +43,12 @@ namespace Blog.Core.Repositories
 
         public User Get(string key)
         {
-            return _userManagerFacade.FindByIdAsync(key).Result as User;
+            return _userManagerFacade.FindByIdAsync(key).Result;
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _userManagerFacade.Users.Cast<User>();
+            return _userManagerFacade.Users.ToList();
         }
 
         public Task<IEnumerable<User>> GetAllAsync()
@@ -58,17 +58,17 @@ namespace Blog.Core.Repositories
 
         public async Task<User> GetAsync(string key)
         {
-            return await _userManagerFacade.FindByIdAsync(key) as User;
+            return await _userManagerFacade.FindByIdAsync(key);
         }
 
         public User GetByName(string name)
         {
-            return _userManagerFacade.FindByNameAsync(name).Result as User;
+            return _userManagerFacade.FindByNameAsync(name).Result;
         }
 
         public async Task<User> GetByNameAsync(string name)
         {
-            return await _userManagerFacade.FindByNameAsync(name) as User;
+            return await _userManagerFacade.FindByNameAsync(name);
         }
 
         public TResult Update<TResult>(User entity) where TResult : class

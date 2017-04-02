@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Model.ViewModels
 {
-    public class UserIdentityRoleViewModel
+    public class IdentityRoleViewModel
     {
         public string Id { get; set; }
 
@@ -14,6 +14,6 @@ namespace Blog.Model.ViewModels
 
         public string Title { get; set; }
 
-        public IList<UserIdentityPermissionViewModel> Permissions { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

@@ -1,0 +1,10 @@
+﻿@using Blog.Model.ViewModels
+@model EditPermissionViewModel
+
+@using (Html.BeginForm())
+{
+    <label>Permissions</label>
+    <div class="form-group">
+        @Html.EditorFor(m => m.Permissions)
+    </div>
+}

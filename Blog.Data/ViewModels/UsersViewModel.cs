@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blog.Model.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace Blog.Model.ViewModels
         public string Email { get; set; }
 
         [Display(Name = "Roles")]
-        public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<IdentityRole> Roles { get; set; }
 
         [Display(Name = "Permissions")]
-        public IEnumerable<string> Permissions { get; set; }
+        public IEnumerable<IdentityPermission> Permissions { get; set; }
 
     }
 }

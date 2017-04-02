@@ -1,0 +1,12 @@
+﻿@using Blog.Model.ViewModels
+@model IdentityPermissionViewModel
+
+@Html.HiddenFor(m => m.Id)
+@Html.HiddenFor(m => m.RoleId)
+@Html.HiddenFor(m => m.UserId)
+
+<div class="checkbox">
+    @Html.CheckBoxFor(m => m.IsSelected)
+    @Html.DisplayFor(m => m.Description)
+</div>
+

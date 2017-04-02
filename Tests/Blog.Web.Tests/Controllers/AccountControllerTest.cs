@@ -7,23 +7,23 @@ using Blog.Web.Controllers;
 using Microsoft.AspNet.Identity.Owin;
 using System.Web.Mvc;
 using Blog.Model.ViewModels;
-using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
 using Blog.Abstractions.ViewModels;
 using Microsoft.AspNet.Identity;
-using Blog.Abstractions.Mappings;
+using Blog.Abstractions.Managers;
 
 namespace Blog.Web.Tests.Controllers
 {
     public class AccountControllerTest 
-        : BaseControllerTest<AccountController, IAccountRepository<User, string>>
+        : BaseControllerTest<AccountController>
     {
-        private Mock<IMappingManager> _mappingManager;
+        Mock<IUserManager> _userManager;
+        Mock<IAuthenticationManager<User>> _authenticationManager; 
         public override void Init()
         {
-            _repository = new Mock<IAccountRepository<User, string>>();
-            _mappingManager = new Mock<IMappingManager>();
-            _controller = new AccountController(_repository.Object, _mappingManager.Object);
+            _userManager = new Mock<IUserManager>();
+            _authenticationManager = new Mock<IAuthenticationManager<User>>();
+            _controller = new AccountController(_userManager.Object, _authenticationManager.Object);
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _repository.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
+            _authenticationManager.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
                               .Returns(Task.FromResult(SignInStatus.Success));
 
             var result = await _controller.Login(new LoginViewModel()) as RedirectToRouteResult;
@@ -64,7 +64,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _repository.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
+            _authenticationManager.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
                               .Returns(Task.FromResult(SignInStatus.Failure));
 
             var result = await _controller.Login(new LoginViewModel
@@ -93,7 +93,7 @@ namespace Blog.Web.Tests.Controllers
             ClearModelState();
 
             // Sign In should return non of the enum value
-            _repository.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
+            _authenticationManager.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
                               .Returns(Task.FromResult((SignInStatus.Failure)-1));
 
             result = await _controller.Login(new LoginViewModel { Email = null });
@@ -105,14 +105,14 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _repository.Setup(a => a.ConfirmEmail(It.IsAny<string>(), It.IsAny<string>()))
+            _userManager.Setup(a => a.ConfirmEmail(It.IsAny<string>(), It.IsAny<string>()))
                               .Returns(Task.FromResult(IdentityResult.Success));
 
             var result = await _controller.ConfirmEmail(It.IsAny<string>(), It.IsAny<string>()) as ViewResult;
 
             Assert.AreEqual("ConfirmEmail", result.ViewName);
 
-            _repository.Setup(a => a.ConfirmEmail("error", "error"))
+            _userManager.Setup(a => a.ConfirmEmail("error", "error"))
                               .Returns(Task.FromResult(new IdentityResult("Error")));
 
             result = await _controller.ConfirmEmail("error", "error") as ViewResult;
@@ -152,7 +152,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _repository.Setup(r => r.ForgotPassword(It.IsAny<IForgotPasswordViewModel>()))
+            _userManager.Setup(r => r.SendResetPasswordEmail(It.IsAny<IForgotPasswordViewModel>()))
                               .Returns(Task.FromResult(IdentityResult.Success));
 
             var result = await _controller.ForgotPassword(new ForgotPasswordViewModel()) as RedirectToRouteResult;
@@ -168,7 +168,7 @@ namespace Blog.Web.Tests.Controllers
             ClearModelState();
 
             string errorMessage = "Could not sent email to user!";
-            _repository.Setup(r => r.ForgotPassword(null))
+            _userManager.Setup(r => r.SendResetPasswordEmail(null))
                               .Returns(Task.FromResult(new IdentityResult(errorMessage)));
 
             var result = await _controller.ForgotPassword(null);
@@ -190,7 +190,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            var model = new IRegiserViewModel();
+            var model = new RegiserViewModel();
             string errorMessage = "Validation error!";
             
             _controller.ModelState.AddModelError("validation_error", errorMessage);
@@ -207,13 +207,11 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _repository.Setup(r => r.CreateUserAsync(It.IsAny<User>(), It.IsAny<string>()))
+            _userManager.Setup(r => r.SignUpAndSignIn(It.IsAny<RegiserViewModel>()))
                               .Returns(Task.FromResult(IdentityResult.Success));
 
-            _mappingManager.Setup(r => r.Map<IRegiserViewModel,User>(It.IsAny<IRegiserViewModel>()))
-                           .Returns(new User());
 
-            var result = await _controller.Register(new IRegiserViewModel()) as RedirectToRouteResult;
+            var result = await _controller.Register(new RegiserViewModel()) as RedirectToRouteResult;
 
             Assert.AreEqual("Success", result.RouteValues["action"]);
             Assert.AreEqual("Account", result.RouteValues["controller"]);
@@ -225,10 +223,10 @@ namespace Blog.Web.Tests.Controllers
             _controller.ModelState.Clear();
 
             string errorMessage = "Can not create user!";
-            _repository.Setup(r => r.CreateUserAsync(It.IsAny<User>(), It.IsAny<string>()))
+            _userManager.Setup(r => r.SignUpAndSignIn(It.IsAny<RegiserViewModel>()))
                               .Returns(Task.FromResult(new IdentityResult(errorMessage)));
 
-            var result = await _controller.Register(new IRegiserViewModel()) as ViewResult;
+            var result = await _controller.Register(new RegiserViewModel()) as ViewResult;
 
             Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, errorMessage);
         }
@@ -275,7 +273,7 @@ namespace Blog.Web.Tests.Controllers
         public async Task ResetPasswordShouldRedirectToSuccessAction()
         {
             ClearModelState();
-            _repository.Setup(r => r.ResetPassword(It.IsAny<IResetPasswordViewModel>()))
+            _userManager.Setup(r => r.ResetPassword(It.IsAny<IResetPasswordViewModel>()))
                               .Returns(Task.FromResult(IdentityResult.Success));
             
             var result = await _controller.ResetPassword(new ResetPasswordViewModel()) as ViewResult;
@@ -289,7 +287,7 @@ namespace Blog.Web.Tests.Controllers
             ClearModelState();
 
             string errorMessage = "Can not reset password!";
-            _repository.Setup(r => r.ResetPassword(It.IsAny<IResetPasswordViewModel>()))
+            _userManager.Setup(r => r.ResetPassword(It.IsAny<IResetPasswordViewModel>()))
                               .Returns(Task.FromResult(new IdentityResult(errorMessage)));
 
             var result = await _controller.ResetPassword(null) as ViewResult;

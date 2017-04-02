@@ -11,17 +11,16 @@ namespace Blog.Core.Mappings
         {
             CreateMap<User, UpdateProfileViewModel>();
 
-            CreateMap<IRegiserViewModel, User>()
+            CreateMap<RegiserViewModel, User>()
                 .ForMember(u => u.UserName, map => map.MapFrom(vm => vm.Email));
 
             CreateMap<User, UsersViewModel>()
-                .ForMember(vm => vm.Roles, opt => opt.MapFrom(u => u.Roles.Select(ur => ur.Role).Select(r => r.Name)))
+                .ForMember(vm => vm.Roles, opt => opt.MapFrom(u => u.Roles.Select(ur => ur.Role)))
                 .ForMember(vm => vm.Permissions,
                                     opt => opt.MapFrom(u =>
                                             u.Roles.Select(ur => ur.Role)
                                                    .SelectMany(r => r.Permissions)
-                                                   .Select(rp => rp.Permission)
-                                                   .Select(p => p.Description)));
+                                                   .Select(rp => rp.Permission)));
         }
     }
 }

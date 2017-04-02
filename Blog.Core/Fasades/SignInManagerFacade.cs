@@ -9,7 +9,7 @@ using System.Web;
 namespace Blog.Core.Fasades
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class SignInManagerFacade : ISignInManagerFacade
+    public class SignInManagerFacade : ISignInManagerFacade<User>
     {
         private readonly IdentitySignInManager _signInManager;
 
@@ -23,9 +23,9 @@ namespace Blog.Core.Fasades
             return _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
         }
 
-        public Task SignInAsync(IUser user)
+        public Task SignInAsync(User user)
         {
-            return _signInManager.SignInAsync(user as User, isPersistent: false, rememberBrowser: false);
+            return _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
         }
 
         public void SignOut()

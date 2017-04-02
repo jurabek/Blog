@@ -12,12 +12,12 @@ namespace Blog.Web.Controllers
     [Authorize]
     public class AccountController : BaseAccountController
     {
-        private readonly IAuthenticationManager _authenticationManager;
+        private readonly IAuthenticationManager<User> _authenticationManager;
         private readonly IUserManager _userManager;
 
         public AccountController(
             IUserManager userManager,
-            IAuthenticationManager authenticationManager)
+            IAuthenticationManager<User> authenticationManager)
         {
             _userManager = userManager;
             _authenticationManager = authenticationManager;
@@ -85,7 +85,7 @@ namespace Blog.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Register(IRegiserViewModel model)
+        public async Task<ActionResult> Register(RegiserViewModel model)
         {
             if (ModelState.IsValid)
             {

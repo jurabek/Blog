@@ -1,5 +1,6 @@
 ﻿using Blog.Abstractions.Facades;
 using Blog.Abstractions.Managers;
+using Blog.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace Blog.Core.Managers
     public class EmailManager : IEmailManager
     {
         private IUrlHelperFacade _urlHelperFacade;
-        private IUserManagerFacade _userManagerFacade;
+        private IUserManagerFacade<User> _userManagerFacade;
 
-        public EmailManager(IUserManagerFacade userManagerFacade, IUrlHelperFacade urlHelperFacade)
+        public EmailManager(IUserManagerFacade<User> userManagerFacade, IUrlHelperFacade urlHelperFacade)
         {
             _userManagerFacade = userManagerFacade;
             _urlHelperFacade = urlHelperFacade;

@@ -4,10 +4,10 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Blog.Abstractions.Facades
 {
-    public interface ISignInManagerFacade
+    public interface ISignInManagerFacade<TUser> where TUser : IUser
     {
         Task<SignInStatus> PasswordSignInAsync(string email, string password, bool rememberMe);
-        Task SignInAsync(IUser user);
+        Task SignInAsync(TUser user);
         void SignOut();
     }
 }

@@ -9,7 +9,7 @@ using System.Linq;
 namespace Blog.Core.Fasades
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class UserManagerFacade : IUserManagerFacade
+    public class UserManagerFacade : IUserManagerFacade<User>
     {
         private readonly ApplicationUserManager _userManager;
 
@@ -18,36 +18,36 @@ namespace Blog.Core.Fasades
             _userManager = userManager;
 
         }
-        public IQueryable<IUser> Users { get { return _userManager.Users; } }
+        public IQueryable<User> Users { get { return _userManager.Users; } }
         
-        public async Task<IUser> FindByIdAsync(string userId)
+        public async Task<User> FindByIdAsync(string userId)
         {
             return await _userManager.FindByIdAsync(userId);
         }
 
-        public async Task<IUser> FindByNameAsync(string name)
+        public async Task<User> FindByNameAsync(string name)
         {
             return await _userManager.FindByNameAsync(name);
         }
         
-        public Task<IdentityResult> CreateAsync(IUser user)
+        public Task<IdentityResult> CreateAsync(User user)
         {
-            return _userManager.CreateAsync(user as User);
+            return _userManager.CreateAsync(user);
         }
 
-        public Task<IdentityResult> CreateAsync(IUser user, string password)
+        public Task<IdentityResult> CreateAsync(User user, string password)
         {
-            return _userManager.CreateAsync(user as User, password);
+            return _userManager.CreateAsync(user, password);
         }
 
-        public Task<IdentityResult> UpdateAsync(IUser user)
+        public Task<IdentityResult> UpdateAsync(User user)
         {
-            return _userManager.UpdateAsync(user as User);
+            return _userManager.UpdateAsync(user);
         }
 
-        public Task<IdentityResult> DeleteAsync(IUser user)
+        public Task<IdentityResult> DeleteAsync(User user)
         {
-            return _userManager.DeleteAsync(user as User);
+            return _userManager.DeleteAsync(user);
         }
 
         public Task<IdentityResult> ChangePassword(string userId, string oldPassword, string newPassword)

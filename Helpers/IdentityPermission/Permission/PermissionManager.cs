@@ -155,7 +155,7 @@ namespace IdentityPermissionExtension
                 await
                     this.GetRolesAsync(stringUserId, (ClaimsPrincipal)Thread.CurrentPrincipal);
 
-            //TODO: if is admin otherwise we don't need check permissions
+            //NOTE: if is admin otherwise we don't need check permissions
             // in our case admin has all permissions
             if (IsAdmin(roles))
                 return await Task.FromResult(true);
