@@ -18,14 +18,5 @@ namespace Blog.Model
         public BlogDbContext() : base("BlogConnectionString")
         {
         }
-
-        /// <summary>
-        /// A static method which create a new instance of this DbContext
-        /// </summary>
-        /// <returns></returns>
-        public static BlogDbContext Create()
-        {
-            return new BlogDbContext();
-        }
     }
 }

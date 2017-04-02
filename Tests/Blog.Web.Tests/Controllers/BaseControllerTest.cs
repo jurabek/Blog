@@ -26,6 +26,7 @@ namespace Blog.Web.Tests.Controllers
         {
             if (dispose)
             {
+                _controller.Dispose();
                 Dispose();
             }
         }

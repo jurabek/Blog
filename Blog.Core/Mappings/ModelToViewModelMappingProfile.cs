@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Blog.Core.Mappings
 {
@@ -15,7 +11,7 @@ namespace Blog.Core.Mappings
         {
             CreateMap<User, UpdateProfileViewModel>();
 
-            CreateMap<RegisterViewModel, User>()
+            CreateMap<IRegiserViewModel, User>()
                 .ForMember(u => u.UserName, map => map.MapFrom(vm => vm.Email));
 
             CreateMap<User, UsersViewModel>()

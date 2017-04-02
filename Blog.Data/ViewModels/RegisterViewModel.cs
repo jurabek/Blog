@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Blog.Model.ViewModels
 {
-    public class RegisterViewModel : IRegisterUserViewModel
+    public class IRegiserViewModel : IRegisterUserViewModel
     {
         [Display(Name = "Name"), Required]
         public string Name { get; set; }

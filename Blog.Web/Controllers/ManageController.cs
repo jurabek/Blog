@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Blog.Abstractions.Facades;
+using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
+using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using Microsoft.AspNet.Identity;
@@ -12,9 +14,17 @@ namespace Blog.Web.Controllers
     [Authorize]
     public class ManageAccountController : BaseAccountController
     {
-        public ManageAccountController(IAccountRepository<User, string> accountRepository) 
-            : base(accountRepository)
+        private IUserManager _userManager;
+        private IMappingManager _mappingManager;
+        private IUserRepository<User, string> _repository;
+
+        public ManageAccountController(IUserRepository<User, string> userRepository,
+            IUserManager userManager,
+            IMappingManager mappingManager)
         {
+            _repository = userRepository;
+            _userManager = userManager;
+            _mappingManager = mappingManager;
         }
 
         public ActionResult Index(ManageMessageId? message = null)
@@ -37,7 +47,7 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.UpdatePassword(User.Identity.GetUserId(), model);
+                var result = await _userManager.UpdatePassword(User?.Identity?.GetUserId(), model);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", new { Message = ManageMessageId.ChangePasswordSuccess });
@@ -49,8 +59,8 @@ namespace Blog.Web.Controllers
 
         public async Task<ActionResult> ChangeProfile()
         {
-            var user = await _accountRepository.GetAsync(User.Identity.GetUserId());
-            var model = Mapper.Map<User, UpdateProfileViewModel>(user);
+            var user = await _repository.GetAsync(User?.Identity?.GetUserId());
+            var model = _mappingManager.Map<User, UpdateProfileViewModel>(user);
             return View(model);
         }
 
@@ -59,14 +69,14 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.UpdateProfile(User.Identity.GetUserId(), model);
+                var result = await _userManager.UpdateProfile(User?.Identity?.GetUserId(), model);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", new { Message = ManageMessageId.ChangeProfileSuccess });
                 }
                 AddErrors(result);
             }
-            return View();
+            return View(model);
         }
 
         public enum ManageMessageId

@@ -1,24 +1,26 @@
-﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
+﻿using Microsoft.AspNet.Identity.Owin;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blog.Model.ViewModels;
 using Blog.Model.Entities;
-using System.Web;
-using AutoMapper;
-using Blog.Core.Managers;
-using IdentityPermissionExtension;
-using Blog.Abstractions.Facades;
 using Blog.Abstractions.Repositories;
+using Blog.Abstractions.Managers;
+using Blog.Core.Managers;
 
 namespace Blog.Web.Controllers
 {
     [Authorize]
     public class AccountController : BaseAccountController
     {
-        public AccountController(IAccountRepository<User, string> accountRepository)
-            : base(accountRepository)
+        private readonly IAuthenticationManager _authenticationManager;
+        private readonly IUserManager _userManager;
+
+        public AccountController(
+            IUserManager userManager,
+            IAuthenticationManager authenticationManager)
         {
+            _userManager = userManager;
+            _authenticationManager = authenticationManager;
         }
 
         [AllowAnonymous]
@@ -34,7 +36,7 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.SignIn(model);
+                var result = await _authenticationManager.SignIn(model);
                 switch (result)
                 {
                     case SignInStatus.Success:
@@ -61,16 +63,14 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.ForgotPassword(model);
+                var result = await _userManager.SendResetPasswordEmail(model);
                 if (result.Succeeded)
                 {
-                    var successModel = new SuccessViewModel
+                    return RedirectToAction("Success", "Account", new SuccessViewModel
                     {
                         Title = "Forgot Password Confirmation",
                         Message = "Please check your email to reset your password."
-                    };
-
-                    return RedirectToAction("Success", "Account", successModel);
+                    });
                 }
                 AddErrors(result);
             }
@@ -85,11 +85,11 @@ namespace Blog.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(IRegiserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.CreateUserAsync(model);
+                var result = await _userManager.SignUpAndSignIn(model);
                 if (result.Succeeded)
                 {
                     var successModel = new SuccessViewModel
@@ -97,7 +97,6 @@ namespace Blog.Web.Controllers
                         Title= "Email confirmation",
                         Message = "Email confirmation has been sent, please check your email!"
                     };
-
                     return RedirectToAction("Success", "Account", successModel);
                 }
                 AddErrors(result);
@@ -119,7 +118,7 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _accountRepository.ResetPassword(model);
+                var result = await _userManager.ResetPassword(model);
                 if (result.Succeeded)
                 {
                     return View("ResetPasswordConfirmation");
@@ -133,7 +132,7 @@ namespace Blog.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            _accountRepository.SignOut();
+            _authenticationManager.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -146,7 +145,7 @@ namespace Blog.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            var result = await _accountRepository.ConfirmEmail(userId, code);
+            var result = await _userManager.ConfirmEmail(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
     }

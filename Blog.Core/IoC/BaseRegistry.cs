@@ -1,7 +1,9 @@
 ﻿using Blog.Abstractions.Facades;
+using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Core.Fasades;
 using Blog.Core.Managers;
+using Blog.Core.Mappings;
 using Blog.Core.Repositories;
 using Blog.Model;
 using Blog.Model.Entities;
@@ -22,8 +24,10 @@ namespace Blog.Core.IoC
             For<ApplicationUserManager>().Use<ApplicationUserManager>();
             For<ISignInManagerFacade>().Use<SignInManagerFacade>();
             For<IUserManagerFacade>().Use<UserManagerFacade>();
-            For<IAccountRepository<User, string>>().Use<AccountRepository>();
             For<IUrlHelperFacade>().Use<UrlHelperFacade>();
+            For<IMappingManager>().Use<MappingManager>();
+            For<IRoleManagerFacade>().Use<RoleManagerFacade>();
+            For<IRepository<IdentityRole, string>>().Use<RoleRepository>();
         }
     }
 }

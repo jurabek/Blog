@@ -10,24 +10,28 @@ namespace Blog.Abstractions.Repositories
     public interface IRepository<T, TKey> 
         where T : class, new()
     {
-        Task<TResult> AddAsync<TResult>(T entity);
+        Task<TResult> AddAsync<TResult>(T entity) where TResult : class;
 
-        Task<TResult> UpdateAsync<TResult>(T entity);
+        Task<TResult> UpdateAsync<TResult>(T entity) where TResult : class;
 
-        Task<TResult> DeleteAsync<TResult>(T entity);
+        Task<TResult> DeleteAsync<TResult>(T entity) where TResult : class;
 
         Task<IEnumerable<T>> GetAllAsync();
 
         Task<T> GetAsync(TKey key);
 
-        TResult Add<TResult>(T entity);
+        Task<T> GetByNameAsync(string name);
 
-        TResult Update<TResult>(T entity);
+        TResult Add<TResult>(T entity) where TResult : class;
 
-        TResult Delete<TResult>(T entity);
+        TResult Update<TResult>(T entity) where TResult : class;
+
+        TResult Delete<TResult>(T entity) where TResult : class;
 
         IEnumerable<T> GetAll();
 
         T Get(TKey key);
+
+        T GetByName(string name);
     }
 }

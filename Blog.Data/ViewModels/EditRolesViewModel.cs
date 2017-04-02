@@ -12,12 +12,14 @@ namespace Blog.Model.ViewModels
     {
         public string UserId { get; set; }
 
+        public string SelectedPermissionId { get; set; }
+
         public string SelectedRoleId { get; set; }
 
         public SelectList Roles { get; set; }
 
-        public IList<UserIdentityPermissionViewModel> Permissions { get; set; }
-
+        public SelectList Permissions { get; set; }
+        
         public IList<UserIdentityRoleViewModel> UserRoles { get; set; }
     }
 }

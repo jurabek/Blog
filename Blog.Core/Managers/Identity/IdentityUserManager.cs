@@ -4,7 +4,6 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using Blog.Core.Services;
 using Blog.Model.Entities;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Blog.Core.Managers
 {
