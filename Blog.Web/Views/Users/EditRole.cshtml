@@ -17,32 +17,36 @@
         <div class="form-group">
             @Html.HiddenFor(m => m.UserId)
 
-            <label>User Roles</label>
-            @foreach (IdentityRole item in Model.UserRoles)
-            {
-                <ul>
-                    <li>
-                        @Html.ActionLink(item.Name, "EditPermission", new { userId = Model.UserId, roleId = item.Id })
-                        <ul>
-                            @foreach (var permission in item.Permissions.Select(p => p.Permission))
-                            {
-                                <li>@permission.Description</li>
-                            }
-                        </ul>
-                    </li>
-                </ul>
-            }
+            <div class="col-md-10">
+                <label>User Roles</label>
+                @foreach (IdentityRole item in Model.UserRoles)
+                {
+                    <ul>
+                        <li>
+                            @Html.ActionLink(item.Name, "EditPermission", new { userId = Model.UserId, roleId = item.Id })
+                            <ul>
+                                @foreach (var permission in item.Permissions.Select(p => p.Permission))
+                                {
+                                    <li>@permission.Description</li>
+                                }
+                            </ul>
+                        </li>
+                    </ul>
+                }
+            </div>
         </div>
-
         <hr />
 
         <div class="form-group">
-            <label>Change roles</label>
+            <div class="col-md-10">
+                <label>Change roles</label>
+                @Html.EditorFor(m => m.Roles)
+            </div>
+        </div>
 
-            @Html.EditorFor(m => m.Roles)
-
-            <div class="">
-                <input type="submit" value="Save" class="btn btn-primary btn-sm" style="margin-top:10px" />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary btn-sm" style="min-width:200px" />
             </div>
         </div>
     </div>

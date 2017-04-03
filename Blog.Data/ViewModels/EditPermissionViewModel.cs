@@ -9,6 +9,8 @@ namespace Blog.Model.ViewModels
 {
     public class EditPermissionViewModel
     {
+        public string UserId { get; set; }
+
         public IdentityRole Role { get; set; }
 
         public IEnumerable<IdentityPermissionViewModel> Permissions { get; set; }

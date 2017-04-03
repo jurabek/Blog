@@ -79,10 +79,25 @@ namespace Blog.Core.Fasades
         {
             return _userManager.ResetPasswordAsync(id, code, password);
         }
-
+        
         public Task<IdentityResult> AddToRoleAsync(string userId, string role)
         {
             return _userManager.AddToRoleAsync(userId, role);
+        }
+
+        public Task<IdentityResult> AddToRolesAsync(string userId, params string[] roles)
+        {
+            return _userManager.AddToRolesAsync(userId, roles);
+        }
+
+        public Task<IdentityResult> RemoveFromRoleAsync(string userId, string role)
+        {
+            return _userManager.RemoveFromRoleAsync(userId, role);
+        }
+
+        public Task<IdentityResult> RemoveFromRolesAsync(string userId, params string[] roles)
+        {
+            return _userManager.RemoveFromRolesAsync(userId, roles);
         }
 
         public Task<bool> IsInRoleAsync(string userId, string roleName)

@@ -3,7 +3,10 @@
 @model IdentityRoleViewModel
 
 @Html.HiddenFor(m => m.Id)
+@Html.HiddenFor(m => m.Name)
 <div class="checkbox">
-    @Html.CheckBoxFor(m => m.IsSelected)
-    @Html.DisplayFor(model => model.Name)
+    <label>
+        @Html.CheckBoxFor(m => m.IsSelected)
+        @Html.DisplayFor(model => model.Name)
+    </label>
 </div>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Model;
 using Blog.Model.Entities;
@@ -16,11 +17,13 @@ namespace Blog.Web.Controllers
     {
         private readonly IRepository<IdentityRole, string> _roleRepository;
         private IUserRepository<User, string> _userRepository;
+        private IUserManager _userManager;
 
-        public UsersController(IRepository<IdentityRole, string> roleRepository, IUserRepository<User, string> userRepository)
+        public UsersController(IRepository<IdentityRole, string> roleRepository, IUserRepository<User, string> userRepository, IUserManager userManager)
         {
             _roleRepository = roleRepository;
             _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         public ActionResult Index()
@@ -56,10 +59,35 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditRole(EditRoleViewModel model)
         {
+         
+
+            var selectedRoles = model.Roles.Where(ir => ir.IsSelected);
+            var unSelectedRoles = model.Roles.Where(ir => !ir.IsSelected);
+            var context = new BlogDbContext();
+
+            var user = await _userRepository.GetAsync(model.UserId);
+            UsersViewModel vm = Mapper.Map<UsersViewModel>(user);
+            var userRoles = user.Roles;
+
+            var rolesToAdd = selectedRoles.Where(r => !userRoles.Select(i => i.RoleId).Contains(r.Id));
+            var rolesToRemove = unSelectedRoles.Where(r => userRoles.Select(ur => ur.RoleId).Contains(r.Id));
+
+            if (rolesToAdd.Any())
+            {
+                await _userManager.AddToRolesAsync(model.UserId, rolesToAdd.Select(ir => ir.Name).ToArray());
+            }
+
+            if (rolesToRemove.Any())
+            {
+                await _userManager.RemoveFromRolesAsync(model.UserId, rolesToRemove.Select(ir => ir.Name).ToArray());
+            }
+
+            model.UserRoles = vm.Roles;
+
             //var user = await _userRepository.GetAsync(model.UserId);
             //var role = _roleRepository.Get(model.SelectedRoleId);
 
-            return View();
+            return View(model);
         }
 
         public async Task<ActionResult> EditPermission(string userId, string roleId)
@@ -74,10 +102,10 @@ namespace Blog.Web.Controllers
 
             var model = new EditPermissionViewModel
             {
+                UserId = userId,
                 Role = _roleRepository.Get(roleId)
             };
-
-
+            
             var permissions = context.Permissions.ToList().Select(p => new IdentityPermissionViewModel
             {
                 Description = p.Description,
@@ -90,6 +118,12 @@ namespace Blog.Web.Controllers
 
             model.Permissions = permissions;
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditPermission(EditPermissionViewModel model)
+        {
+            return View();
         }
 
         public enum UsersMessageId

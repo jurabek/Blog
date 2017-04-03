@@ -1,10 +1,35 @@
 ﻿@using Blog.Model.ViewModels
 @model EditPermissionViewModel
 
+@{
+    ViewBag.Title = "Edit user role permissions";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>User role permissions</h4>
+
+<hr />
+
 @using (Html.BeginForm())
 {
-    <label>Permissions</label>
-    <div class="form-group">
-        @Html.EditorFor(m => m.Permissions)
+    <div class="form-horizontal">
+
+        @Html.HiddenFor(m => m.UserId)
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>@Model.Role.Name permissions</label>
+                @Html.EditorFor(m => m.Permissions)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary btn-sm" style="min-width:200px"/>
+            </div>
+        </div>
     </div>
 }
+
+<div>
+    @Html.ActionLink("Back to user roles", "EditRole", new { id = Model.UserId })
+</div>

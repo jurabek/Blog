@@ -34,6 +34,12 @@ namespace Blog.Abstractions.Facades
 
         Task<IdentityResult> AddToRoleAsync(string userId, string role);
 
+        Task<IdentityResult> AddToRolesAsync(string userId, params string[] roles);
+
+        Task<IdentityResult> RemoveFromRoleAsync(string userId, string role);
+
+        Task<IdentityResult> RemoveFromRolesAsync(string userId, params string[] roles);
+
         Task<bool> IsInRoleAsync(string userId, string roleId);
 
     }

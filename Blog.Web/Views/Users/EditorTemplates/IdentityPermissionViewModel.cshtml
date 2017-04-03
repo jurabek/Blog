@@ -6,7 +6,9 @@
 @Html.HiddenFor(m => m.UserId)
 
 <div class="checkbox">
-    @Html.CheckBoxFor(m => m.IsSelected)
-    @Html.DisplayFor(m => m.Description)
+    <label>
+        @Html.CheckBoxFor(m => m.IsSelected)
+        @Html.DisplayFor(m => m.Description)
+    </label>
 </div>
 

@@ -84,7 +84,7 @@ namespace IdentityPermissionExtension
             rolePermissionTable.HasKey(r => new
             {
                 r.RoleId,
-                r.PermissionId
+                r.PermissionId                
             }).ToTable("AspNetRolePermission");
 
             permissionTable

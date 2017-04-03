@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Blog.Web.Tests.Model
 {
     //TODO:
-    // That tests will be ignored it is only for Debugging... 
+    // That tests will be ignored it is only creating Demo Permissions and Roles
     [TestFixture]
     public class IdentityUserRolesAndPermissionsTest
     {
@@ -54,7 +54,7 @@ namespace Blog.Web.Tests.Model
             var role = new IdentityRole
             {
                 Name = "Role 1",
-                Title = "Description"
+                Title = "Roe Description1"
             };
 
             var roleResult = await RoleManager.CreateAsync(role);
@@ -65,8 +65,8 @@ namespace Blog.Web.Tests.Model
 
 
             var permission = await PermissionManager.CreatePermissionAsync("CanWriteTest", "User can write to test", true);
-            var permission2 = await PermissionManager.CreatePermissionAsync("CanWriteTest1", "User can write to test", true);
-            var permission3 = await PermissionManager.CreatePermissionAsync("CanWriteTest2", "User can write to test", true);
+            var permission2 = await PermissionManager.CreatePermissionAsync("CanWriteTest1", "User can write to test1", true);
+            var permission3 = await PermissionManager.CreatePermissionAsync("CanWriteTest2", "User can write to test2", true);
 
             await PermissionManager.AddToRole(permission, role.Id);
             await PermissionManager.AddToRole(permission2, role.Id);
@@ -86,7 +86,7 @@ namespace Blog.Web.Tests.Model
             var role2 = new IdentityRole
             {
                 Name = "Role 2",
-                Title = "Description"
+                Title = "Role description2"
             };
 
             var roleResult2 = await RoleManager.CreateAsync(role2);

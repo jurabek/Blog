@@ -8,6 +8,9 @@ namespace Blog.Abstractions.Managers
     {
         Task<IdentityResult> SignUpAndSignIn(IRegisterUserViewModel model);
         Task<IdentityResult> AddToRoleAsync(string userId, string roleName);
+        Task<IdentityResult> AddToRolesAsync(string userId, params string[] roles);
+        Task<IdentityResult> RemoveFromRoleAsync(string userId, string role);
+        Task<IdentityResult> RemoveFromRolesAsync(string userId, params string[] roles);
         Task<IdentityResult> ConfirmEmail(string userId, string code);
         Task<bool> IsInRoleAsync(string userId, string roleName);
         Task<IdentityResult> ResetPassword(IResetPasswordViewModel model);

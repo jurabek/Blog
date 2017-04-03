@@ -6,6 +6,7 @@ using Blog.Model.Entities;
 using IdentityPermissionExtension;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
+using System;
 
 namespace Blog.Core.Managers
 {
@@ -36,7 +37,6 @@ namespace Blog.Core.Managers
             var result = await _userRepository.AddAsync<IdentityResult>(user, model.Password);
             if (result.Succeeded)
             {
-                await _userManagerFacade.AddToRoleAsync(user.Id, nameof(Roles.User));
                 await _authenticationManager.SignInAsync(user);
                 await _emailManager.SendConfirmationEmail(user.Id);
             }
@@ -89,9 +89,25 @@ namespace Blog.Core.Managers
             return _userManagerFacade.AddToRoleAsync(userId, roleName);
         }
 
+        public Task<IdentityResult> AddToRolesAsync(string userId, params string[] roles)
+        {
+            return _userManagerFacade.AddToRolesAsync(userId, roles);
+        }
+
+        public Task<IdentityResult> RemoveFromRoleAsync(string userId, string role)
+        {
+            return _userManagerFacade.RemoveFromRoleAsync(userId, role);
+        }
+
+        public Task<IdentityResult> RemoveFromRolesAsync(string userId, params string[] roles)
+        {
+            return _userManagerFacade.RemoveFromRolesAsync(userId, roles);
+        }
+
         public Task<bool> IsInRoleAsync(string userId, string roleName)
         {
             return _userManagerFacade.IsInRoleAsync(userId, roleName);
         }
+
     }
 }
