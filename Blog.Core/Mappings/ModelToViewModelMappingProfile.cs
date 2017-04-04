@@ -11,7 +11,7 @@ namespace Blog.Core.Mappings
         {
             CreateMap<User, UpdateProfileViewModel>();
 
-            CreateMap<RegiserViewModel, User>()
+            CreateMap<RegisterViewModel, User>()
                 .ForMember(u => u.UserName, map => map.MapFrom(vm => vm.Email));
 
             CreateMap<User, UsersViewModel>()

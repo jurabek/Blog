@@ -12,6 +12,7 @@
     
     <div class="form-horizontal">
         <h4>RoleViewModel</h4>
+        @Html.HiddenFor(m => m.Id)
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">

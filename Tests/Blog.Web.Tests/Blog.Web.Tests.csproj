@@ -187,7 +187,10 @@
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="Controllers\BaseControllerTest.cs" />
     <Compile Include="Controllers\ManageAccountControllerTest.cs" />
+    <Compile Include="Controllers\RoleControllerTest.cs" />
     <Compile Include="Mappings\MappingManagerTest.cs" />
+    <Compile Include="Mappings\RolePermissionsMapperTest.cs" />
+    <Compile Include="Mappings\UserRolesMapperTest.cs" />
     <Compile Include="Model\IdentityUserRolesAndPermissionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

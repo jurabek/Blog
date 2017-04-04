@@ -42,7 +42,7 @@ namespace Blog.Web.Controllers
                 message == UsersMessageId.RoleAddedSuccess ? "Roles has been changed." : "";
 
             var model = await _mappingManager.GetUserRolesMapper().GetEditRoleViewModel<IdentityRoleViewModel>(id);
-            return View(model);
+            return View(model as EditRoleViewModel);
         }
 
         [HttpPost]
@@ -65,7 +65,7 @@ namespace Blog.Web.Controllers
             var model = await _mappingManager.GetRolePermissionsMapper()
                 .GetEditPermissionViewModel<IdentityRole, IdentityPermissionViewModel>(userId, roleId);
 
-            return View(model);
+            return View(model as EditPermissionViewModel);
         }
 
         [HttpPost]

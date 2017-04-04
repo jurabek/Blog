@@ -213,7 +213,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            var model = new RegiserViewModel();
+            var model = new RegisterViewModel();
             string errorMessage = "Validation error!";
 
             _controller.ModelState.AddModelError("validation_error", errorMessage);
@@ -230,11 +230,11 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _userManager.Setup(r => r.SignUpAndSignIn(It.IsAny<RegiserViewModel>()))
+            _userManager.Setup(r => r.SignUpAndSignIn(It.IsAny<RegisterViewModel>()))
                               .Returns(Task.FromResult(IdentityResult.Success));
 
 
-            var result = await _controller.Register(new RegiserViewModel()) as RedirectToRouteResult;
+            var result = await _controller.Register(new RegisterViewModel()) as RedirectToRouteResult;
 
             Assert.AreEqual("Success", result.RouteValues["action"]);
             Assert.AreEqual("Account", result.RouteValues["controller"]);
@@ -246,10 +246,10 @@ namespace Blog.Web.Tests.Controllers
             _controller.ModelState.Clear();
 
             string errorMessage = "Can not create user!";
-            _userManager.Setup(r => r.SignUpAndSignIn(It.IsAny<RegiserViewModel>()))
+            _userManager.Setup(r => r.SignUpAndSignIn(It.IsAny<RegisterViewModel>()))
                               .Returns(Task.FromResult(new IdentityResult(errorMessage)));
 
-            var result = await _controller.Register(new RegiserViewModel()) as ViewResult;
+            var result = await _controller.Register(new RegisterViewModel()) as ViewResult;
 
             Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, errorMessage);
         }

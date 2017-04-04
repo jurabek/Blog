@@ -8,18 +8,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Controllers
 {
-    public class RoleController : Controller
+    public class RoleController : BaseController
     {
         private IRepository<IdentityRole, string> _roleRepository;
         private IMappingManager _mappingManager;
+        private IUrlHelperFacade _urlHelper;
 
-        public RoleController(IRepository<IdentityRole, string> roleRepository, IMappingManager mappingManager)
+        public RoleController(IRepository<IdentityRole, string> roleRepository, 
+            IMappingManager mappingManager,
+            IUrlHelperFacade urlHelper) : base(urlHelper)
         {
             _roleRepository = roleRepository;
             _mappingManager = mappingManager;
+            
         }
 
         public ActionResult Index()
@@ -42,8 +47,9 @@ namespace Blog.Web.Controllers
                 {
                     return RedirectToAction("Index");
                 }
+                AddErrors(result);
             }
-            return View(model);
+            return View();
         }
 
         public ActionResult Edit(string id)
@@ -57,11 +63,12 @@ namespace Blog.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = _roleRepository.Update<IdentityResult>(_mappingManager.Map<RoleViewModel, IdentityRole>(model));
+                var result = _roleRepository.Update<IdentityResult>(_roleRepository.Get(model.Id));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
                 }
+                AddErrors(result);
             }
             return View(model);
         }
@@ -74,11 +81,11 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public ActionResult Delete(IdentityRole model)
         {
-            var result = _roleRepository.Delete<IdentityResult>(_roleRepository.Get(model.Id));
+            var result = _roleRepository.Delete<IdentityResult>(model);
             if (result.Succeeded)
                 return RedirectToAction("Index");
 
-            return View(model);
+            return View();
 
         }
     }

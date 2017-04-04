@@ -16,6 +16,7 @@ using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Tests.Controllers
 {
+    [TestFixture]
     public class ManageAccountControllerTest : BaseControllerTest<ManageAccountController>
     {
         private Mock<IUserRepository<User, string>> _repository;
