@@ -11,20 +11,28 @@ using Blog.Model.Entities;
 using Blog.Abstractions.ViewModels;
 using Microsoft.AspNet.Identity;
 using Blog.Abstractions.Managers;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Tests.Controllers
 {
-    public class AccountControllerTest 
+    public class AccountControllerTest
         : BaseControllerTest<AccountController>
     {
         Mock<IUserManager> _userManager;
-        Mock<IAuthenticationManager<User>> _authenticationManager; 
+        Mock<IAuthenticationManager<User>> _authenticationManager;
+        private Mock<IUrlHelperFacade> _urlHelperFacade;
+
         public override void Init()
         {
             _userManager = new Mock<IUserManager>();
             _authenticationManager = new Mock<IAuthenticationManager<User>>();
-            _controller = new AccountController(_userManager.Object, _authenticationManager.Object);
+            _urlHelperFacade = new Mock<IUrlHelperFacade>();
+            _controller = new AccountController(_userManager.Object, _authenticationManager.Object, _urlHelperFacade.Object);
+            _urlHelperFacade.Setup(uf => uf.IsLocalUrl(It.IsAny<string>()))
+                .Returns(true);
         }
+
+
 
         [Test]
         public void LoginActionTest()
@@ -60,6 +68,21 @@ namespace Blog.Web.Tests.Controllers
         }
 
         [Test]
+        public async Task LoginShouldRedirectUrlWhenSuccess()
+        {
+            ClearModelState();
+
+            _authenticationManager.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
+                              .Returns(Task.FromResult(SignInStatus.Success));
+
+
+
+            var result = await _controller.Login(new LoginViewModel(), "/Home/About");
+
+            Assert.IsInstanceOf<ActionResult>(result);
+        }
+
+        [Test]
         public async Task LoginShouldBeFailWhenEnteredWrongData()
         {
             ClearModelState();
@@ -74,7 +97,7 @@ namespace Blog.Web.Tests.Controllers
             });
 
             Assert.IsInstanceOf<ViewResult>(result);
-            
+
             Assert.IsTrue(_controller.ModelState.Any(), "There is should be one error!");
 
             Assert.AreEqual(_controller.ModelState.Values.First().Errors.First().ErrorMessage, "Invalid login attempt.");
@@ -94,7 +117,7 @@ namespace Blog.Web.Tests.Controllers
 
             // Sign In should return non of the enum value
             _authenticationManager.Setup(ar => ar.SignIn(It.IsAny<ILoginViewModel>()))
-                              .Returns(Task.FromResult((SignInStatus.Failure)-1));
+                              .Returns(Task.FromResult((SignInStatus.Failure) - 1));
 
             result = await _controller.Login(new LoginViewModel { Email = null });
             Assert.IsInstanceOf<ViewResult>(result);
@@ -116,7 +139,7 @@ namespace Blog.Web.Tests.Controllers
                               .Returns(Task.FromResult(new IdentityResult("Error")));
 
             result = await _controller.ConfirmEmail("error", "error") as ViewResult;
-            
+
             Assert.AreEqual("Error", result.ViewName);
         }
 
@@ -177,7 +200,7 @@ namespace Blog.Web.Tests.Controllers
         }
 
         [Test]
-        public void RegisterActionTest()
+        public void RegisterActionShouldReturnViewTest()
         {
             ClearModelState();
 
@@ -192,7 +215,7 @@ namespace Blog.Web.Tests.Controllers
 
             var model = new RegiserViewModel();
             string errorMessage = "Validation error!";
-            
+
             _controller.ModelState.AddModelError("validation_error", errorMessage);
 
             var result = await _controller.Register(model) as ViewResult;
@@ -241,7 +264,7 @@ namespace Blog.Web.Tests.Controllers
 
         [Test]
         public void ResetPasswordActionTest()
-        {   
+        {
             ClearModelState();
             var result = _controller.ResetPassword(null, null) as ViewResult;
             Assert.AreEqual("Error", result.ViewName);
@@ -258,11 +281,11 @@ namespace Blog.Web.Tests.Controllers
             string errorMessage = "The password and confirmation password do not match.";
             _controller.ModelState.AddModelError("", errorMessage);
             var result = await _controller.ResetPassword(new ResetPasswordViewModel
-                                                               {
-                                                                    Password = "123", 
-                                                                    ConfirmPassword = "1234"
-                                                               }) as ViewResult;
-            
+            {
+                Password = "123",
+                ConfirmPassword = "1234"
+            }) as ViewResult;
+
             Assert.IsFalse(_controller.ModelState.IsValid);
 
             Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
@@ -275,7 +298,7 @@ namespace Blog.Web.Tests.Controllers
             ClearModelState();
             _userManager.Setup(r => r.ResetPassword(It.IsAny<IResetPasswordViewModel>()))
                               .Returns(Task.FromResult(IdentityResult.Success));
-            
+
             var result = await _controller.ResetPassword(new ResetPasswordViewModel()) as ViewResult;
 
             Assert.AreEqual("ResetPasswordConfirmation", result.ViewName);

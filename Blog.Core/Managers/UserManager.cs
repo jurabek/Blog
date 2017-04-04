@@ -3,10 +3,8 @@ using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Abstractions.ViewModels;
 using Blog.Model.Entities;
-using IdentityPermissionExtension;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
-using System;
 
 namespace Blog.Core.Managers
 {

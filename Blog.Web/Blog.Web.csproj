@@ -198,13 +198,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
-    <Compile Include="Controllers\BaseAccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="Extentions\Extenstions.cs" />
-    <Compile Include="DependencyResolution\ControllerConvention.cs" />
+    <Compile Include="DependencyResolution\Conventions\CoreAssemblyConvention.cs" />
+    <Compile Include="DependencyResolution\Conventions\ModelAssemblyConvention.cs" />
+    <Compile Include="DependencyResolution\Conventions\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
@@ -273,6 +275,10 @@
     <Content Include="Views\Users\EditorTemplates\IdentityRoleViewModel.cshtml" />
     <Content Include="Views\Users\EditorTemplates\IdentityPermissionViewModel.cshtml" />
     <Content Include="Views\Users\EditPermission.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Role\Create.cshtml" />
+    <Content Include="Views\Role\Edit.cshtml" />
+    <Content Include="Views\Role\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

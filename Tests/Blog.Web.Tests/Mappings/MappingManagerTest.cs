@@ -22,7 +22,7 @@ namespace Blog.Web.Tests.Mappings
         public void Init()
         {
             AutoMapperConfiguration.Configure();
-            mappingManager = new MappingManager();
+            mappingManager = new MappingManager(null, null);
         }
 
         [OneTimeTearDown]

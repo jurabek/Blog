@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Blog.Abstractions.Facades;
+using Blog.Abstractions.Fasades;
 using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Model;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using IdentityPermissionExtension;
+using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,17 +16,18 @@ using System.Web.Mvc;
 namespace Blog.Web.Controllers
 {
     [Authorize(Roles = nameof(Roles.Administrator))]
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
-        private readonly IRepository<IdentityRole, string> _roleRepository;
-        private IUserRepository<User, string> _userRepository;
-        private IUserManager _userManager;
+        private readonly IUserRepository<User, string> _userRepository;
+        private IRoleRepository<IdentityRole, string> _roleRepository;
+        private IMappingManager _mappingManager;
 
-        public UsersController(IRepository<IdentityRole, string> roleRepository, IUserRepository<User, string> userRepository, IUserManager userManager)
+        public UsersController(IUserRepository<User, string> userRepository,
+            IRoleRepository<IdentityRole, string> roleRepository, IMappingManager mappingManager, IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
         {
-            _roleRepository = roleRepository;
             _userRepository = userRepository;
-            _userManager = userManager;
+            _roleRepository = roleRepository;
+            _mappingManager = mappingManager;
         }
 
         public ActionResult Index()
@@ -34,102 +38,52 @@ namespace Blog.Web.Controllers
 
         public async Task<ActionResult> EditRole(string id = null, UsersMessageId? message = null)
         {
-            var user = await _userRepository.GetAsync(id);
+            ViewBag.StatusMessage =
+                message == UsersMessageId.RoleAddedSuccess ? "Roles has been changed." : "";
 
-            UsersViewModel vm = Mapper.Map<UsersViewModel>(user);
-
-            var context = new BlogDbContext();
-
-            var model = new EditRoleViewModel { UserRoles = vm.Roles, UserId = vm.Id };
-
-
-            var roles = context.Roles.ToList().Select(r => new IdentityRoleViewModel
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Title = r.Title,
-                IsSelected = vm.Roles.Select(ur => ur.Id).Contains(r.Id)
-            });
-
-            model.Roles = roles;
-
+            var model = await _mappingManager.GetUserRolesMapper().GetEditRoleViewModel<IdentityRoleViewModel>(id);
             return View(model);
         }
 
         [HttpPost]
         public async Task<ActionResult> EditRole(EditRoleViewModel model)
         {
-         
-
-            var selectedRoles = model.Roles.Where(ir => ir.IsSelected);
-            var unSelectedRoles = model.Roles.Where(ir => !ir.IsSelected);
-            var context = new BlogDbContext();
-
-            var user = await _userRepository.GetAsync(model.UserId);
-            UsersViewModel vm = Mapper.Map<UsersViewModel>(user);
-            var userRoles = user.Roles;
-
-            var rolesToAdd = selectedRoles.Where(r => !userRoles.Select(i => i.RoleId).Contains(r.Id));
-            var rolesToRemove = unSelectedRoles.Where(r => userRoles.Select(ur => ur.RoleId).Contains(r.Id));
-
-            if (rolesToAdd.Any())
+            var result = await _userRepository.UpdateUserRoles<IdentityResult, IdentityRoleViewModel>(model);
+            if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(model.UserId, rolesToAdd.Select(ir => ir.Name).ToArray());
+                return RedirectToAction("EditRole", new { id = model.UserId, message = UsersMessageId.RoleAddedSuccess });
             }
-
-            if (rolesToRemove.Any())
-            {
-                await _userManager.RemoveFromRolesAsync(model.UserId, rolesToRemove.Select(ir => ir.Name).ToArray());
-            }
-
-            model.UserRoles = vm.Roles;
-
-            //var user = await _userRepository.GetAsync(model.UserId);
-            //var role = _roleRepository.Get(model.SelectedRoleId);
-
+            AddErrors(result);
             return View(model);
         }
 
-        public async Task<ActionResult> EditPermission(string userId, string roleId)
+        public async Task<ActionResult> EditPermission(string userId, string roleId, UsersMessageId? message = null)
         {
-            var user = await _userRepository.GetAsync(userId);
+            ViewBag.StatusMessage =
+                message == UsersMessageId.PermissionsAddedSuccess ? "Permissions has been changed." : "";
 
-            UsersViewModel vm = Mapper.Map<UsersViewModel>(user);
+            var model = await _mappingManager.GetRolePermissionsMapper()
+                .GetEditPermissionViewModel<IdentityRole, IdentityPermissionViewModel>(userId, roleId);
 
-            var context = new BlogDbContext();
-
-            var userRolePermissions = vm.Roles.FirstOrDefault(r => r.Id == roleId).Permissions.Select(p => p.Permission);
-
-            var model = new EditPermissionViewModel
-            {
-                UserId = userId,
-                Role = _roleRepository.Get(roleId)
-            };
-            
-            var permissions = context.Permissions.ToList().Select(p => new IdentityPermissionViewModel
-            {
-                Description = p.Description,
-                Id = p.Id,
-                Name = p.Name,
-                RoleId = roleId,
-                UserId = userId,
-                IsSelected = userRolePermissions.Select(rp => rp.Id).Contains(p.Id)
-            });
-
-            model.Permissions = permissions;
             return View(model);
         }
 
         [HttpPost]
         public async Task<ActionResult> EditPermission(EditPermissionViewModel model)
         {
-            return View();
+            var result = await _roleRepository.UpdateRolePermissions<IdentityResult, IdentityPermissionViewModel>(model);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("EditPermission", new { userId = model.UserId, roleId = model.RoleId, message = UsersMessageId.PermissionsAddedSuccess });
+            }
+            AddErrors(result);
+            return View(model);
         }
 
         public enum UsersMessageId
         {
             RoleAddedSuccess,
-            RoleUpdateSuccess,
+            PermissionsAddedSuccess,
             Error
         }
     }

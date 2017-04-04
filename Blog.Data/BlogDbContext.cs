@@ -1,4 +1,5 @@
-﻿using Blog.Model.Entities;
+﻿using Blog.Abstractions;
+using Blog.Model.Entities;
 using IdentityPermissionExtension;
 
 namespace Blog.Model
@@ -6,6 +7,7 @@ namespace Blog.Model
     /// <summary>
     /// A DbContext class that inherited from IdentityDbContext of Permission extension.
     /// </summary>
+    [Injectable]
     public class BlogDbContext 
         : IdentityDbContext<User, 
                             IdentityRole, 

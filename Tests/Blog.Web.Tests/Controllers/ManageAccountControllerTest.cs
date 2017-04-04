@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;
 using static Blog.Web.Controllers.ManageAccountController;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Tests.Controllers
 {
@@ -20,13 +21,18 @@ namespace Blog.Web.Tests.Controllers
         private Mock<IUserRepository<User, string>> _repository;
         private Mock<IUserManager> _userManager;
         private Mock<IMappingManager> _mappingManager;
+        private Mock<IUrlHelperFacade> _urlHelperFacade;
 
         public override void Init()
         {
             _repository = new Mock<IUserRepository<User, string>>();
             _userManager = new Mock<IUserManager>();
             _mappingManager = new Mock<IMappingManager>();
-            _controller = new ManageAccountController(_repository.Object, _userManager.Object,  _mappingManager.Object);
+            _urlHelperFacade = new Mock<IUrlHelperFacade>();
+            _controller = new ManageAccountController(_repository.Object,
+                                                        _userManager.Object, 
+                                                        _mappingManager.Object,
+                                                        _urlHelperFacade.Object);
         }
 
         [Test]

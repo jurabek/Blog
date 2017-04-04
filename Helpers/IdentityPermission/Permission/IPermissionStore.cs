@@ -16,5 +16,7 @@ namespace IdentityPermissionExtension
         Task<IList<string>> GetRolesAsync(TPermission permission);
         Task InitialConfiguration();
         Task AddToRole(TPermission permissionId, TKey roleId);
+        Task RemoveFromRole(TPermission permission, TKey roleId);
+        Task<IEnumerable<TPermission>> GetAll();
     }
 }

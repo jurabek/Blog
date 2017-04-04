@@ -6,33 +6,35 @@ using Blog.Model.Entities;
 using Blog.Abstractions.Repositories;
 using Blog.Abstractions.Managers;
 using Blog.Core.Managers;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Controllers
 {
     [Authorize]
-    public class AccountController : BaseAccountController
+    public class AccountController : BaseController
     {
         private readonly IAuthenticationManager<User> _authenticationManager;
         private readonly IUserManager _userManager;
 
         public AccountController(
             IUserManager userManager,
-            IAuthenticationManager<User> authenticationManager)
+            IAuthenticationManager<User> authenticationManager, 
+            IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
         {
             _userManager = userManager;
             _authenticationManager = authenticationManager;
         }
 
         [AllowAnonymous]
-        public ActionResult Login(string redirectUrl = null)
+        public ActionResult Login(string ReturnUrl = null)
         {
-            ViewBag.RedirecrUrl = redirectUrl;
+            ViewBag.ReturnUrl = ReturnUrl;
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(LoginViewModel model, string redirectUrl = null)
+        public async Task<ActionResult> Login(LoginViewModel model, string ReturnUrl = null)
         {
             if (ModelState.IsValid)
             {
@@ -40,7 +42,7 @@ namespace Blog.Web.Controllers
                 switch (result)
                 {
                     case SignInStatus.Success:
-                        return RedirectToLocal(redirectUrl);
+                        return RedirectToLocal(ReturnUrl);
 
                     case SignInStatus.Failure:
                         ModelState.AddModelError("", "Invalid login attempt.");

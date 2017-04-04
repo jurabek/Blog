@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Core", "Blog.Core\Blog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Web", "Blog.Web\Blog.Web.csproj", "{D33BD03F-C6D0-4162-A11E-A0DCE133CCCB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{AD93CDB9-3761-4CC5-AAA9-D694553707EB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Web.Tests", "Tests\Blog.Web.Tests\Blog.Web.Tests.csproj", "{0715A257-83CA-4428-B0F0-30C91343A69A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{DAD18D34-54B9-42CB-96D3-039A0D3DDC7C}"
@@ -54,7 +52,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{0715A257-83CA-4428-B0F0-30C91343A69A} = {AD93CDB9-3761-4CC5-AAA9-D694553707EB}
 		{0DD3726C-04DD-4D17-82B6-BF20898D0D92} = {DAD18D34-54B9-42CB-96D3-039A0D3DDC7C}
 	EndGlobalSection
 EndGlobal

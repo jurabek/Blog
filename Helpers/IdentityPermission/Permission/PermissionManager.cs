@@ -59,9 +59,19 @@ namespace IdentityPermissionExtension
             await this.Store.AddToRole(permission, roleId);
         }
 
+        public virtual async Task RemoveFromRole(TPermission permission, TKey roleId)
+        {
+            await this.Store.RemoveFromRole(permission, roleId);
+        }
+
         public virtual async Task DeletePermissionAsync(TKey id)
         {
             await this.Store.DeletePermissionAsync(id);
+        }
+
+        public Task<IEnumerable<TPermission>> GetAll()
+        {
+            return this.Store.GetAll();
         }
 
         /// <summary>

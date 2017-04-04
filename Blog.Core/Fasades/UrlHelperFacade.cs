@@ -14,7 +14,6 @@ namespace Blog.Core.Fasades
     {
         public string Action(string actionName, string controllerName, object routeValues, string protocol)
         {
-            
             UrlHelper url = new UrlHelper(HttpContext.Current.Request.RequestContext);
             return url.Action(actionName, controllerName, routeValues, protocol);
         }
@@ -22,6 +21,12 @@ namespace Blog.Core.Fasades
         public string GetUrlScheme()
         {
             return HttpContext.Current.Request.Url.Scheme;
+        }
+
+        public bool IsLocalUrl(string url)
+        {
+            UrlHelper urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+            return urlHelper.IsLocalUrl(url);
         }
     }
 }

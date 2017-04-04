@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Blog.Abstractions;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -84,7 +85,7 @@ namespace Blog.Model.Entities
     /// <summary>
     /// Note: use the permission extension DbContext in the constructor of the Stores.
     /// </summary>
-
+    [Injectable]
     public class IdentityUserStore : UserStore<User, IdentityRole, string, IdentityUserLogin, IdentityUserRole, IdentityUserClaim>
     {
         public IdentityUserStore(BlogDbContext context) : base(context)
@@ -92,6 +93,7 @@ namespace Blog.Model.Entities
         }
     }
 
+    [Injectable]
     public class IdentityRoleStore : RoleStore<IdentityRole, string, IdentityUserRole>
     {
         public IdentityRoleStore(BlogDbContext context) : base(context)
@@ -99,6 +101,7 @@ namespace Blog.Model.Entities
         }
     }
     
+    [Injectable]
     public class IdentityPermissionStore : IdentityPermissionExtension.PermissionStore<string, IdentityRole, User, IdentityUserStore, IdentityUserLogin,
         IdentityRolePermission, IdentityUserClaim, IdentityUserRole, IdentityPermission>
     {

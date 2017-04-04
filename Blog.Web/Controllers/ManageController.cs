@@ -1,4 +1,5 @@
-﻿using Blog.Abstractions.Managers;
+﻿using Blog.Abstractions.Facades;
+using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Core.Managers;
 using Blog.Model.Entities;
@@ -10,7 +11,7 @@ using System.Web.Mvc;
 namespace Blog.Web.Controllers
 {
     [Authorize]
-    public class ManageAccountController : BaseAccountController
+    public class ManageAccountController : BaseController
     {
         private IUserManager _userManager;
         private IMappingManager _mappingManager;
@@ -18,7 +19,8 @@ namespace Blog.Web.Controllers
 
         public ManageAccountController(IUserRepository<User, string> userRepository,
             IUserManager userManager,
-            IMappingManager mappingManager)
+            IMappingManager mappingManager, 
+            IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
         {
             _repository = userRepository;
             _userManager = userManager;

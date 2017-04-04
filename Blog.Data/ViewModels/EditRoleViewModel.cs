@@ -1,4 +1,5 @@
-﻿using Blog.Model.Entities;
+﻿using Blog.Abstractions.ViewModels;
+using Blog.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Web.Mvc;
 
 namespace Blog.Model.ViewModels
 {
-    public class EditRoleViewModel
+    public class EditRoleViewModel : IEditRoleViewModel<IdentityRoleViewModel>
     {
         public string UserId { get; set; }
 

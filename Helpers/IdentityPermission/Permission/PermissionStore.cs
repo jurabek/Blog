@@ -313,5 +313,18 @@ namespace IdentityPermissionExtension
             }
             await this.Context.SaveChangesAsync();
         }
+        
+
+        public async Task RemoveFromRole(TPermission permission, TKey roleId)
+        {
+            TRolePermission rolePermission = permission.Roles.FirstOrDefault(rp => rp.RoleId.Equals(roleId));
+            permission.Roles.Remove(rolePermission);
+            await this.Context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<TPermission>> GetAll()
+        {
+            return  await _permissions.ToListAsync();
+        }
     }
 }

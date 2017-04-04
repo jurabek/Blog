@@ -17,26 +17,51 @@
 
 namespace Blog.Web.DependencyResolution
 {
-    using Blog.Core.IoC;
+    using Blog.Web.DependencyResolution.Conventions;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataProtection;
+    using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
+    using System;
+    using System.Linq;
     using System.Web;
 
-    public class BlogRegistry : BaseRegistry {
+    public class BlogRegistry : Registry {
 
         public BlogRegistry() : base()
         {
+
+            var modelAssembly = AppDomain.CurrentDomain.GetAssemblies().
+                  SingleOrDefault(assembly => assembly.GetName().Name == "Blog.Model");
+
+            var coreAssembly = AppDomain.CurrentDomain.GetAssemblies().
+                  SingleOrDefault(assembly => assembly.GetName().Name == "Blog.Core");
+
+            Scan(
+                scan => {
+                    scan.Assembly(modelAssembly);
+                    scan.With(new ModelAssemblyConvention());
+                });
+
+            Scan(
+                scan => {
+                    scan.Assembly(coreAssembly);
+                    scan.With(new CoreAssemblyConvention());
+                });
+
             Scan(
                 scan => {
                     scan.TheCallingAssembly();
                     scan.WithDefaultConventions();
 					scan.With(new ControllerConvention());
                 });
+
+            
             
             For<IAuthenticationManager>().Use(x => HttpContext.Current.GetOwinContext().Authentication);
             For<IDataProtectionProvider>().Use(x => Startup.DataProtectionProvider);
         }
-        
+       
+
     }
 }

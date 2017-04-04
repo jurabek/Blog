@@ -7,12 +7,13 @@
 }
 
 <h2>@ViewBag.Title</h2>
+<h4>User roles and permissions</h4>
+
 <p class="text-success">@ViewBag.StatusMessage</p>
 
 @using (Html.BeginForm())
 {
     <div class="form-horizontal">
-        <h4>User roles and permissions</h4>
         <hr />
         <div class="form-group">
             @Html.HiddenFor(m => m.UserId)
@@ -36,7 +37,9 @@
             </div>
         </div>
         <hr />
-
+        <p>
+            @Html.ActionLink("Create New", "Create", "Role")
+        </p>
         <div class="form-group">
             <div class="col-md-10">
                 <label>Change roles</label>

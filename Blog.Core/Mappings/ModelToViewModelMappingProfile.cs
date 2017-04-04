@@ -21,6 +21,10 @@ namespace Blog.Core.Mappings
                                             u.Roles.Select(ur => ur.Role)
                                                    .SelectMany(r => r.Permissions)
                                                    .Select(rp => rp.Permission)));
+
+
+            CreateMap<RoleViewModel, IdentityRole>();
+            CreateMap<IdentityRole, RoleViewModel>();
         }
     }
 }

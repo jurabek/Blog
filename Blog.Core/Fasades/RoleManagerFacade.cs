@@ -52,7 +52,7 @@ namespace Blog.Core.Fasades
 
         public IdentityResult Delete(IdentityRole role)
         {
-            return _roleManager.Create(role);
+            return _roleManager.Delete(role);
         }
 
         public IdentityResult Update(IdentityRole role)

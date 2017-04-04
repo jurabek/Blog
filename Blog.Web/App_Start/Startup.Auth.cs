@@ -12,7 +12,6 @@ using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Blog.Core.Mappings;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Blog.Core.IoC;
 using Blog.Core;
 using IdentityPermissionExtension;
 

@@ -5,15 +5,22 @@ using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
 using Blog.Abstractions.Fasades;
 using System.Linq;
+using Blog.Abstractions.ViewModels;
+using System;
+using Microsoft.AspNet.Identity;
+using Blog.Model.ViewModels;
 
 namespace Blog.Core.Repositories
 {
-    public class RoleRepository : IRepository<IdentityRole, string>
+    public class RoleRepository : IRoleRepository<IdentityRole, string>
     {
         private readonly IRoleManagerFacade<IdentityRole> _roleManagerFacade;
-        public RoleRepository(IRoleManagerFacade<IdentityRole> roleManagerFacade)
+        private readonly IPermissionManagerFacade<IdentityPermission> _permissionManager;
+
+        public RoleRepository(IRoleManagerFacade<IdentityRole> roleManagerFacade, IPermissionManagerFacade<IdentityPermission> permissionManager)
         {
             _roleManagerFacade = roleManagerFacade;
+            _permissionManager = permissionManager;
         }
 
         public TResult Add<TResult>(IdentityRole entity) where TResult : class
@@ -75,5 +82,44 @@ namespace Blog.Core.Repositories
         {
             return Task.FromResult(Update<TResult>(entity));
         }
+
+        public async Task<TResult> UpdateRolePermissions<TResult, TViewModel>(IEditPermissionViewModel<IdentityRole, TViewModel> model) 
+            where TResult : class
+            where TViewModel : IIdentityPermissionViewModel
+        {
+            try
+            {
+                var selectedPermissions = model.Permissions.Where(ip => ip.IsSelected);
+                var unSelectedPermissions = model.Permissions.Where(ip => !ip.IsSelected);
+                var role = Get(model.RoleId);
+                var rolePermissions = role.Permissions;
+
+                var permissionsToAdd = selectedPermissions
+                    .Where(p => !rolePermissions.Select(rp => rp.PermissionId).Contains(p.Id));
+
+                var permissionsToDelete = unSelectedPermissions
+                    .Where(p => rolePermissions.Select(rp => rp.PermissionId).Contains(p.Id));
+
+                var allPermissions = await _permissionManager.GetAll();
+
+                foreach (var permissionToAdd in permissionsToAdd)
+                {
+                    var permission = allPermissions.FirstOrDefault(p => p.Id == permissionToAdd.Id);
+                    await _permissionManager.AddToRole(permission, role.Id);
+                }
+                foreach (var permissionToDelete in permissionsToDelete)
+                {
+                    var permission = allPermissions.FirstOrDefault(p => p.Id == permissionToDelete.Id);
+                    await _permissionManager.RemoveFromRole(permission, role.Id);
+                }
+
+                return IdentityResult.Success as TResult;
+            }
+            catch (Exception ex)
+            {
+                return new IdentityResult(ex.Message) as TResult;
+            }
+        }
+        
     }
 }

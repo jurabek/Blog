@@ -30,9 +30,8 @@ namespace Blog.Web.App_Start {
 	using Blog.Web.DependencyResolution;
 
     using StructureMap;
-    using Blog.Core.IoC;
 
-    public class StructuremapBootstrapper : BaseStructuremapBootstrapper {
+    public class StructuremapBootstrapper  {
         #region Public Properties
 
         public static StructureMapDependencyScope StructureMapDependencyScope { get; set; }
@@ -45,8 +44,8 @@ namespace Blog.Web.App_Start {
             StructureMapDependencyScope.Dispose();
         }
         public static void Start() {
-            Container = IoC.Initialize();
-            StructureMapDependencyScope = new StructureMapDependencyScope(Container);
+            var container = IoC.Initialize();
+            StructureMapDependencyScope = new StructureMapDependencyScope(container);
             DependencyResolver.SetResolver(StructureMapDependencyScope);
             DynamicModuleUtility.RegisterModule(typeof(StructureMapScopeModule));
         }
