@@ -7,6 +7,7 @@ using Blog.Abstractions.Fasades;
 
 namespace Blog.Core.Fasades
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class RoleManagerFacade : IRoleManagerFacade<IdentityRole>
     {
         private IdentityRoleManager _roleManager;

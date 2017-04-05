@@ -18,7 +18,7 @@
 
 namespace Blog.Web.DependencyResolution {
     using StructureMap;
-	
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public static class IoC {
         public static IContainer Initialize() {
             return new Container(c => c.AddRegistry<BlogRegistry>());

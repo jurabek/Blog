@@ -24,7 +24,8 @@ namespace Blog.Web.DependencyResolution {
     using Microsoft.Practices.ServiceLocation;
 
     using StructureMap;
-	
+
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     /// <summary>
     /// The structure map dependency scope.
     /// </summary>

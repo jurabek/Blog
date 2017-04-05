@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Blog.Abstractions.Mappings;
@@ -18,6 +17,7 @@ namespace Blog.Web.Tests.Mappings
         private Mock<IUserRepository<User, string>> _userRepository;
         private Mock<IRepository<IdentityRole, string>> _roleRepository;
         private IUserRolesMapper _userRolesMapper;
+
         [OneTimeSetUp]
         public void Init()
         {
@@ -34,17 +34,20 @@ namespace Blog.Web.Tests.Mappings
         [Test]
         public async Task GetEditRoleViewModelTest()
         {
+            string roleId = Guid.NewGuid().ToString("N");
+            var role = new IdentityRole { Id = roleId };
+            var user = new User();
+            user.Roles.Add(new IdentityUserRole { RoleId = roleId, Role = role });
 
             _userRepository.Setup(x => x.GetAsync(It.IsAny<string>()))
-                .Returns(Task.FromResult(new User()));
+                .Returns(Task.FromResult(user));
 
             _roleRepository.Setup(x => x.GetAll())
-                .Returns(Enumerable.Repeat(new IdentityRole(), 5));
-
+                .Returns(Enumerable.Repeat(role, 5));
 
             var result = await _userRolesMapper.GetEditRoleViewModel<IdentityRoleViewModel>("12");
 
-            Assert.AreEqual(5, result.Roles.Count());
+            Assert.That(result.Roles.Count(), Is.EqualTo(5));
         }
 
     }

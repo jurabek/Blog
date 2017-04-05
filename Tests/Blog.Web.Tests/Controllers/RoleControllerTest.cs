@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Blog.Abstractions.Facades;
 using Blog.Abstractions.Managers;
@@ -65,7 +61,8 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.Create(new RoleViewModel {Name = null}) as ViewResult;
 
             Assert.IsNotNull(result, "result != null");
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage,
+                                                                                 Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -78,7 +75,7 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.Create(new RoleViewModel()) as RedirectToRouteResult;
 
             Assert.NotNull(result, "result != null");
-            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
         }
 
         [Test]
@@ -93,7 +90,8 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.Create(null) as ViewResult;
 
             Assert.NotNull(result, "result != null");
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage,
+                                                                                 Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -111,7 +109,7 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.Edit("1") as ViewResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(model, result.ViewData.Model); 
+            Assert.That(result.ViewData.Model, Is.SameAs(model)); 
         }
 
 
@@ -126,7 +124,8 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.Edit(new RoleViewModel { Name = null }) as ViewResult;
 
             Assert.IsNotNull(result, "result != null");
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage,
+                                                                                Is.EqualTo(errorMessage));
 
         }
 
@@ -141,7 +140,7 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.Edit(new RoleViewModel()) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
         }
 
         [Test]
@@ -155,7 +154,7 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsNotNull(result);
 
-            Assert.AreEqual(model, result.ViewData.Model);
+            Assert.That(result.ViewData.Model, Is.SameAs(model));
         }
 
         [Test]
@@ -166,10 +165,8 @@ namespace Blog.Web.Tests.Controllers
                 .Returns(IdentityResult.Success);
 
             var result = _controller.Delete(new IdentityRole()) as RedirectToRouteResult;
-
             Assert.NotNull(result);
-
-            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
         }
 
     }

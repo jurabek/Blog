@@ -8,6 +8,7 @@ using System.Web.Routing;
 
 namespace Blog.Web
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()

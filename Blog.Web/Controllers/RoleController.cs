@@ -3,15 +3,13 @@ using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Blog.Abstractions.Facades;
+using IdentityPermissionExtension;
 
 namespace Blog.Web.Controllers
 {
+    [Authorize(Roles = nameof(Roles.Administrator))]
     public class RoleController : BaseController
     {
         private IRepository<IdentityRole, string> _roleRepository;

@@ -4,7 +4,7 @@ namespace Blog.Web.DependencyResolution {
     using Blog.Web.App_Start;
 
     using StructureMap.Web.Pipeline;
-
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class StructureMapScopeModule : IHttpModule {
         #region Public Methods and Operators
 

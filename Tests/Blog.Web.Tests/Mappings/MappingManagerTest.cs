@@ -10,6 +10,10 @@ using Blog.Model.ViewModels;
 using NUnit.Framework;
 using Blog.Abstractions.Managers;
 using Blog.Core.Managers;
+using Blog.Abstractions.Mappings;
+using Moq;
+using Blog.Abstractions.ViewModels;
+using Blog.Abstractions.Repositories;
 
 namespace Blog.Web.Tests.Mappings
 {
@@ -17,12 +21,17 @@ namespace Blog.Web.Tests.Mappings
     public class MappingManagerTest : IDisposable
     {
         private IMappingManager mappingManager;
-        
+
+        private Mock<IUserRolesMapper> _userRolesMapper;
+        private Mock<IRolePermissionsMapper> _rolePermissionsMapper;
+
         [OneTimeSetUp]
         public void Init()
         {
             AutoMapperConfiguration.Configure();
-            mappingManager = new MappingManager(null, null);
+            _userRolesMapper = new Mock<IUserRolesMapper>();
+            _rolePermissionsMapper = new Mock<IRolePermissionsMapper>();
+            mappingManager = new MappingManager(_userRolesMapper.Object, _rolePermissionsMapper.Object);
         }
 
         [OneTimeTearDown]
@@ -43,6 +52,22 @@ namespace Blog.Web.Tests.Mappings
 
             Assert.AreEqual("Map Name", vm.Name);
             Assert.AreEqual("Map LastName", vm.LastName);
+        }
+
+        [Test]
+        public void GetRolePermissionsMapperShouldNotReturnNull()
+        {
+            var result = mappingManager.GetRolePermissionsMapper();
+
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void GetUserRolesMapperShouldNotReturnNull()
+        {
+            var result = mappingManager.GetUserRolesMapper();
+
+            Assert.IsNotNull(result);
         }
     }
 }

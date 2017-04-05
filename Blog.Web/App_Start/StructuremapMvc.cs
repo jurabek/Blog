@@ -31,6 +31,7 @@ namespace Blog.Web.App_Start {
 
     using StructureMap;
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class StructuremapBootstrapper  {
         #region Public Properties
 

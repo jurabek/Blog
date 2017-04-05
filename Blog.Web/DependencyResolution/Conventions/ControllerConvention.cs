@@ -24,6 +24,7 @@ namespace Blog.Web.DependencyResolution {
     using StructureMap.Pipeline;
     using StructureMap.TypeRules;
 
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class ControllerConvention : IRegistrationConvention {
         #region Public Methods and Operators
 

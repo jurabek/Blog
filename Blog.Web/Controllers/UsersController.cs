@@ -23,7 +23,8 @@ namespace Blog.Web.Controllers
         private IMappingManager _mappingManager;
 
         public UsersController(IUserRepository<User, string> userRepository,
-            IRoleRepository<IdentityRole, string> roleRepository, IMappingManager mappingManager, IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
+            IRoleRepository<IdentityRole, string> roleRepository,
+            IMappingManager mappingManager, IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -32,7 +33,7 @@ namespace Blog.Web.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<UsersViewModel> model = Mapper.Map<IEnumerable<UsersViewModel>>(_userRepository.GetAll());
+            IEnumerable<UsersViewModel> model = _mappingManager.Map<IEnumerable<User>, IEnumerable<UsersViewModel>>(_userRepository.GetAll());
             return View(model);
         }
 

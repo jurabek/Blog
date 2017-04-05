@@ -3,6 +3,7 @@ using System.Web.Optimization;
 
 namespace Blog.Web
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class BundleConfig
     {
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862

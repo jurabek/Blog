@@ -17,7 +17,6 @@
 
 namespace Blog.Web.DependencyResolution
 {
-    using Blog.Web.DependencyResolution.Conventions;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.DataProtection;
     using StructureMap.Configuration.DSL;
@@ -61,7 +60,5 @@ namespace Blog.Web.DependencyResolution
             For<IAuthenticationManager>().Use(x => HttpContext.Current.GetOwinContext().Authentication);
             For<IDataProtectionProvider>().Use(x => Startup.DataProtectionProvider);
         }
-       
-
     }
 }

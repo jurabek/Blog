@@ -17,6 +17,7 @@ using IdentityPermissionExtension;
 
 namespace Blog.Web
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public partial class Startup
     {
         internal static IDataProtectionProvider DataProtectionProvider { get; private set; }

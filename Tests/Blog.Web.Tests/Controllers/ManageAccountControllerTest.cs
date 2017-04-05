@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using Blog.Abstractions.Managers;
 using Blog.Abstractions.Repositories;
 using Blog.Abstractions.ViewModels;
-using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using Blog.Web.Controllers;
@@ -43,15 +42,15 @@ namespace Blog.Web.Tests.Controllers
 
             var result = _controller.Index(ManageMessageId.ChangePasswordSuccess) as ViewResult;
 
-            Assert.AreEqual("Your password has been changed.", result.ViewBag.StatusMessage);
+            Assert.That(result.ViewBag.StatusMessage, Is.EqualTo("Your password has been changed."));
 
             result = _controller.Index(ManageMessageId.ChangeProfileSuccess) as ViewResult;
 
-            Assert.AreEqual("Your profile has been changed",result.ViewBag.StatusMessage);
+            Assert.That(result.ViewBag.StatusMessage, Is.EqualTo("Your profile has been changed"));
 
             result = _controller.Index(ManageMessageId.Error) as ViewResult;
 
-            Assert.AreEqual(string.Empty, result.ViewBag.StatusMessage);
+            Assert.That(result.ViewBag.StatusMessage, Is.EqualTo(string.Empty));
         }
 
         [Test]
@@ -85,9 +84,9 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ChangePassword(null) as RedirectToRouteResult;
 
-            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
 
-            Assert.AreEqual(ManageMessageId.ChangePasswordSuccess , result.RouteValues["Message"]);
+            Assert.That(result.RouteValues["Message"], Is.EqualTo(ManageMessageId.ChangePasswordSuccess));
         }
 
         [Test]
@@ -102,7 +101,8 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsInstanceOf<ViewResult>(result);
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -132,9 +132,9 @@ namespace Blog.Web.Tests.Controllers
 
             var model = result.ViewData.Model as UpdateProfileViewModel;
 
-            Assert.AreEqual(name, model.Name);
+            Assert.That(model.Name, Is.EqualTo(name));
 
-            Assert.AreEqual(lastName, model.LastName);
+            Assert.That(model.LastName, Is.EqualTo(lastName));
         }
         
 
@@ -156,7 +156,8 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.AreSame(model, result.ViewData.Model);
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                 Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -169,9 +170,9 @@ namespace Blog.Web.Tests.Controllers
             
             var result = await _controller.ChangeProfile(new UpdateProfileViewModel()) as RedirectToRouteResult;
 
-            Assert.AreEqual("Index", result.RouteValues["action"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
 
-            Assert.AreEqual(ManageMessageId.ChangeProfileSuccess, result.RouteValues["Message"]);
+            Assert.That(result.RouteValues["Message"], Is.EqualTo(ManageMessageId.ChangeProfileSuccess));
         }
         
         [Test]
@@ -186,7 +187,8 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ChangeProfile(null) as ViewResult;
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                             Is.EqualTo(errorMessage));
         } 
     }
 }

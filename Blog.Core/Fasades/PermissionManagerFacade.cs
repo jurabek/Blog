@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Core.Fasades
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class PermissionManagerFacade : IPermissionManagerFacade<IdentityPermission>
     {
         private IdentityPermissionManager _permissionManager;

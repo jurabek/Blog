@@ -59,12 +59,8 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsInstanceOf<RedirectToRouteResult>(result);
 
-            Assert.AreEqual("Home",
-                            result.RouteValues["controller"],
-                            "Controller should be Home after logining it will rederict into Home controller");
-            Assert.AreEqual("Index",
-                            result.RouteValues["action"],
-                            "Expected action shoulde be Index beacause if login success it rederects into Index");
+            Assert.That(result.RouteValues["controller"], Is.EqualTo("Home"));
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
         }
 
         [Test]
@@ -97,10 +93,9 @@ namespace Blog.Web.Tests.Controllers
             });
 
             Assert.IsInstanceOf<ViewResult>(result);
-
             Assert.IsTrue(_controller.ModelState.Any(), "There is should be one error!");
-
-            Assert.AreEqual(_controller.ModelState.Values.First().Errors.First().ErrorMessage, "Invalid login attempt.");
+            Assert.That(_controller.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                             Is.EqualTo("Invalid login attempt."));
         }
 
         [Test]
@@ -133,14 +128,14 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ConfirmEmail(It.IsAny<string>(), It.IsAny<string>()) as ViewResult;
 
-            Assert.AreEqual("ConfirmEmail", result.ViewName);
+            Assert.That(result.ViewName, Is.EqualTo("ConfirmEmail"));
 
             _userManager.Setup(a => a.ConfirmEmail("error", "error"))
                               .Returns(Task.FromResult(new IdentityResult("Error")));
 
             result = await _controller.ConfirmEmail("error", "error") as ViewResult;
 
-            Assert.AreEqual("Error", result.ViewName);
+            Assert.That(result.ViewName, Is.EqualTo("Error"));
         }
 
         [Test]
@@ -165,7 +160,8 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsInstanceOf<ViewResult>(result);
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                 Is.EqualTo(errorMessage));
 
             Assert.AreSame(model, result.ViewData.Model);
         }
@@ -180,9 +176,9 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ForgotPassword(new ForgotPasswordViewModel()) as RedirectToRouteResult;
 
-            Assert.AreEqual("Account", result.RouteValues["controller"]);
+            Assert.That(result.RouteValues["controller"], Is.EqualTo("Account"));
 
-            Assert.AreEqual("Success", result.RouteValues["action"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Success"));
         }
 
         [Test]
@@ -196,7 +192,8 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ForgotPassword(null);
 
-            Assert.AreEqual(_controller.ModelState.Values.First().Errors.First().ErrorMessage, errorMessage);
+            Assert.That(_controller.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                             Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -222,7 +219,8 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsInstanceOf<ViewResult>(result);
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, errorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                 Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -236,8 +234,8 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.Register(new RegisterViewModel()) as RedirectToRouteResult;
 
-            Assert.AreEqual("Success", result.RouteValues["action"]);
-            Assert.AreEqual("Account", result.RouteValues["controller"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Success"));
+            Assert.That(result.RouteValues["controller"], Is.EqualTo("Account"));
         }
 
         [Test]
@@ -251,7 +249,8 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.Register(new RegisterViewModel()) as ViewResult;
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, errorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                 Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -288,7 +287,8 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsFalse(_controller.ModelState.IsValid);
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                 Is.EqualTo(errorMessage));
 
         }
 
@@ -301,7 +301,7 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ResetPassword(new ResetPasswordViewModel()) as ViewResult;
 
-            Assert.AreEqual("ResetPasswordConfirmation", result.ViewName);
+            Assert.That(result.ViewName, Is.EqualTo("ResetPasswordConfirmation"));
         }
 
         [Test]
@@ -315,7 +315,8 @@ namespace Blog.Web.Tests.Controllers
 
             var result = await _controller.ResetPassword(null) as ViewResult;
 
-            Assert.AreEqual(errorMessage, result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage);
+            Assert.That(result.ViewData.ModelState.Values.First().Errors.First().ErrorMessage, 
+                                                                                 Is.EqualTo(errorMessage));
         }
 
         [Test]
@@ -323,8 +324,8 @@ namespace Blog.Web.Tests.Controllers
         {
             var result = _controller.LogOff() as RedirectToRouteResult;
 
-            Assert.AreEqual("Index", result.RouteValues["action"]);
-            Assert.AreEqual("Home", result.RouteValues["controller"]);
+            Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
+            Assert.That(result.RouteValues["controller"], Is.EqualTo("Home"));
         }
     }
 }
