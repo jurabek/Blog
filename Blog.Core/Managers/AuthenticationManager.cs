@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Blog.Abstractions.Facades;
 using Blog.Abstractions.ViewModels;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Blog.Abstractions.Managers;
 using Blog.Model.Entities;

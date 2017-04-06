@@ -28,16 +28,16 @@ namespace Blog.Core.Mappings
             var model = new EditRoleViewModel
             {
                 UserRoles = userRoles,
-                UserId = user.Id
+                UserId = user.Id,
+                Roles = _roleRepository.GetAll().Select(r => new IdentityRoleViewModel
+                {
+                    Id = r.Id,
+                    Name = r.Name,
+                    Title = r.Title,
+                    IsSelected = user.Roles.Select(ur => ur.RoleId).Contains(r.Id)
+                })
             };
 
-            model.Roles = _roleRepository.GetAll().Select(r => new IdentityRoleViewModel
-            {
-                Id = r.Id,
-                Name = r.Name,
-                Title = r.Title,
-                IsSelected = user.Roles.Select(ur => ur.RoleId).Contains(r.Id)
-            });
 
             return model as IEditRoleViewModel<TRoleViewModel>;
         }

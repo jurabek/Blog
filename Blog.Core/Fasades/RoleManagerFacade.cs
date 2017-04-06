@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Blog.Abstractions.Facades;
 using Blog.Core.Managers;
 using Blog.Model.Entities;
 using Microsoft.AspNet.Identity;
-using Blog.Abstractions.Fasades;
 
 namespace Blog.Core.Fasades
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class RoleManagerFacade : IRoleManagerFacade<IdentityRole>
     {
-        private IdentityRoleManager _roleManager;
+        private readonly IdentityRoleManager _roleManager;
 
         public RoleManagerFacade(IdentityRoleManager roleManager)
         {
@@ -41,10 +41,7 @@ namespace Blog.Core.Fasades
         /// Gets all Roles
         /// </summary>
         /// <returns></returns>
-        public IQueryable<IdentityRole> Roles
-        {
-            get { return _roleManager.Roles; }
-        }
+        public IQueryable<IdentityRole> Roles => _roleManager.Roles;
 
         public IdentityResult Create(IdentityRole role)
         {

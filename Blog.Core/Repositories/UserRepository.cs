@@ -12,7 +12,7 @@ namespace Blog.Core.Repositories
 {
     public class UserRepository : IUserRepository<User, string>
     {
-        private IUserManagerFacade<User> _userManagerFacade;
+        private readonly IUserManagerFacade<User> _userManagerFacade;
 
         public UserRepository(IUserManagerFacade<User> userManagerFacade)
         {

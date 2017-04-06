@@ -3,15 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Blog.Abstractions.Repositories;
+using Blog.Model.Entities;
 
 namespace Blog.Web.Controllers
 {
     public class ArticleController : Controller
     {
+        private readonly IRepository<Article, string> _repository;
+
+        public ArticleController(IRepository<Article, string> repository)
+        {
+            _repository = repository;
+        }
+
         // GET: Article
         public ActionResult Index()
         {
-            return View();
+            return View(_repository.GetAll());
         }
 
         // GET: Article/Details/5

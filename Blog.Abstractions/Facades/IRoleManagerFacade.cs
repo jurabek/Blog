@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 
-namespace Blog.Abstractions.Fasades
+namespace Blog.Abstractions.Facades
 {
     public interface IRoleManagerFacade<TRole>
     {

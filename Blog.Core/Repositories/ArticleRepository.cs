@@ -26,6 +26,7 @@ namespace Blog.Core.Repositories
                 _context.Articles.Add(entity);
                 _context.SaveChanges();
                 return true as TResult;
+
             }
             catch (Exception)
             {

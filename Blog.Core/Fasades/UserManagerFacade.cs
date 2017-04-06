@@ -18,8 +18,8 @@ namespace Blog.Core.Fasades
             _userManager = userManager;
 
         }
-        public IQueryable<User> Users { get { return _userManager.Users; } }
-        
+        public IQueryable<User> Users => _userManager.Users;
+
         public async Task<User> FindByIdAsync(string userId)
         {
             return await _userManager.FindByIdAsync(userId);

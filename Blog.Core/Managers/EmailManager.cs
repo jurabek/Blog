@@ -1,18 +1,14 @@
 ﻿using Blog.Abstractions.Facades;
 using Blog.Abstractions.Managers;
 using Blog.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blog.Core.Managers
 {
     public class EmailManager : IEmailManager
     {
-        private IUrlHelperFacade _urlHelperFacade;
-        private IUserManagerFacade<User> _userManagerFacade;
+        private readonly IUrlHelperFacade _urlHelperFacade;
+        private readonly IUserManagerFacade<User> _userManagerFacade;
 
         public EmailManager(IUserManagerFacade<User> userManagerFacade, IUrlHelperFacade urlHelperFacade)
         {

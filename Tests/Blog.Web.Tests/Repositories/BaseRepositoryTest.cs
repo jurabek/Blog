@@ -7,14 +7,13 @@ using System.Threading.Tasks;
 
 namespace Blog.Web.Tests.Repositories
 {
-    public abstract class BaseRepositoryTest<TRepository, T, TKey> 
+    public abstract class BaseRepositoryTest<T, TKey> 
         where T : class, new()
-        where TRepository : IRepository<T, TKey>
     {
         /// <summary>
         /// Initialize int on classes and setup mockups
         /// </summary>
-        internal protected abstract IRepository<T, TKey> Repository { get; set; }
+        protected abstract IRepository<T, TKey> Repository { get; set; }
 
         [OneTimeSetUp]
         public abstract void Init();

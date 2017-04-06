@@ -10,11 +10,11 @@ namespace Blog.Core.Managers
 {
     public class UserManager : IUserManager
     {
-        private IUserManagerFacade<User> _userManagerFacade;
-        private IUserRepository<User, string> _userRepository;
-        private IEmailManager _emailManager;
-        private IMappingManager _mappingManager;
-        private IAuthenticationManager<User> _authenticationManager;
+        private readonly IUserManagerFacade<User> _userManagerFacade;
+        private readonly IUserRepository<User, string> _userRepository;
+        private readonly IEmailManager _emailManager;
+        private readonly IMappingManager _mappingManager;
+        private readonly IAuthenticationManager<User> _authenticationManager;
 
         public UserManager(IUserManagerFacade<User> userManagerFacade,
             IUserRepository<User, string> userRepository,
@@ -75,7 +75,7 @@ namespace Blog.Core.Managers
 
         public async Task<IdentityResult> UpdateProfile(string userId, IUpdateProfileViewModel model)
         {
-            var user = await _userManagerFacade.FindByIdAsync(userId) as User;
+            var user = await _userManagerFacade.FindByIdAsync(userId);
             user.Name = model.Name;
             user.LastName = model.LastName;
 

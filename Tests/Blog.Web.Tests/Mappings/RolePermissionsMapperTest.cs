@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blog.Abstractions.Fasades;
+using Blog.Abstractions.Facades;
 using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
 using Moq;

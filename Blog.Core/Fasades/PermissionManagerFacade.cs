@@ -1,18 +1,18 @@
-﻿using Blog.Abstractions.Fasades;
-using Blog.Core.Managers;
+﻿using Blog.Core.Managers;
 using Blog.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Core.Fasades
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class PermissionManagerFacade : IPermissionManagerFacade<IdentityPermission>
     {
-        private IdentityPermissionManager _permissionManager;
+        private readonly IdentityPermissionManager _permissionManager;
 
         public PermissionManagerFacade(IdentityPermissionManager permissionManager)
         {

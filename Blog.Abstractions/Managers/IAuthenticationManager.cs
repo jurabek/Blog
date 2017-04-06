@@ -5,7 +5,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace Blog.Abstractions.Managers
 {
-    public interface IAuthenticationManager<TUser> where TUser : IUser
+    public interface IAuthenticationManager<in TUser> where TUser : IUser
     {
         /// <summary>
         /// Signs via model

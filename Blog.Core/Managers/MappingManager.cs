@@ -1,15 +1,13 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Blog.Abstractions.Managers;
 using Blog.Abstractions.Mappings;
-using Blog.Model.Entities;
 
 namespace Blog.Core.Managers
 {
     public class MappingManager : IMappingManager
     {
-        private IUserRolesMapper _userRolesMapper;
-        private IRolePermissionsMapper _rolePermissionsMapper;
+        private readonly IUserRolesMapper _userRolesMapper;
+        private readonly IRolePermissionsMapper _rolePermissionsMapper;
 
         public MappingManager(IUserRolesMapper userRolesMapper, IRolePermissionsMapper rolePermissionsMapper)
         {

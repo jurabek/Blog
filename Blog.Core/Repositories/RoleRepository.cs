@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
-using Blog.Abstractions.Fasades;
 using System.Linq;
 using Blog.Abstractions.ViewModels;
 using System;
+using Blog.Abstractions.Facades;
 using Microsoft.AspNet.Identity;
 
 namespace Blog.Core.Repositories

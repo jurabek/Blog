@@ -2,7 +2,6 @@
 using Blog.Model.Entities;
 using Blog.Abstractions.Repositories;
 using Moq;
-using Blog.Abstractions.Fasades;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using NUnit.Framework;
@@ -12,13 +11,14 @@ using Blog.Abstractions.ViewModels;
 using System;
 using IdentityPermissionExtension;
 using System.Collections.Generic;
+using Blog.Abstractions.Facades;
 
 namespace Blog.Web.Tests.Repositories
 {
     [TestFixture]
-    public class RoleRepositoryTest : BaseRepositoryTest<RoleRepository, IdentityRole, string>
+    public class RoleRepositoryTest : BaseRepositoryTest<IdentityRole, string>
     {
-        protected internal override IRepository<IdentityRole, string> Repository { get; set; }
+        protected override IRepository<IdentityRole, string> Repository { get; set; }
 
         private Mock<IRoleManagerFacade<IdentityRole>> _roleManager;
         private Mock<IPermissionManagerFacade<IdentityPermission>> _permissionManager;

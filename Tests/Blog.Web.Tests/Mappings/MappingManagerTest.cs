@@ -20,8 +20,7 @@ namespace Blog.Web.Tests.Mappings
     [TestFixture]
     public class MappingManagerTest : IDisposable
     {
-        private IMappingManager mappingManager;
-
+        private IMappingManager _mappingManager;
         private Mock<IUserRolesMapper> _userRolesMapper;
         private Mock<IRolePermissionsMapper> _rolePermissionsMapper;
 
@@ -31,7 +30,7 @@ namespace Blog.Web.Tests.Mappings
             AutoMapperConfiguration.Configure();
             _userRolesMapper = new Mock<IUserRolesMapper>();
             _rolePermissionsMapper = new Mock<IRolePermissionsMapper>();
-            mappingManager = new MappingManager(_userRolesMapper.Object, _rolePermissionsMapper.Object);
+            _mappingManager = new MappingManager(_userRolesMapper.Object, _rolePermissionsMapper.Object);
         }
 
         [OneTimeTearDown]
@@ -48,7 +47,7 @@ namespace Blog.Web.Tests.Mappings
                 LastName = "Map LastName"
             };
 
-            var vm = mappingManager.Map<User, UpdateProfileViewModel>(user);
+            var vm = _mappingManager.Map<User, UpdateProfileViewModel>(user);
 
             Assert.AreEqual("Map Name", vm.Name);
             Assert.AreEqual("Map LastName", vm.LastName);
@@ -57,7 +56,7 @@ namespace Blog.Web.Tests.Mappings
         [Test]
         public void GetRolePermissionsMapperShouldNotReturnNull()
         {
-            var result = mappingManager.GetRolePermissionsMapper();
+            var result = _mappingManager.GetRolePermissionsMapper();
 
             Assert.IsNotNull(result);
         }
@@ -65,7 +64,7 @@ namespace Blog.Web.Tests.Mappings
         [Test]
         public void GetUserRolesMapperShouldNotReturnNull()
         {
-            var result = mappingManager.GetUserRolesMapper();
+            var result = _mappingManager.GetUserRolesMapper();
 
             Assert.IsNotNull(result);
         }

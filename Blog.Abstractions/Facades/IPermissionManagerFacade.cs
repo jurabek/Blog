@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Blog.Abstractions.Fasades
+namespace Blog.Abstractions.Facades
 {
     public interface IPermissionManagerFacade<TPermission>
     {

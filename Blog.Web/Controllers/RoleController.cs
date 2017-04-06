@@ -12,9 +12,8 @@ namespace Blog.Web.Controllers
     [Authorize(Roles = nameof(Roles.Administrator))]
     public class RoleController : BaseController
     {
-        private IRepository<IdentityRole, string> _roleRepository;
-        private IMappingManager _mappingManager;
-        private IUrlHelperFacade _urlHelper;
+        private readonly IRepository<IdentityRole, string> _roleRepository;
+        private readonly IMappingManager _mappingManager;
 
         public RoleController(IRepository<IdentityRole, string> roleRepository, 
             IMappingManager mappingManager,

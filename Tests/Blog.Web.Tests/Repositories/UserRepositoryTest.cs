@@ -15,9 +15,9 @@ using System.Collections.Generic;
 namespace Blog.Web.Tests.Repositories
 {
     [TestFixture]
-    public class UserRepositoryTest : BaseRepositoryTest<UserRepository, User, string>
+    public class UserRepositoryTest : BaseRepositoryTest<User, string>
     {
-        protected internal override IRepository<User, string> Repository { get; set; }
+        protected override IRepository<User, string> Repository { get; set; }
         private Mock<IUserManagerFacade<User>> _userManager;
 
         public override void Init()

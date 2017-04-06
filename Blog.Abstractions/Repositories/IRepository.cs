@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Blog.Abstractions.Repositories
 {
-    public interface IRepository<T, TKey> 
+    public interface IRepository<T, in TKey> 
         where T : class, new()
     {
         Task<TResult> AddAsync<TResult>(T entity) where TResult : class;
