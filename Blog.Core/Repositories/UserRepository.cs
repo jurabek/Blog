@@ -51,7 +51,7 @@ namespace Blog.Core.Repositories
 
         public IEnumerable<User> GetAll()
         {
-            return _userManagerFacade.Users.ToList();
+            return _userManagerFacade.Users;
         }
 
         public Task<IEnumerable<User>> GetAllAsync()

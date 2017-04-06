@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
@@ -27,6 +28,8 @@ namespace Blog.Model.Entities
         [NotMapped]
         [Display(Name = "Full name")]
         public virtual string FullName { get { return Name + " " + LastName; } }
+
+        public ICollection<Article> Articles { get; set; }
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User, string> manager)

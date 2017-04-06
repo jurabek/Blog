@@ -127,6 +127,7 @@
     <Compile Include="Mappings\RolePermissionsMapper.cs" />
     <Compile Include="Mappings\UserRolesMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ArticleRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
     <Compile Include="Services\EmailService.cs" />

@@ -55,10 +55,10 @@ namespace Blog.Web.DependencyResolution
 					scan.With(new ControllerConvention());
                 });
 
-            
-            
+#if !DEBUG_TEST
             For<IAuthenticationManager>().Use(x => HttpContext.Current.GetOwinContext().Authentication);
             For<IDataProtectionProvider>().Use(x => Startup.DataProtectionProvider);
+#endif
         }
     }
 }
