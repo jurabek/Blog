@@ -194,8 +194,10 @@
     <Compile Include="Mappings\MappingManagerTest.cs" />
     <Compile Include="Mappings\RolePermissionsMapperTest.cs" />
     <Compile Include="Mappings\UserRolesMapperTest.cs" />
-    <Compile Include="Model\IdentityUserRolesAndPermissionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\BaseRepositoryTest.cs" />
+    <Compile Include="Repositories\RoleRepositoryTest.cs" />
+    <Compile Include="Repositories\UserRepositoryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -223,9 +225,7 @@
       <Name>IdentityPermissionExtension</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Repositories\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

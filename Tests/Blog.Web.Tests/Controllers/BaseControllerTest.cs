@@ -19,14 +19,6 @@ namespace Blog.Web.Tests.Controllers
         [OneTimeSetUp]
         public abstract void Init();
 
-        public virtual void Dispose(bool dispose)
-        {
-            if (dispose)
-            {
-                _controller.Dispose();
-                Dispose();
-            }
-        }
         protected void ClearModelState()
         {
             _controller.ModelState.Clear();            

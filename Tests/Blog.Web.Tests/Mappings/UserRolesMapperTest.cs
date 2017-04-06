@@ -37,9 +37,10 @@ namespace Blog.Web.Tests.Mappings
             string roleId = Guid.NewGuid().ToString("N");
             var role = new IdentityRole { Id = roleId };
             var user = new User();
-            user.Roles.Add(new IdentityUserRole { RoleId = roleId, Role = role });
+            user.Roles.Add(new IdentityUserRole { RoleId = roleId, Role = role, User = user });
+            user.Roles.Add(new IdentityUserRole { Role = new IdentityRole(), RoleId = "1234", User = user });
 
-            _userRepository.Setup(x => x.GetAsync(It.IsAny<string>()))
+            _userRepository.Setup(x => x.GetAsync("12"))
                 .Returns(Task.FromResult(user));
 
             _roleRepository.Setup(x => x.GetAll())
@@ -48,6 +49,8 @@ namespace Blog.Web.Tests.Mappings
             var result = await _userRolesMapper.GetEditRoleViewModel<IdentityRoleViewModel>("12");
 
             Assert.That(result.Roles.Count(), Is.EqualTo(5));
+
+            Assert.That(((EditRoleViewModel)result).UserRoles.Count, Is.EqualTo(2));
         }
 
     }

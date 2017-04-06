@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Blog.Core.Fasades;
 using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
 using Blog.Abstractions.Fasades;
@@ -8,7 +7,6 @@ using System.Linq;
 using Blog.Abstractions.ViewModels;
 using System;
 using Microsoft.AspNet.Identity;
-using Blog.Model.ViewModels;
 
 namespace Blog.Core.Repositories
 {

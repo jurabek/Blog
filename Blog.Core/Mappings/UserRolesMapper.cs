@@ -3,10 +3,7 @@ using Blog.Abstractions.Repositories;
 using Blog.Abstractions.ViewModels;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Blog.Core.Mappings
@@ -27,10 +24,10 @@ namespace Blog.Core.Mappings
             where TRoleViewModel : class, IIdentityRoleViewModel
         {
             var user = await _userRepository.GetAsync(userId);
-
+            var userRoles = user.Roles.Select(r => r.Role);
             var model = new EditRoleViewModel
             {
-                UserRoles = user.Roles.Select(r => r.Role),
+                UserRoles = userRoles,
                 UserId = user.Id
             };
 
