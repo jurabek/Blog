@@ -7,17 +7,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Blog.Abstractions.Facades;
+using Microsoft.AspNet.Identity;
 
 namespace Blog.Core.Mappings
 {
     public class RolePermissionsMapper : IRolePermissionsMapper
     {
-        private IUserRepository<User, string> _userRepository;
-        private IRoleRepository<IdentityRole, string> _roleRepository;
+        private IUserRepository<User, string, IdentityResult> _userRepository;
+        private IRoleRepository<IdentityRole, string, IdentityResult> _roleRepository;
         private IPermissionManagerFacade<IdentityPermission> _permissionManagerFacade;
 
-        public RolePermissionsMapper(IUserRepository<User, string> userRepository,
-            IRoleRepository<IdentityRole, string> roleRepository,
+        public RolePermissionsMapper(IUserRepository<User, string, IdentityResult> userRepository,
+            IRoleRepository<IdentityRole, string, IdentityResult> roleRepository,
             IPermissionManagerFacade<IdentityPermission> permissionManagerFacade)
         {
             _userRepository = userRepository;

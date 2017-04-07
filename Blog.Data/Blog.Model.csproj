@@ -81,18 +81,19 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\Votes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\EditPermissionViewModel.cs" />
-    <Compile Include="ViewModels\EditRoleViewModel.cs" />
-    <Compile Include="ViewModels\RoleViewModel.cs" />
-    <Compile Include="ViewModels\UpdatePasswordViewModel.cs" />
-    <Compile Include="ViewModels\UpdateProfileViewModel.cs" />
-    <Compile Include="ViewModels\ForgotPasswordViewModel.cs" />
-    <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\ResetPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Articles\ArticleViewModel.cs" />
+    <Compile Include="ViewModels\Permissions\EditPermissionViewModel.cs" />
+    <Compile Include="ViewModels\Roles\EditRoleViewModel.cs" />
+    <Compile Include="ViewModels\Roles\RoleViewModel.cs" />
+    <Compile Include="ViewModels\Account\UpdatePasswordViewModel.cs" />
+    <Compile Include="ViewModels\Account\UpdateProfileViewModel.cs" />
+    <Compile Include="ViewModels\Account\ForgotPasswordViewModel.cs" />
+    <Compile Include="ViewModels\Account\LoginViewModel.cs" />
+    <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\Account\ResetPasswordViewModel.cs" />
     <Compile Include="ViewModels\SuccessViewModel.cs" />
-    <Compile Include="ViewModels\IdentityPermissionViewModel.cs" />
-    <Compile Include="ViewModels\IdentityRoleViewModel.cs" />
+    <Compile Include="ViewModels\Permissions\IdentityPermissionViewModel.cs" />
+    <Compile Include="ViewModels\Roles\IdentityRoleViewModel.cs" />
     <Compile Include="ViewModels\UsersViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

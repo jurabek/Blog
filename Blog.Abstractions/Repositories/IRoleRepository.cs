@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Blog.Abstractions.Repositories
 {
-    public interface IRoleRepository<T, in TKey> : IRepository<T, TKey>
+    public interface IRoleRepository<T, in TKey, TResult> : IRepository<T, TKey, TResult>
         where T : class, new()
     {
-        Task<TResult> UpdateRolePermissions<TResult, TViewModel>(IEditPermissionViewModel<T, TViewModel> model)
-            where TResult : class
+        Task<TResult> UpdateRolePermissions<TViewModel>(IEditPermissionViewModel<T, TViewModel> model)
             where TViewModel : IIdentityPermissionViewModel;
     }
 }

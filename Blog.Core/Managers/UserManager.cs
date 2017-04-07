@@ -11,13 +11,13 @@ namespace Blog.Core.Managers
     public class UserManager : IUserManager
     {
         private readonly IUserManagerFacade<User> _userManagerFacade;
-        private readonly IUserRepository<User, string> _userRepository;
+        private readonly IUserRepository<User, string, IdentityResult> _userRepository;
         private readonly IEmailManager _emailManager;
         private readonly IMappingManager _mappingManager;
         private readonly IAuthenticationManager<User> _authenticationManager;
 
         public UserManager(IUserManagerFacade<User> userManagerFacade,
-            IUserRepository<User, string> userRepository,
+            IUserRepository<User, string, IdentityResult> userRepository,
             IEmailManager emailManager,
             IMappingManager mappingManager,
             IAuthenticationManager<User> authenticationManager)
@@ -32,7 +32,7 @@ namespace Blog.Core.Managers
         public async Task<IdentityResult> SignUpAndSignIn(IRegisterUserViewModel model)
         {
             var user = _mappingManager.Map<IRegisterUserViewModel, User>(model);
-            var result = await _userRepository.AddAsync<IdentityResult>(user, model.Password);
+            var result = await _userRepository.AddAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await _authenticationManager.SignInAsync(user);

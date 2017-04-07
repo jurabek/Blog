@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace Blog.Abstractions.Repositories
 {
-    public interface IRepository<T, in TKey> 
+    public interface IRepository<T, in TKey, TResult> 
         where T : class, new()
     {
-        Task<TResult> AddAsync<TResult>(T entity) where TResult : class;
+        Task<TResult> AddAsync(T entity);
 
-        Task<TResult> UpdateAsync<TResult>(T entity) where TResult : class;
+        Task<TResult> UpdateAsync(T entity);
 
-        Task<TResult> DeleteAsync<TResult>(T entity) where TResult : class;
+        Task<TResult> DeleteAsync(T entity);
 
         Task<IEnumerable<T>> GetAllAsync();
 
@@ -22,11 +22,11 @@ namespace Blog.Abstractions.Repositories
 
         Task<T> GetByNameAsync(string name);
 
-        TResult Add<TResult>(T entity) where TResult : class;
+        TResult Add(T entity);
 
-        TResult Update<TResult>(T entity) where TResult : class;
+        TResult Update(T entity);
 
-        TResult Delete<TResult>(T entity) where TResult : class;
+        TResult Delete(T entity);
 
         IEnumerable<T> GetAll();
 

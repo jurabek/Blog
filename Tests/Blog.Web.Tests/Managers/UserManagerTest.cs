@@ -16,7 +16,7 @@ namespace Blog.Web.Tests.Managers
     public class UserManagerTest
     {
         private Mock<IUserManagerFacade<User>> _userManagerFacade;
-        private Mock<IUserRepository<User, string>> _userRepository;
+        private Mock<IUserRepository<User, string, IdentityResult>> _userRepository;
         private Mock<IEmailManager> _emailManager;
         private Mock<IAuthenticationManager<User>> _authenticationManager;
         private IUserManager _userManager;
@@ -27,7 +27,7 @@ namespace Blog.Web.Tests.Managers
         public void Init()
         {
             _userManagerFacade = new Mock<IUserManagerFacade<User>>();
-            _userRepository = new Mock<IUserRepository<User, string>>();
+            _userRepository = new Mock<IUserRepository<User, string, IdentityResult>>();
             _emailManager = new Mock<IEmailManager>();
             _mappingManager = new Mock<IMappingManager>();
             _authenticationManager = new Mock<IAuthenticationManager<User>>();
@@ -44,7 +44,7 @@ namespace Blog.Web.Tests.Managers
             _mappingManager.Setup(x => x.Map<IRegisterUserViewModel, User>(It.IsAny<IRegisterUserViewModel>()))
                            .Returns(new User());
 
-            _userRepository.Setup(x => x.AddAsync<IdentityResult>(It.IsAny<User>(), It.IsAny<string>()))
+            _userRepository.Setup(x => x.AddAsync(It.IsAny<User>(), It.IsAny<string>()))
                           .Returns(Task.FromResult(IdentityResult.Success));
 
             var model = new RegisterViewModel

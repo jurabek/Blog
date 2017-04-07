@@ -15,9 +15,9 @@ namespace Blog.Web.Controllers
     {
         private IUserManager _userManager;
         private IMappingManager _mappingManager;
-        private IUserRepository<User, string> _repository;
+        private IUserRepository<User, string, IdentityResult> _repository;
 
-        public ManageAccountController(IUserRepository<User, string> userRepository,
+        public ManageAccountController(IUserRepository<User, string, IdentityResult> userRepository,
             IUserManager userManager,
             IMappingManager mappingManager, 
             IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)

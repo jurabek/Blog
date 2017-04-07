@@ -17,7 +17,7 @@ namespace Blog.Web.Tests.Repositories
     [TestFixture]
     public class UserRepositoryTest : BaseRepositoryTest<User, string>
     {
-        protected override IRepository<User, string> Repository { get; set; }
+        protected override IRepository<User, string, IdentityResult> Repository { get; set; }
         private Mock<IUserManagerFacade<User>> _userManager;
 
         public override void Init()
@@ -106,7 +106,7 @@ namespace Blog.Web.Tests.Repositories
                 Roles = roles
             };
 
-            var result = await repository.UpdateUserRoles<IdentityResult, IdentityRoleViewModel>(model);
+            var result = await repository.UpdateUserRoles<IdentityRoleViewModel>(model);
 
             Assert.IsTrue(result.Succeeded);
         }
@@ -114,7 +114,7 @@ namespace Blog.Web.Tests.Repositories
         [Test]
         public async Task UpdateShuoldThrwoExceptionAndShouldReturnErrorMessage()
         {
-            var result = await ((UserRepository)Repository).UpdateUserRoles<IdentityResult, IdentityRoleViewModel>(null);
+            var result = await ((UserRepository)Repository).UpdateUserRoles<IdentityRoleViewModel>(null);
 
             Assert.IsTrue(result.Errors.Any());
         }
@@ -125,7 +125,7 @@ namespace Blog.Web.Tests.Repositories
             _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
 
-            var result = await (Repository as UserRepository).AddAsync<IdentityResult>(new User(), "123");
+            var result = await (Repository as UserRepository).AddAsync(new User(), "123");
 
             Assert.IsTrue(result.Succeeded);
         }

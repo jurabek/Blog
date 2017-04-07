@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Blog.Core.Repositories
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class ArticleRepository : IRepository<Article, string>
+    public class ArticleRepository : IRepository<Article, string, bool>
     {
         private readonly BlogDbContext _context;
 
@@ -19,43 +19,43 @@ namespace Blog.Core.Repositories
             _context = new BlogDbContext();
         }
 
-        public TResult Add<TResult>(Article entity) where TResult : class
+        public bool Add(Article entity)
         {
             try
             {
                 _context.Articles.Add(entity);
                 _context.SaveChanges();
-                return true as TResult;
+                return true;
 
             }
             catch (Exception)
             {
-                return false as TResult;
+                return false;
             }
         }
 
-        public Task<TResult> AddAsync<TResult>(Article entity) where TResult : class
+        public Task<bool> AddAsync(Article entity)
         {
-            return Task.FromResult(Add<TResult>(entity));
+            return Task.FromResult(Add(entity));
         }
 
-        public TResult Delete<TResult>(Article entity) where TResult : class
+        public bool Delete(Article entity)
         {
             try
             {
                 _context.Articles.Remove(entity);
                 _context.SaveChanges();
-                return true as TResult;
+                return true;
             }
             catch (Exception)
             {
-                return false as TResult;
+                return false;
             }
         }
 
-        public Task<TResult> DeleteAsync<TResult>(Article entity) where TResult : class
+        public Task<bool> DeleteAsync(Article entity)
         {
-            return Task.FromResult(Delete<TResult>(entity));
+            return Task.FromResult(Delete(entity));
         }
 
         public Article Get(string key)
@@ -87,24 +87,24 @@ namespace Blog.Core.Repositories
         {
             return Task.FromResult(GetByName(name));
         }
-
-        public TResult Update<TResult>(Article entity) where TResult : class
+              
+        public bool Update(Article entity)
         {
             try
             {
                 _context.Entry(entity).State = System.Data.Entity.EntityState.Modified;
                 _context.SaveChanges();
-                return true as TResult;
+                return true;
             }
             catch (Exception)
             {
-                return true as TResult;
+                return true;
             }
         }
 
-        public Task<TResult> UpdateAsync<TResult>(Article entity) where TResult : class
+        public Task<bool> UpdateAsync(Article entity)
         {
-            return Task.FromResult(Update<TResult>(entity));
+            return Task.FromResult(Update(entity));
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Blog.Web.Tests.Repositories
     [TestFixture]
     public class RoleRepositoryTest : BaseRepositoryTest<IdentityRole, string>
     {
-        protected override IRepository<IdentityRole, string> Repository { get; set; }
+        protected override IRepository<IdentityRole, string, IdentityResult> Repository { get; set; }
 
         private Mock<IRoleManagerFacade<IdentityRole>> _roleManager;
         private Mock<IPermissionManagerFacade<IdentityPermission>> _permissionManager;
@@ -115,7 +115,7 @@ namespace Blog.Web.Tests.Repositories
                 RoleId = roleId
             };
 
-            var result = await repository.UpdateRolePermissions<IdentityResult, IdentityPermissionViewModel>(model);
+            var result = await repository.UpdateRolePermissions(model);
 
             Assert.IsTrue(result.Succeeded);
         }
@@ -123,7 +123,7 @@ namespace Blog.Web.Tests.Repositories
         [Test]
         public async Task UpdateRoleShouldThrowException()
         {
-            var result = await ((RoleRepository)Repository).UpdateRolePermissions<IdentityResult, IdentityPermissionViewModel>(null);
+            var result = await ((RoleRepository)Repository).UpdateRolePermissions<IdentityPermissionViewModel>(null);
 
             Assert.IsTrue(result.Errors.Any());
         }

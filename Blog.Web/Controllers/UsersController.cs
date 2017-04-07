@@ -17,12 +17,12 @@ namespace Blog.Web.Controllers
     [Authorize(Roles = nameof(Roles.Administrator))]
     public class UsersController : BaseController
     {
-        private readonly IUserRepository<User, string> _userRepository;
-        private IRoleRepository<IdentityRole, string> _roleRepository;
+        private readonly IUserRepository<User, string, IdentityResult> _userRepository;
+        private IRoleRepository<IdentityRole, string, IdentityResult> _roleRepository;
         private IMappingManager _mappingManager;
 
-        public UsersController(IUserRepository<User, string> userRepository,
-            IRoleRepository<IdentityRole, string> roleRepository,
+        public UsersController(IUserRepository<User, string, IdentityResult> userRepository,
+            IRoleRepository<IdentityRole, string, IdentityResult> roleRepository,
             IMappingManager mappingManager, IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
         {
             _userRepository = userRepository;
@@ -32,7 +32,8 @@ namespace Blog.Web.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<UsersViewModel> model = _mappingManager.Map<IEnumerable<User>, IEnumerable<UsersViewModel>>(_userRepository.GetAll());
+            IEnumerable<UsersViewModel> model = _mappingManager.
+                Map<IEnumerable<User>, IEnumerable<UsersViewModel>>(_userRepository.GetAll().ToList());
             return View(model);
         }
 
@@ -48,7 +49,7 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditRole(EditRoleViewModel model)
         {
-            var result = await _userRepository.UpdateUserRoles<IdentityResult, IdentityRoleViewModel>(model);
+            var result = await _userRepository.UpdateUserRoles<IdentityRoleViewModel>(model);
             if (result.Succeeded)
             {
                 return RedirectToAction("EditRole", new { id = model.UserId, message = UsersMessageId.RoleAddedSuccess });
@@ -71,7 +72,7 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> EditPermission(EditPermissionViewModel model)
         {
-            var result = await _roleRepository.UpdateRolePermissions<IdentityResult, IdentityPermissionViewModel>(model);
+            var result = await _roleRepository.UpdateRolePermissions<IdentityPermissionViewModel>(model);
             if (result.Succeeded)
             {
                 return RedirectToAction("EditPermission", new { userId = model.UserId, roleId = model.RoleId, message = UsersMessageId.PermissionsAddedSuccess });

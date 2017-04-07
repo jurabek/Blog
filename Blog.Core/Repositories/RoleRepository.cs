@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Blog.Core.Repositories
 {
-    public class RoleRepository : IRoleRepository<IdentityRole, string>
+    public class RoleRepository : IRoleRepository<IdentityRole, string, IdentityResult>
     {
         private readonly IRoleManagerFacade<IdentityRole> _roleManagerFacade;
         private readonly IPermissionManagerFacade<IdentityPermission> _permissionManager;
@@ -21,24 +21,24 @@ namespace Blog.Core.Repositories
             _permissionManager = permissionManager;
         }
 
-        public TResult Add<TResult>(IdentityRole entity) where TResult : class
+        public IdentityResult Add(IdentityRole entity)
         {
-            return _roleManagerFacade.Create(entity) as TResult;
+            return _roleManagerFacade.Create(entity);
         }
 
-        public Task<TResult> AddAsync<TResult>(IdentityRole entity) where TResult : class
+        public Task<IdentityResult> AddAsync(IdentityRole entity)
         {
-            return Task.FromResult(Add<TResult>(entity));
+            return Task.FromResult(Add(entity));
         }
 
-        public TResult Delete<TResult>(IdentityRole entity) where TResult : class
+        public IdentityResult Delete(IdentityRole entity)
         {
-            return _roleManagerFacade.Delete(entity) as TResult;
+            return _roleManagerFacade.Delete(entity);
         }
 
-        public Task<TResult> DeleteAsync<TResult>(IdentityRole entity) where TResult : class
+        public Task<IdentityResult> DeleteAsync(IdentityRole entity)
         {
-            return Task.FromResult(Delete<TResult>(entity));
+            return Task.FromResult(Delete(entity));
         }
 
         public IdentityRole Get(string key)
@@ -71,18 +71,17 @@ namespace Blog.Core.Repositories
             return _roleManagerFacade.FindByNameAsync(name);
         }
 
-        public TResult Update<TResult>(IdentityRole entity) where TResult : class
+        public IdentityResult Update(IdentityRole entity)
         {
-            return _roleManagerFacade.Update(entity) as TResult;
+            return _roleManagerFacade.Update(entity);
         }
 
-        public Task<TResult> UpdateAsync<TResult>(IdentityRole entity) where TResult : class
+        public Task<IdentityResult> UpdateAsync(IdentityRole entity)
         {
-            return Task.FromResult(Update<TResult>(entity));
+            return Task.FromResult(Update(entity));
         }
 
-        public async Task<TResult> UpdateRolePermissions<TResult, TViewModel>(IEditPermissionViewModel<IdentityRole, TViewModel> model) 
-            where TResult : class
+        public async Task<IdentityResult> UpdateRolePermissions<TViewModel>(IEditPermissionViewModel<IdentityRole, TViewModel> model) 
             where TViewModel : IIdentityPermissionViewModel
         {
             try
@@ -111,11 +110,11 @@ namespace Blog.Core.Repositories
                     await _permissionManager.RemoveFromRole(permission, role.Id);
                 }
 
-                return IdentityResult.Success as TResult;
+                return IdentityResult.Success;
             }
             catch (Exception ex)
             {
-                return new IdentityResult(ex.Message) as TResult;
+                return new IdentityResult(ex.Message);
             }
         }
         

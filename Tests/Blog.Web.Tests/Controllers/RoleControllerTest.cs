@@ -16,13 +16,13 @@ namespace Blog.Web.Tests.Controllers
     [TestFixture]
     public class RoleControllerTest : BaseControllerTest<RoleController>
     {
-        private Mock<IRepository<IdentityRole, string>> _roleRepository;
+        private Mock<IRepository<IdentityRole, string, IdentityResult>> _roleRepository;
         private Mock<IMappingManager> _mappingManager;
         private Mock<IUrlHelperFacade> _urlHelperFacade;
 
         public override void Init()
         {
-            _roleRepository = new Mock<IRepository<IdentityRole, string>>();
+            _roleRepository = new Mock<IRepository<IdentityRole, string, IdentityResult>>();
             _mappingManager = new Mock<IMappingManager>();
             _urlHelperFacade = new Mock<IUrlHelperFacade>();
             _controller = new RoleController(_roleRepository.Object, _mappingManager.Object, _urlHelperFacade.Object);
@@ -69,7 +69,7 @@ namespace Blog.Web.Tests.Controllers
         public void CreateShoudRedirectToIndex()
         {
             ClearModelState();
-            _roleRepository.Setup(rp => rp.Add<IdentityResult>(It.IsAny<IdentityRole>()))
+            _roleRepository.Setup(rp => rp.Add(It.IsAny<IdentityRole>()))
                 .Returns(IdentityResult.Success);
 
             var result = _controller.Create(new RoleViewModel()) as RedirectToRouteResult;
@@ -84,7 +84,7 @@ namespace Blog.Web.Tests.Controllers
             ClearModelState();
             string errorMessage = "Can not create role!";
 
-            _roleRepository.Setup(rp => rp.Add<IdentityResult>(null))
+            _roleRepository.Setup(rp => rp.Add(null))
                 .Returns(new IdentityResult(errorMessage));
 
             var result = _controller.Create(null) as ViewResult;
@@ -134,7 +134,7 @@ namespace Blog.Web.Tests.Controllers
         {
             ClearModelState();
 
-            _roleRepository.Setup(x => x.Update<IdentityResult>(It.IsAny<IdentityRole>()))
+            _roleRepository.Setup(x => x.Update(It.IsAny<IdentityRole>()))
                 .Returns(IdentityResult.Success);
 
             var result = _controller.Edit(new RoleViewModel()) as RedirectToRouteResult;
@@ -161,7 +161,7 @@ namespace Blog.Web.Tests.Controllers
         public void DeleteShouldRederectToIndex()
         {
             _roleRepository
-                .Setup(x => x.Delete<IdentityResult>(It.IsAny<IdentityRole>()))
+                .Setup(x => x.Delete(It.IsAny<IdentityRole>()))
                 .Returns(IdentityResult.Success);
 
             var result = _controller.Delete(new IdentityRole()) as RedirectToRouteResult;

@@ -12,10 +12,10 @@ namespace Blog.Web.Controllers
     [Authorize(Roles = nameof(Roles.Administrator))]
     public class RoleController : BaseController
     {
-        private readonly IRepository<IdentityRole, string> _roleRepository;
+        private readonly IRepository<IdentityRole, string, IdentityResult> _roleRepository;
         private readonly IMappingManager _mappingManager;
 
-        public RoleController(IRepository<IdentityRole, string> roleRepository, 
+        public RoleController(IRepository<IdentityRole, string, IdentityResult> roleRepository, 
             IMappingManager mappingManager,
             IUrlHelperFacade urlHelper) : base(urlHelper)
         {
@@ -39,7 +39,7 @@ namespace Blog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = _roleRepository.Add<IdentityResult>(_mappingManager.Map<RoleViewModel, IdentityRole>(model));
+                var result = _roleRepository.Add(_mappingManager.Map<RoleViewModel, IdentityRole>(model));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -60,7 +60,7 @@ namespace Blog.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = _roleRepository.Update<IdentityResult>(_roleRepository.Get(model.Id));
+                var result = _roleRepository.Update(_roleRepository.Get(model.Id));
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -78,7 +78,7 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public ActionResult Delete(IdentityRole model)
         {
-            var result = _roleRepository.Delete<IdentityResult>(model);
+            var result = _roleRepository.Delete(model);
             if (result.Succeeded)
                 return RedirectToAction("Index");
 

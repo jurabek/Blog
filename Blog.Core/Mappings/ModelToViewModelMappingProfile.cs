@@ -25,6 +25,15 @@ namespace Blog.Core.Mappings
 
             CreateMap<RoleViewModel, IdentityRole>();
             CreateMap<IdentityRole, RoleViewModel>();
+
+            CreateMap<ArticleViewModel, Article>()
+                .ForMember(m => m.PublishedDate, vm => vm.MapFrom(x => x.DateTime))
+                .ForMember(m => m.PictureUrl, vm => vm.MapFrom(x => x.Image));
+
+            CreateMap<Article, ArticleViewModel>()
+                .ForMember(vm => vm.ShortBody, m => m.MapFrom(x => x.Body.Split('.').Take(5)))
+                .ForMember(vm => vm.Image, m => m.MapFrom(x => "..//..//Images//Blog//" + x.PictureUrl))
+                .ForMember(vm => vm.Author, m => m.MapFrom(x => x.User));
         }
     }
 }

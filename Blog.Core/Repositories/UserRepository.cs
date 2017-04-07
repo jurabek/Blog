@@ -10,7 +10,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Blog.Core.Repositories
 {
-    public class UserRepository : IUserRepository<User, string>
+    public class UserRepository : IUserRepository<User, string, IdentityResult>
     {
         private readonly IUserManagerFacade<User> _userManagerFacade;
 
@@ -19,29 +19,29 @@ namespace Blog.Core.Repositories
             _userManagerFacade = userManagerFacade;
         }
 
-        public TResult Add<TResult>(User entity) where TResult : class
+        public IdentityResult Add(User entity)
         {
-            return _userManagerFacade.CreateAsync(entity).Result as TResult;
+            return _userManagerFacade.CreateAsync(entity).Result;
         }
 
-        public async Task<TResult> AddAsync<TResult>(User entity) where TResult : class
+        public async Task<IdentityResult> AddAsync(User entity) 
         {
-            return await _userManagerFacade.CreateAsync(entity) as TResult;
+            return await _userManagerFacade.CreateAsync(entity);
         }
 
-        public async Task<TResult> AddAsync<TResult>(User entity, string password) where TResult : class
+        public async Task<IdentityResult> AddAsync(User entity, string password) 
         {
-            return await _userManagerFacade.CreateAsync(entity, password) as TResult;
+            return await _userManagerFacade.CreateAsync(entity, password);
         }
 
-        public TResult Delete<TResult>(User entity) where TResult : class
+        public IdentityResult Delete(User entity) 
         {
-            return _userManagerFacade.DeleteAsync(entity).Result as TResult;
+            return _userManagerFacade.DeleteAsync(entity).Result;
         }
 
-        public Task<TResult> DeleteAsync<TResult>(User entity) where TResult : class
+        public Task<IdentityResult> DeleteAsync(User entity) 
         {
-            return _userManagerFacade.DeleteAsync(entity) as Task<TResult>;
+            return _userManagerFacade.DeleteAsync(entity);
         }
 
         public User Get(string key)
@@ -74,18 +74,18 @@ namespace Blog.Core.Repositories
             return await _userManagerFacade.FindByNameAsync(name);
         }
 
-        public TResult Update<TResult>(User entity) where TResult : class
+        public IdentityResult Update(User entity) 
         {
-            return _userManagerFacade.UpdateAsync(entity).Result as TResult;
+            return _userManagerFacade.UpdateAsync(entity).Result;
         }
 
-        public Task<TResult> UpdateAsync<TResult>(User entity) where TResult : class
+        public Task<IdentityResult> UpdateAsync(User entity) 
         {
-            return _userManagerFacade.UpdateAsync(entity) as Task<TResult>;
+            return _userManagerFacade.UpdateAsync(entity);
         }
 
-        public async Task<TResult> UpdateUserRoles<TResult, TRoleViewModel>(IEditRoleViewModel<TRoleViewModel> model)
-            where TResult : class
+        public async Task<IdentityResult> UpdateUserRoles<TRoleViewModel>(IEditRoleViewModel<TRoleViewModel> model)
+            
             where TRoleViewModel : IIdentityRoleViewModel
         {
             try
@@ -105,11 +105,11 @@ namespace Blog.Core.Repositories
                 if (rolesToRemove.Any())
                     await _userManagerFacade.RemoveFromRolesAsync(model.UserId, rolesToRemove.Select(ir => ir.Name).ToArray());
 
-                return IdentityResult.Success as TResult;
+                return IdentityResult.Success;
             }
             catch (Exception ex)
             {
-                return new IdentityResult(ex.Message) as TResult;
+                return new IdentityResult(ex.Message);
             }
         }
     }

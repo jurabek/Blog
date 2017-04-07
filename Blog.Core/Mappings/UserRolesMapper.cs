@@ -3,6 +3,7 @@ using Blog.Abstractions.Repositories;
 using Blog.Abstractions.ViewModels;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
+using Microsoft.AspNet.Identity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,11 +11,11 @@ namespace Blog.Core.Mappings
 {
     public class UserRolesMapper : IUserRolesMapper
     {
-        private readonly IUserRepository<User, string> _userRepository;
-        private readonly IRepository<IdentityRole, string> _roleRepository;
+        private readonly IUserRepository<User, string, IdentityResult> _userRepository;
+        private readonly IRepository<IdentityRole, string, IdentityResult> _roleRepository;
 
-        public UserRolesMapper(IUserRepository<User, string> userRepository,
-            IRepository<IdentityRole, string> roleRepository)
+        public UserRolesMapper(IUserRepository<User, string, IdentityResult> userRepository,
+            IRepository<IdentityRole, string, IdentityResult> roleRepository)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;

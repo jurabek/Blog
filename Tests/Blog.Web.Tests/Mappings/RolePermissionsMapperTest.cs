@@ -10,22 +10,23 @@ using NUnit.Framework;
 using Blog.Abstractions.Mappings;
 using Blog.Core.Mappings;
 using Blog.Model.ViewModels;
+using Microsoft.AspNet.Identity;
 
 namespace Blog.Web.Tests.Mappings
 {
     [TestFixture]
     public class RolePermissionsMapperTest
     {
-        private Mock<IUserRepository<User, string>> _userRepository;
-        private Mock<IRoleRepository<IdentityRole, string>> _roleRepository;
+        private Mock<IUserRepository<User, string, IdentityResult>> _userRepository;
+        private Mock<IRoleRepository<IdentityRole, string, IdentityResult>> _roleRepository;
         private Mock<IPermissionManagerFacade<IdentityPermission>> _permissionManagerFacade;
         private IRolePermissionsMapper _permissionsMapper;
 
         [OneTimeSetUp]
         public void Init()
         {
-            _userRepository = new Mock<IUserRepository<User, string>>();
-            _roleRepository = new Mock<IRoleRepository<IdentityRole, string>>();
+            _userRepository = new Mock<IUserRepository<User, string, IdentityResult>>();
+            _roleRepository = new Mock<IRoleRepository<IdentityRole, string, IdentityResult>>();
             _permissionManagerFacade = new Mock<IPermissionManagerFacade<IdentityPermission>>();
             _permissionsMapper = new RolePermissionsMapper(_userRepository.Object, _roleRepository.Object, _permissionManagerFacade.Object);
         }

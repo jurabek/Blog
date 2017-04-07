@@ -8,21 +8,22 @@ using Blog.Model.Entities;
 using Blog.Model.ViewModels;
 using Moq;
 using NUnit.Framework;
+using Microsoft.AspNet.Identity;
 
 namespace Blog.Web.Tests.Mappings
 {
     [TestFixture]
     public class UserRolesMapperTest
     {
-        private Mock<IUserRepository<User, string>> _userRepository;
-        private Mock<IRepository<IdentityRole, string>> _roleRepository;
+        private Mock<IUserRepository<User, string, IdentityResult>> _userRepository;
+        private Mock<IRepository<IdentityRole, string, IdentityResult>> _roleRepository;
         private IUserRolesMapper _userRolesMapper;
 
         [OneTimeSetUp]
         public void Init()
         {
-            _userRepository = new Mock<IUserRepository<User, string>>();
-            _roleRepository = new Mock<IRepository<IdentityRole, string>>();
+            _userRepository = new Mock<IUserRepository<User, string, IdentityResult>>();
+            _roleRepository = new Mock<IRepository<IdentityRole, string, IdentityResult>>();
             _userRolesMapper = new UserRolesMapper(_userRepository.Object, _roleRepository.Object);
         }
 

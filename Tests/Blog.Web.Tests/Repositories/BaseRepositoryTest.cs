@@ -13,7 +13,7 @@ namespace Blog.Web.Tests.Repositories
         /// <summary>
         /// Initialize int on classes and setup mockups
         /// </summary>
-        protected abstract IRepository<T, TKey> Repository { get; set; }
+        protected abstract IRepository<T, TKey, IdentityResult> Repository { get; set; }
 
         [OneTimeSetUp]
         public abstract void Init();
@@ -29,21 +29,21 @@ namespace Blog.Web.Tests.Repositories
         [Test]
         public virtual async Task AddAsyncShouldSuccess()
         {
-            var result = await Repository.AddAsync<IdentityResult>(default(T));
+            var result = await Repository.AddAsync(default(T));
             Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
         public virtual async Task UpdateAsyncShouldSuccess()
         {
-            var result = await Repository.UpdateAsync<IdentityResult>(default(T));
+            var result = await Repository.UpdateAsync(default(T));
             Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
         public virtual async Task DeleteAsyncShouldSuccess()
         {
-            var result = await Repository.DeleteAsync<IdentityResult>(default(T));
+            var result = await Repository.DeleteAsync(default(T));
             Assert.IsTrue(result.Succeeded);
         }
 
@@ -66,21 +66,21 @@ namespace Blog.Web.Tests.Repositories
         [Test]
         public virtual void AddShouldSuccess()
         {
-            var result = Repository.Add<IdentityResult>(default(T));
+            var result = Repository.Add(default(T));
             Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
         public virtual void UpdateShouldSuccess()
         {
-            var result = Repository.Update<IdentityResult>(default(T));
+            var result = Repository.Update(default(T));
             Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
         public virtual void DeleteShouldSuccess()
         {
-            var result = Repository.Delete<IdentityResult>(default(T));
+            var result = Repository.Delete(default(T));
             Assert.IsTrue(result.Succeeded);
         }
 

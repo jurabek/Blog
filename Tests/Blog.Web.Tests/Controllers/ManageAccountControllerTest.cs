@@ -18,14 +18,14 @@ namespace Blog.Web.Tests.Controllers
     [TestFixture]
     public class ManageAccountControllerTest : BaseControllerTest<ManageAccountController>
     {
-        private Mock<IUserRepository<User, string>> _repository;
+        private Mock<IUserRepository<User, string, IdentityResult>> _repository;
         private Mock<IUserManager> _userManager;
         private Mock<IMappingManager> _mappingManager;
         private Mock<IUrlHelperFacade> _urlHelperFacade;
 
         public override void Init()
         {
-            _repository = new Mock<IUserRepository<User, string>>();
+            _repository = new Mock<IUserRepository<User, string, IdentityResult>>();
             _userManager = new Mock<IUserManager>();
             _mappingManager = new Mock<IMappingManager>();
             _urlHelperFacade = new Mock<IUrlHelperFacade>();

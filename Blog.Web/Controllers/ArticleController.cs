@@ -5,16 +5,23 @@ using System.Web;
 using System.Web.Mvc;
 using Blog.Abstractions.Repositories;
 using Blog.Model.Entities;
+using Blog.Model.ViewModels;
+using System.IO;
+using Blog.Abstractions.Managers;
+using Microsoft.AspNet.Identity;
 
 namespace Blog.Web.Controllers
 {
     public class ArticleController : Controller
     {
-        private readonly IRepository<Article, string> _repository;
+        private readonly IRepository<Article, string, bool> _repository;
+        private readonly IMappingManager _mappingManager;
 
-        public ArticleController(IRepository<Article, string> repository)
+        public ArticleController(IRepository<Article, string, bool> repository,
+            IMappingManager mappingManager)
         {
             _repository = repository;
+            _mappingManager = mappingManager;
         }
 
         // GET: Article
@@ -37,12 +44,20 @@ namespace Blog.Web.Controllers
 
         // POST: Article/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(ArticleViewModel model, HttpPostedFileBase file)
         {
             try
             {
-                // TODO: Add insert logic here
-
+                if (file != null)
+                {
+                    model.Image = file.FileName;
+                    model.DateTime = DateTime.Now;
+                    string pic = Path.GetFileName(file.FileName);
+                    string path = Path.Combine(Server.MapPath("~/Images/Blog"), pic);
+                    file.SaveAs(path);
+                }
+                Article article = _mappingManager.Map<ArticleViewModel, Article>(model);
+                var a = _repository.Add(article);
                 return RedirectToAction("Index");
             }
             catch
