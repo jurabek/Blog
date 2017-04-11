@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,7 +30,7 @@ namespace Blog.Web.Tests.Repositories
         [Test]
         public virtual async Task AddAsyncShouldSuccess()
         {
-            var result = await Repository.AddAsync(default(T));
+            var result = await Repository.AddAsync(Activator.CreateInstance<T>());
             Assert.IsTrue(result.Succeeded);
         }
 
@@ -66,14 +67,14 @@ namespace Blog.Web.Tests.Repositories
         [Test]
         public virtual void AddShouldSuccess()
         {
-            var result = Repository.Add(default(T));
+            var result = Repository.Add(Activator.CreateInstance<T>());
             Assert.IsTrue(result.Succeeded);
         }
 
         [Test]
         public virtual void UpdateShouldSuccess()
         {
-            var result = Repository.Update(default(T));
+            var result = Repository.Update(Activator.CreateInstance<T>());
             Assert.IsTrue(result.Succeeded);
         }
 

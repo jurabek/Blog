@@ -34,13 +34,13 @@ namespace Blog.Web.Tests.Repositories
             _userManager.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(new User()));
 
-            _userManager.Setup(x => x.CreateAsync(default(User)))
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
 
-            _userManager.Setup(x => x.UpdateAsync(default(User)))
+            _userManager.Setup(x => x.UpdateAsync(It.IsAny<User>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
 
-            _userManager.Setup(x => x.DeleteAsync(default(User)))
+            _userManager.Setup(x => x.DeleteAsync(It.IsAny<User>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
 
         }

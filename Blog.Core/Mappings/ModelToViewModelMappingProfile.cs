@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Model.Entities;
 using Blog.Model.ViewModels;
+using System;
 using System.Linq;
 
 namespace Blog.Core.Mappings
@@ -28,12 +29,16 @@ namespace Blog.Core.Mappings
 
             CreateMap<ArticleViewModel, Article>()
                 .ForMember(m => m.PublishedDate, vm => vm.MapFrom(x => x.DateTime))
-                .ForMember(m => m.PictureUrl, vm => vm.MapFrom(x => x.Image));
+                .ForMember(m => m.PictureUrl, vm => vm.MapFrom(x => x.Image))
+                .ForMember(m => m.User, vm => vm.MapFrom(x => x.Author))
+                .ForMember(m => m.Id, vm => vm.MapFrom(x => Guid.NewGuid().ToString("N")))
+                .ForMember(m => m.PublishedDate, vm => vm.MapFrom(x => DateTime.Now));
 
             CreateMap<Article, ArticleViewModel>()
-                .ForMember(vm => vm.ShortBody, m => m.MapFrom(x => x.Body.Split('.').Take(5)))
-                .ForMember(vm => vm.Image, m => m.MapFrom(x => "..//..//Images//Blog//" + x.PictureUrl))
-                .ForMember(vm => vm.Author, m => m.MapFrom(x => x.User));
+                .ForMember(vm => vm.ShortBody, m => m.MapFrom(x => string.Join(string.Empty, x.Body.Split('.').Take(5))))
+                .ForMember(vm => vm.Image, m => m.MapFrom(x => "~/Images/Blog/" + x.PictureUrl))
+                .ForMember(vm => vm.Author, m => m.MapFrom(x => x.User))
+                .ForMember(vm => vm.DateTime, m => m.MapFrom(x => x.PublishedDate));
         }
     }
 }

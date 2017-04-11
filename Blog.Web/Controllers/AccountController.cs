@@ -135,7 +135,7 @@ namespace Blog.Web.Controllers
         public ActionResult LogOff()
         {
             _authenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Article");
         }
 
         [AllowAnonymous]

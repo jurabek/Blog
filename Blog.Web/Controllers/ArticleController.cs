@@ -9,6 +9,9 @@ using Blog.Model.ViewModels;
 using System.IO;
 using Blog.Abstractions.Managers;
 using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
+using IdentityPermissionExtension;
+using Blog.Model;
 
 namespace Blog.Web.Controllers
 {
@@ -16,70 +19,69 @@ namespace Blog.Web.Controllers
     {
         private readonly IRepository<Article, string, bool> _repository;
         private readonly IMappingManager _mappingManager;
+        private IUserRepository<User, string, IdentityResult> _userRepository;
 
-        public ArticleController(IRepository<Article, string, bool> repository,
+        public ArticleController(
+            IRepository<Article, string, bool> repository,
+            IUserRepository<User, string, IdentityResult> userRepository,
             IMappingManager mappingManager)
         {
             _repository = repository;
+            _userRepository = userRepository;
             _mappingManager = mappingManager;
         }
 
-        // GET: Article
         public ActionResult Index()
         {
-            return View(_repository.GetAll());
+            IEnumerable<ArticleViewModel> model = _mappingManager
+                .Map<IEnumerable<Article>, IEnumerable<ArticleViewModel>>(_repository.GetAll().Take(5).ToList());
+            return View(model);
         }
 
-        // GET: Article/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            return View();
+            var model = _repository.Get(id);
+            var viewModel = _mappingManager.Map<Article, ArticleViewModel>(model);
+            return View(viewModel);
         }
 
-        // GET: Article/Create
+        [AuthorizePermission(Roles = "Administrator", Name = nameof(Permissions.CanCreateArticle), IsGlobal = true)]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Article/Create
         [HttpPost]
-        public ActionResult Create(ArticleViewModel model, HttpPostedFileBase file)
+        [AuthorizePermission(Roles = "Administrator", Name = nameof(Permissions.CanCreateArticle), IsGlobal = true)]
+        public async Task<ActionResult> Create(ArticleViewModel model, HttpPostedFileBase file)
         {
-            try
-            {
-                if (file != null)
-                {
-                    model.Image = file.FileName;
-                    model.DateTime = DateTime.Now;
-                    string pic = Path.GetFileName(file.FileName);
-                    string path = Path.Combine(Server.MapPath("~/Images/Blog"), pic);
-                    file.SaveAs(path);
-                }
-                Article article = _mappingManager.Map<ArticleViewModel, Article>(model);
-                var a = _repository.Add(article);
+            if (file != null)
+            {   
+                model.Image = file.FileName;
+                string path = Path.Combine(Server.MapPath("~/Images/Blog"), Path.GetFileName(file.FileName));
+                file.SaveAs(path);
+            }
+
+            var user = await _userRepository.GetByNameAsync(User?.Identity.GetUserName());
+            model.Author = user;
+            
+            Article article = _mappingManager.Map<ArticleViewModel, Article>(model);
+            if (_repository.Add(article))
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+
+            return View(model);
         }
 
-        // GET: Article/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: Article/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
             try
-            {
-                // TODO: Add update logic here
-
+            {   
                 return RedirectToAction("Index");
             }
             catch
@@ -88,19 +90,16 @@ namespace Blog.Web.Controllers
             }
         }
 
-        // GET: Article/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Article/Delete/5
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
 
                 return RedirectToAction("Index");
             }

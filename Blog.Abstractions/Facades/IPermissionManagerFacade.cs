@@ -10,5 +10,6 @@ namespace Blog.Abstractions.Facades
         Task CreatePermissionAsync(string name, string description, bool isGlobal);
         Task DeletePermissionAsync(string id);
         Task<IEnumerable<TPermission>> GetAll();
+        Task<bool> CheckPermission(string name, IList<string> roles, bool iGlobal);
     }
 }

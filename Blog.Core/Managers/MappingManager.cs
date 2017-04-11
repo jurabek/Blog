@@ -9,7 +9,9 @@ namespace Blog.Core.Managers
         private readonly IUserRolesMapper _userRolesMapper;
         private readonly IRolePermissionsMapper _rolePermissionsMapper;
 
-        public MappingManager(IUserRolesMapper userRolesMapper, IRolePermissionsMapper rolePermissionsMapper)
+        public MappingManager(
+            IUserRolesMapper userRolesMapper, 
+            IRolePermissionsMapper rolePermissionsMapper)
         {
             _userRolesMapper = userRolesMapper;
             _rolePermissionsMapper = rolePermissionsMapper;

@@ -7,23 +7,11 @@ namespace Blog.Abstractions.Managers
 {
     public interface IAuthenticationManager<in TUser> where TUser : IUser
     {
-        /// <summary>
-        /// Signs via model
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
+
         Task<SignInStatus> SignIn(ILoginViewModel model);
 
-        /// <summary>
-        /// Signs via user intance
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
         Task SignInAsync(TUser user);
 
-        /// <summary>
-        /// Sign outs from session
-        /// </summary>
         void SignOut();
     }
 }

@@ -1,0 +1,99 @@
+﻿@model Blog.Model.ViewModels.ArticleViewModel
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<div style="max-width:700px; margin-top:10px">
+    <p class="text-muted">
+        <span class="glyphicon glyphicon-time"></span>
+        @Model.DateTime
+        <span class="label label-info"> by @Model.Author.UserName</span>
+    </p>
+
+    <h3>
+        @Model.Title
+    </h3>
+
+    <img class="img-responsive" src="@Url.Content(Model.Image)" alt="">
+
+    <hr>
+    <p>@Model.Body</p>
+
+    <hr>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.Author.Id)
+
+    <div class="well">
+        <h4>Leave a Comment:</h4>
+
+        <div class="form-group">
+            <textarea class="form-control" rows="3" id="commentMessage"></textarea>
+        </div>
+        <button type="button" id="saveCommentButton" class="btn btn-primary">
+            <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display:none;" id="loading"></span>
+            Submit
+        </button>
+
+    </div>
+
+    <!-- Comment -->
+    <h3>Comments</h3>
+    <hr>
+    <div id="comments">
+        @foreach (var comment in Model.Comments.OrderBy(c => c.PublishDate))
+        {
+            <div class="media">
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        @comment.User.UserName
+                        <small>@comment.PublishDate</small>
+                    </h4>
+                    @comment.Message
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var saveButton = $("#saveCommentButton");
+
+        $.post("../../Comment/CanUserWriteComment", function (data) {
+            var response = jQuery.parseJSON(JSON.stringify(data));
+            console.log(response.Result);
+            if (response.Result) {
+                saveButton.prop('disabled', false);
+            }
+            else {
+                saveButton.prop('disabled', true);
+            }
+        });
+
+        saveButton.click(function () {
+            var userId = $("#Author_Id");
+            var articleId = $("#Id");
+            var commentMessage = $("#commentMessage");
+
+            $.ajax({
+                type: 'POST',
+                url: "../../Comment/Create",
+                data: { articleId: articleId.val(), userId: userId.val(), message: commentMessage.val() },
+                beforeSend: function () {
+                    $("#loading").show();
+                },
+                complete: function () {
+                    $("#loading").hide();
+                },
+                success: function (data) {
+                    location.reload();
+                    console.log(JSON.stringify(data));
+                }
+            });
+        });
+    });
+</script>
+
+
+

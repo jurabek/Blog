@@ -20,7 +20,7 @@ namespace Blog.Core.Managers
         {
             string code = await _userManagerFacade.GenerateEmailConfirmationTokenAsync(userId);
             var callbackUrl = _urlHelperFacade.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: _urlHelperFacade.GetUrlScheme());
-            await _userManagerFacade.SendEmailAsync(userId, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+            await _userManagerFacade.SendEmailAsync(userId, "Confirm your account", $"Please confirm your account by clicking <a href=\"{callbackUrl}\">here</a>");
         }
 
         public async Task SendResetPasswordEmail(string userId)

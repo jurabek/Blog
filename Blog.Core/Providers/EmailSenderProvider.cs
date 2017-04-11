@@ -4,10 +4,10 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Configuration;
 
-namespace Blog.Core.Services
+namespace Blog.Core.Providers
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class EmailService : IIdentityMessageService
+    public class EmailSenderProvider : IIdentityMessageService
     {
         public async Task SendAsync(IdentityMessage message)
         {

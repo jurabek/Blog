@@ -29,7 +29,7 @@ namespace Blog.Web.Tests.Repositories
             _permissionManager = new Mock<IPermissionManagerFacade<IdentityPermission>>();
             Repository = new RoleRepository(_roleManager.Object, _permissionManager.Object);
 
-            _roleManager.Setup(x => x.Create(default(IdentityRole)))
+            _roleManager.Setup(x => x.Create(It.IsAny<IdentityRole>()))
                 .Returns(IdentityResult.Success);
 
             _roleManager.Setup(x => x.Delete(default(IdentityRole)))
@@ -41,7 +41,7 @@ namespace Blog.Web.Tests.Repositories
             _roleManager.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .Returns(Task.FromResult(new IdentityRole()));
 
-            _roleManager.Setup(x => x.Update(default(IdentityRole)))
+            _roleManager.Setup(x => x.Update(It.IsAny<IdentityRole>()))
                 .Returns(IdentityResult.Success);
 
             _roleManager.SetupGet(x => x.Roles)

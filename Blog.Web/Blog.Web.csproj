@@ -213,7 +213,6 @@
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DependencyResolution\BlogRegistry.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -227,7 +226,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -255,9 +254,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Success.cshtml" />
@@ -281,6 +277,8 @@
     <Content Include="Views\Role\Edit.cshtml" />
     <Content Include="Views\Role\Delete.cshtml" />
     <Content Include="Views\Article\Create.cshtml" />
+    <Content Include="Views\Article\Index.cshtml" />
+    <Content Include="Views\Article\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

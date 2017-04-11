@@ -1,11 +1,14 @@
 ﻿using Blog.Model.Entities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Blog.Model.ViewModels
 {
     public class ArticleViewModel
     {
+        public string Id { get; set; }
+
         [Display(Name = "Title")]
         public string Title { get; set; }
 
@@ -24,5 +27,7 @@ namespace Blog.Model.ViewModels
 
         [Display(Name = "Author")]
         public User Author { get; set; }
+
+        public List<Comment> Comments { get; set; }
     }
 }

@@ -16,7 +16,8 @@ namespace Blog.Core.Managers
         private readonly IMappingManager _mappingManager;
         private readonly IAuthenticationManager<User> _authenticationManager;
 
-        public UserManager(IUserManagerFacade<User> userManagerFacade,
+        public UserManager(
+            IUserManagerFacade<User> userManagerFacade,
             IUserRepository<User, string, IdentityResult> userRepository,
             IEmailManager emailManager,
             IMappingManager mappingManager,
@@ -45,8 +46,10 @@ namespace Blog.Core.Managers
         {
             var user = await _userManagerFacade.FindByIdAsync(model.UserId);
             if (user == null)
+            {
                 return new IdentityResult("We did not find user, Perhaps it was deleted or blocked, Please inform customer support!");
-
+            }
+                
             return await _userManagerFacade.ResetPasswordAsync(user.Id, model.Code, model.Password);
         }
 

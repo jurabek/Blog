@@ -32,21 +32,22 @@ namespace Blog.Web.Tests.Controllers
                 .Returns(true);
         }
 
-
-
         [Test]
-        public void LoginActionTest()
+        public void When_login_then_login()
         {
+            // given
             ClearModelState();
 
+            // when
             var result = _controller.Login() as ViewResult;
 
+            // then
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<ActionResult>(result);
         }
 
         [Test]
-        public async Task LoginShouldBeSuccesWhenEnteredValidViewModel()
+        public async Task Login_ShouldBe_Succes_When_Entered_Valid_Data()
         {
             ClearModelState();
 
@@ -59,7 +60,7 @@ namespace Blog.Web.Tests.Controllers
 
             Assert.IsInstanceOf<RedirectToRouteResult>(result);
 
-            Assert.That(result.RouteValues["controller"], Is.EqualTo("Home"));
+            Assert.That(result.RouteValues["controller"], Is.EqualTo("Article"));
             Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
         }
 
@@ -73,7 +74,7 @@ namespace Blog.Web.Tests.Controllers
 
 
 
-            var result = await _controller.Login(new LoginViewModel(), "/Home/About");
+            var result = await _controller.Login(new LoginViewModel(), "/Error/AccessDenied");
 
             Assert.IsInstanceOf<ActionResult>(result);
         }
@@ -325,7 +326,7 @@ namespace Blog.Web.Tests.Controllers
             var result = _controller.LogOff() as RedirectToRouteResult;
 
             Assert.That(result.RouteValues["action"], Is.EqualTo("Index"));
-            Assert.That(result.RouteValues["controller"], Is.EqualTo("Home"));
+            Assert.That(result.RouteValues["controller"], Is.EqualTo("Article"));
         }
     }
 }

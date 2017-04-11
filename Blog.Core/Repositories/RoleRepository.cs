@@ -15,7 +15,9 @@ namespace Blog.Core.Repositories
         private readonly IRoleManagerFacade<IdentityRole> _roleManagerFacade;
         private readonly IPermissionManagerFacade<IdentityPermission> _permissionManager;
 
-        public RoleRepository(IRoleManagerFacade<IdentityRole> roleManagerFacade, IPermissionManagerFacade<IdentityPermission> permissionManager)
+        public RoleRepository(
+            IRoleManagerFacade<IdentityRole> roleManagerFacade, 
+            IPermissionManagerFacade<IdentityPermission> permissionManager)
         {
             _roleManagerFacade = roleManagerFacade;
             _permissionManager = permissionManager;
@@ -23,6 +25,7 @@ namespace Blog.Core.Repositories
 
         public IdentityResult Add(IdentityRole entity)
         {
+            entity.Id = Guid.NewGuid().ToString("N");
             return _roleManagerFacade.Create(entity);
         }
 

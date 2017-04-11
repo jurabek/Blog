@@ -21,9 +21,11 @@ namespace Blog.Web.Controllers
         private IRoleRepository<IdentityRole, string, IdentityResult> _roleRepository;
         private IMappingManager _mappingManager;
 
-        public UsersController(IUserRepository<User, string, IdentityResult> userRepository,
+        public UsersController(
+            IUserRepository<User, string, IdentityResult> userRepository,
             IRoleRepository<IdentityRole, string, IdentityResult> roleRepository,
-            IMappingManager mappingManager, IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
+            IMappingManager mappingManager, 
+            IUrlHelperFacade urlHelperFacade) : base(urlHelperFacade)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;

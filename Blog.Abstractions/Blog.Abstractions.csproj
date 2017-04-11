@@ -79,6 +79,7 @@
     <Compile Include="Facades\ISignInManagerFacade.cs" />
     <Compile Include="Facades\IUrlHelperFacade.cs" />
     <Compile Include="Facades\IUserManagerFacade.cs" />
+    <Compile Include="Providers\IUserPermissionProvider.cs" />
     <Compile Include="InjectableAttribute.cs" />
     <Compile Include="Mappings\IRolePermissionsMapper.cs" />
     <Compile Include="Mappings\IUserRolesMapper.cs" />

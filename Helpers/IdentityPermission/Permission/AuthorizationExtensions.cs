@@ -21,11 +21,12 @@ namespace IdentityPermissionExtension
         }
 
         public static bool AuthorizePermission(this HttpContextBase httpContext, string name,
-            string description = null, bool isGlobal = false)
+            string description = null, bool isGlobal = true)
         {
             return Task.Run(() =>
 
-                    GetPermissionManager(httpContext)
+                    
+            GetPermissionManager(httpContext)
                         .AuthorizePermissionAsync(httpContext, name, description, isGlobal)
             ).Result;
         }

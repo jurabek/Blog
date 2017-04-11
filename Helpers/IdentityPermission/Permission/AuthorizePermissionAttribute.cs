@@ -15,9 +15,9 @@ namespace IdentityPermissionExtension
         public bool IsGlobal { get; set; }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
+
         {
-            return base.AuthorizeCore(httpContext)
-                   && Task.Run(() => httpContext.AuthorizePermission(Name, Description, IsGlobal)).Result;
+            return Task.Run(() => httpContext.AuthorizePermission(Name, Description, IsGlobal)).Result;
         }
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

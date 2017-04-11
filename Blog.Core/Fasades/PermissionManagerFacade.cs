@@ -43,5 +43,10 @@ namespace Blog.Core.Fasades
         {
             return _permissionManager.GetAll();
         }
+
+        public Task<bool> CheckPermission(string name, IList<string> roles, bool iGlobal)
+        {
+            return _permissionManager.CheckPermissionAsync(name, roles, isGlobal: iGlobal);
+        }
     }
 }

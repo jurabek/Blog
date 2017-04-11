@@ -17,7 +17,8 @@ namespace Blog.Core.Mappings
         private IRoleRepository<IdentityRole, string, IdentityResult> _roleRepository;
         private IPermissionManagerFacade<IdentityPermission> _permissionManagerFacade;
 
-        public RolePermissionsMapper(IUserRepository<User, string, IdentityResult> userRepository,
+        public RolePermissionsMapper(
+            IUserRepository<User, string, IdentityResult> userRepository,
             IRoleRepository<IdentityRole, string, IdentityResult> roleRepository,
             IPermissionManagerFacade<IdentityPermission> permissionManagerFacade)
         {

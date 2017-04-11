@@ -126,11 +126,13 @@
     <Compile Include="Mappings\ModelToViewModelMappingProfile.cs" />
     <Compile Include="Mappings\RolePermissionsMapper.cs" />
     <Compile Include="Mappings\UserRolesMapper.cs" />
+    <Compile Include="Providers\UserPermissionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ArticleRepository.cs" />
+    <Compile Include="Repositories\CommentRepository.cs" />
     <Compile Include="Repositories\RoleRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />
-    <Compile Include="Services\EmailService.cs" />
+    <Compile Include="Providers\EmailSenderProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

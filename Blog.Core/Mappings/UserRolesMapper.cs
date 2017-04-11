@@ -14,7 +14,8 @@ namespace Blog.Core.Mappings
         private readonly IUserRepository<User, string, IdentityResult> _userRepository;
         private readonly IRepository<IdentityRole, string, IdentityResult> _roleRepository;
 
-        public UserRolesMapper(IUserRepository<User, string, IdentityResult> userRepository,
+        public UserRolesMapper(
+            IUserRepository<User, string, IdentityResult> userRepository,
             IRepository<IdentityRole, string, IdentityResult> roleRepository)
         {
             _userRepository = userRepository;

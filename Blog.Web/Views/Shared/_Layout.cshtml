@@ -8,6 +8,11 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -18,13 +23,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Blog site", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Blog site", "Index", "Article", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Article", "Index", "Article")</li>
+                    
                     @if(Request.IsAuthenticated && User.IsInRole(nameof(IdentityPermissionExtension.Roles.Administrator)))
                     {
                         <li>@Html.ActionLink("Users", "Index", "Users")</li>
@@ -43,8 +47,5 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
 </body>
 </html>

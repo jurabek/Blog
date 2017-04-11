@@ -2,8 +2,8 @@
 using System;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
-using Blog.Core.Services;
 using Blog.Model.Entities;
+using Blog.Core.Providers;
 
 namespace Blog.Core.Managers
 {
@@ -29,7 +29,7 @@ namespace Blog.Core.Managers
                 BodyFormat = "Your security code is {0}"
             });
 
-            this.EmailService = new EmailService();
+            this.EmailService = new EmailSenderProvider();
             
 #if !DEBUG_TEST
             if (dataProtectionProvider != null)
