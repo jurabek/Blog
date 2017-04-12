@@ -23,7 +23,7 @@ namespace Blog.Core.Repositories
                 _context.Comments.Add(entity);
                 return _context.SaveChanges() == 1 ? true : false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

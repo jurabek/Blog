@@ -42,7 +42,7 @@ namespace Blog.Web.Controllers
         public async Task<ActionResult> CanUserWriteComment()
         {
             var result = await _userPermissionProvider.CheckUserPermission(
-                User.Identity.GetUserId(), 
+                User?.Identity?.GetUserId(), 
                 nameof(Permissions.CanWriteComment));
 
             return Json(result);
@@ -52,17 +52,24 @@ namespace Blog.Web.Controllers
         public async Task<ActionResult> CanUserDeleteComment(string authorId)
         {
             var hasPermission = await _userPermissionProvider.CheckUserPermission(
-                User.Identity.GetUserId(),
+                User?.Identity?.GetUserId(),
                 nameof(Permissions.CanDeleteComment));
 
-            var result = hasPermission && User.Identity.GetUserId() == authorId;
+            var result = hasPermission && User?.Identity?.GetUserId() == authorId;
 
             return Json(result);
         }
 
-        public ActionResult CanUserEditComment(string userId)
+        [HttpPost]
+        public async Task<ActionResult> CanUserEditComment(string authorId)
         {
-            return Json(false);
+            var hasPermission = await _userPermissionProvider.CheckUserPermission(
+                User?.Identity.GetUserId(),
+                nameof(Permissions.CanDeleteComment));
+
+            var result = hasPermission && User?.Identity.GetUserId() == authorId;
+
+            return Json(result);
         }
     }
 }

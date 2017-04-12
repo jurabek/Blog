@@ -176,8 +176,11 @@
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="Controllers\ArticleControllerTest.cs" />
     <Compile Include="Controllers\BaseControllerTest.cs" />
+    <Compile Include="Controllers\CommentControllerTest.cs" />
+    <Compile Include="Controllers\ErrorControllersTest.cs" />
     <Compile Include="Controllers\ManageAccountControllerTest.cs" />
     <Compile Include="Controllers\RoleControllerTest.cs" />
+    <Compile Include="Controllers\UsersControllerTest.cs" />
     <Compile Include="Managers\AuthenticationManagerTest.cs" />
     <Compile Include="Managers\EmailManagerTest.cs" />
     <Compile Include="Managers\UserManagerTest.cs" />
@@ -185,6 +188,7 @@
     <Compile Include="Mappings\RolePermissionsMapperTest.cs" />
     <Compile Include="Mappings\UserRolesMapperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\UserPermissionProviderTest.cs" />
     <Compile Include="Repositories\BaseRepositoryTest.cs" />
     <Compile Include="Repositories\RoleRepositoryTest.cs" />
     <Compile Include="Repositories\UserRepositoryTest.cs" />
