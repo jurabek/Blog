@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 using IdentityPermissionExtension;
 using Blog.Model;
+using Blog.Core.Repositories;
 
 namespace Blog.Web.Controllers
 {
@@ -33,8 +34,9 @@ namespace Blog.Web.Controllers
 
         public ActionResult Index()
         {
+            var articles = _repository.GetAll().Take(5).ToList();
             IEnumerable<ArticleViewModel> model = _mappingManager
-                .Map<IEnumerable<Article>, IEnumerable<ArticleViewModel>>(_repository.GetAll().Take(5).ToList());
+                .Map<IEnumerable<Article>, IEnumerable<ArticleViewModel>>(articles);
             return View(model);
         }
 
@@ -56,7 +58,7 @@ namespace Blog.Web.Controllers
         public async Task<ActionResult> Create(ArticleViewModel model, HttpPostedFileBase file)
         {
             if (file != null)
-            {   
+            {
                 model.Image = file.FileName;
                 string path = Path.Combine(Server.MapPath("~/Images/Blog"), Path.GetFileName(file.FileName));
                 file.SaveAs(path);
@@ -64,12 +66,66 @@ namespace Blog.Web.Controllers
 
             var user = await _userRepository.GetByNameAsync(User?.Identity.GetUserName());
             model.Author = user;
-            
+
             Article article = _mappingManager.Map<ArticleViewModel, Article>(model);
             if (_repository.Add(article))
                 return RedirectToAction("Index");
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Rank(int rank, string articleId)
+        {
+            var articleRepository = _repository as ArticleRepository;
+            if (!new int[] { 1, -1 }.Contains(rank))
+            {
+                return Json(new { Success = false, ErrorMessage = "Rank value value does not correct!" });
+            }
+
+            var user = await _userRepository.GetByNameAsync(User.Identity.GetUserName());
+            var article = articleRepository.Get(articleId);
+
+            if (article.Votes.Any(v => v.UserId == user.Id))
+            {
+                var vote = article.Votes.FirstOrDefault(v => v.UserId == user.Id);
+                if (vote.VoteValue == rank)
+                {
+                    return Json(new { Success = false, ErrorMessage = "You have already ranked this article" });
+                }
+                else
+                {
+                    article.Votes.Remove(vote);
+                    articleRepository.SaveChanges();
+                }
+            }
+
+            article.Votes.Add(new Vote
+            {
+                ArticleId = articleId,
+                VoteValue = rank,
+                UserId = user.Id,
+                VotedTime = DateTime.Now
+            });
+            articleRepository.SaveChanges();
+
+            var result = article.Votes.Count(x => x.VoteValue == rank);
+            return Json(new { Success = true, Result = result });
+
+        }
+
+        public ActionResult GetVoteDown(string articleId)
+        {
+            var article = _repository.Get(articleId);
+            var result = article.Votes.Where(v => v.VoteValue == -1).Count();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetVoteUp(string articleId)
+        {
+            var article = _repository.Get(articleId);
+            var result = article.Votes.Where(v => v.VoteValue == 1).Count();
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Edit(int id)
@@ -81,7 +137,7 @@ namespace Blog.Web.Controllers
         public ActionResult Edit(int id, FormCollection collection)
         {
             try
-            {   
+            {
                 return RedirectToAction("Index");
             }
             catch

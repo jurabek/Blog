@@ -20,7 +20,18 @@
     <hr>
     <p>@Model.Body</p>
 
+
+    <button type="button"
+            id="btnUp"
+            class="btn btn-success glyphicon glyphicon-thumbs-up"
+            data-loading-text=" ... ">
+        4
+    </button>
+    <button type="button" id="btnDown" class="btn btn-success glyphicon glyphicon-thumbs-down" data-loading-text=" ... ">
+        4
+    </button>
     <hr>
+
     @Html.HiddenFor(x => x.Id)
     @Html.HiddenFor(x => x.Author.Id)
 
@@ -34,10 +45,8 @@
             <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" style="display:none;" id="loading"></span>
             Submit
         </button>
-
     </div>
 
-    <!-- Comment -->
     <h3>Comments</h3>
     <hr>
     <div id="comments">
@@ -57,8 +66,51 @@
 </div>
 
 <script type="text/javascript">
+
+    function getVoteValues(url, articleId, button) {
+        $.get(url, { articleId: articleId }, function (data) {
+            var response = jQuery.parseJSON(JSON.stringify(data));
+            button.html(response.toString());
+        });
+    }
+
+    function rank(rank, articleId, button) {
+        $.ajax({
+            type: 'POST',
+            url: '../Rank',
+            data: { rank: rank, articleId: articleId },
+            success: function (data) {
+                var response = jQuery.parseJSON(JSON.stringify(data));
+                console.log(response);
+                if (response.Success) {
+                    console.log(response.Result);
+                    button.html(response.Result);
+                }
+                else {
+                    console.log(response.ErrorMessage);
+                }
+            }
+        });
+    }
+
     $(document).ready(function () {
+        var articleId = $("#Id");
         var saveButton = $("#saveCommentButton");
+        var btnUp = $("#btnUp");
+        var btnDown = $("#btnDown");
+        var voteDownUrl = "../GetVoteDown";
+        var voteUpUrl = "../GetVoteUp";
+
+        getVoteValues(voteUpUrl, articleId.val(), btnUp);
+        getVoteValues(voteDownUrl, articleId.val(), btnDown);
+
+        btnUp.click(function () {
+            rank(1, articleId.val(), this);
+        });
+
+        btnDown.click(function () {
+            rank(-1, articleId.val(), this);
+        });
 
         $.post("../../Comment/CanUserWriteComment", function (data) {
             var response = jQuery.parseJSON(JSON.stringify(data));
@@ -73,7 +125,6 @@
 
         saveButton.click(function () {
             var userId = $("#Author_Id");
-            var articleId = $("#Id");
             var commentMessage = $("#commentMessage");
 
             $.ajax({

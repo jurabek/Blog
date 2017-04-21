@@ -106,5 +106,18 @@ namespace Blog.Core.Repositories
         {
             return Task.FromResult(Update(entity));
         }
+
+        public void SaveChanges()
+        {
+            try
+            {
+                _context.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
     }
 }

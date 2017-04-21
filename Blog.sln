@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Abstractions", "Blog.Abstractions\Blog.Abstractions.csproj", "{7517AC3E-095C-4368-9C89-728ABB6CA078}"
 EndProject
@@ -13,9 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Web", "Blog.Web\Blog.W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Web.Tests", "Tests\Blog.Web.Tests\Blog.Web.Tests.csproj", "{0715A257-83CA-4428-B0F0-30C91343A69A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{DAD18D34-54B9-42CB-96D3-039A0D3DDC7C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityPermissionExtension", "Helpers\IdentityPermission\IdentityPermissionExtension.csproj", "{0DD3726C-04DD-4D17-82B6-BF20898D0D92}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{6FD74559-0A8E-4370-A93F-51CBEF9E23CA}"
+	ProjectSection(SolutionItems) = preProject
+		Libs\Identity.Permission.dll = Libs\Identity.Permission.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,15 +44,8 @@ Global
 		{0715A257-83CA-4428-B0F0-30C91343A69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0715A257-83CA-4428-B0F0-30C91343A69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0715A257-83CA-4428-B0F0-30C91343A69A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0DD3726C-04DD-4D17-82B6-BF20898D0D92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0DD3726C-04DD-4D17-82B6-BF20898D0D92}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0DD3726C-04DD-4D17-82B6-BF20898D0D92}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0DD3726C-04DD-4D17-82B6-BF20898D0D92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{0DD3726C-04DD-4D17-82B6-BF20898D0D92} = {DAD18D34-54B9-42CB-96D3-039A0D3DDC7C}
 	EndGlobalSection
 EndGlobal

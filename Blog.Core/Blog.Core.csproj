@@ -39,6 +39,10 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Identity.Permission, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libs\Identity.Permission.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -146,10 +150,6 @@
     <ProjectReference Include="..\Blog.Data\Blog.Model.csproj">
       <Project>{0d1c4ad3-bc35-4694-ac93-45192590a55e}</Project>
       <Name>Blog.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Helpers\IdentityPermission\IdentityPermissionExtension.csproj">
-      <Project>{0dd3726c-04dd-4d17-82b6-bf20898d0d92}</Project>
-      <Name>IdentityPermissionExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
